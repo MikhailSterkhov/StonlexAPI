@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: net.milkbowl:Vault:1.7.1-b91">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/net/milkbowl/Vault/1.7.1-b91/Vault-1.7.1-b91.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/net/milkbowl/Vault/1.7.1-b91/Vault-1.7.1-b91-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/net/milkbowl/Vault/1.7.1-b91/Vault-1.7.1-b91-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

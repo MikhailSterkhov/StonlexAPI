@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/StonlexAPI/StonlexAPI.iml" filepath="$PROJECT_DIR$/StonlexAPI/StonlexAPI.iml" />
+      <module fileurl="file://$PROJECT_DIR$/StonlexAPI/bukkit/bukkit-api.iml" filepath="$PROJECT_DIR$/StonlexAPI/bukkit/bukkit-api.iml" />
+      <module fileurl="file://$PROJECT_DIR$/StonlexAPI/bungee/bungee.iml" filepath="$PROJECT_DIR$/StonlexAPI/bungee/bungee.iml" />
+    </modules>
+  </component>
+</project>
