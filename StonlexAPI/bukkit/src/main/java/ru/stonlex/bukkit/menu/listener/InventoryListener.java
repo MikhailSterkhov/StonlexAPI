@@ -2,7 +2,7 @@ package ru.stonlex.bukkit.menu.listener;
 
 import lombok.RequiredArgsConstructor;
 import ru.stonlex.bukkit.BukkitAPI;
-import me.moonways.bukkit.menu.MoonInventory;
+import ru.stonlex.bukkit.menu.StonlexMenu;
 import ru.stonlex.bukkit.menu.button.InventoryButton;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -20,17 +20,17 @@ public class InventoryListener implements Listener {
     @EventHandler
     public void onClick(InventoryClickEvent e) {
         Player player = (Player) e.getWhoClicked();
-        MoonInventory inventory = MoonInventory.getInventories().get(player.getName().toLowerCase());
+        StonlexMenu inventory = StonlexMenu.getInventoryMap().get(player.getName().toLowerCase());
 
         int slot = e.getSlot();
 
-        if (e.getCurrentItem() == null || e.getCurrentItem().getType() == Material.AIR || inventory == null || !inventory.getButtons().containsKey(slot + 1)) {
+        if (e.getCurrentItem() == null || e.getCurrentItem().getType() == Material.AIR || inventory == null || !inventory.getButtonMap().containsKey(slot + 1)) {
             return;
         }
 
         e.setCancelled(true);
 
-        InventoryButton button = inventory.getButtons().get(slot + 1);
+        InventoryButton button = inventory.getButtonMap().get(slot + 1);
 
         button.getCommand().onClick(player);
     }
@@ -38,13 +38,13 @@ public class InventoryListener implements Listener {
     @EventHandler
     public void onClose(InventoryCloseEvent e) {
         Player player = (Player) e.getPlayer();
-        MoonInventory inventory = MoonInventory.getInventories().get(player.getName().toLowerCase());
+        StonlexMenu inventory = StonlexMenu.getInventoryMap().get(player.getName().toLowerCase());
 
         if (inventory == null) {
             return;
         }
 
-        MoonInventory.getInventories().remove(player.getName().toLowerCase());
+        StonlexMenu.getInventoryMap().remove(player.getName().toLowerCase());
 
         inventory.onClose(player);
     }

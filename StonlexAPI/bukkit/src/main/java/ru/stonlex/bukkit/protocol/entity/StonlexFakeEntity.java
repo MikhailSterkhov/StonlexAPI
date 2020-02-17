@@ -7,6 +7,7 @@ import com.comphenix.protocol.wrappers.WrappedDataWatcher;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.EntityType;
@@ -14,7 +15,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 import ru.stonlex.bukkit.protocol.entity.animation.FakeEntityAnimation;
 import ru.stonlex.bukkit.protocol.entity.equipment.FakeEntityEquipment;
-import me.moonways.bukkit.protocol.packet.entity.*;
 import ru.stonlex.bukkit.protocol.packet.entity.*;
 
 import java.util.ArrayList;
@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.function.Consumer;
 
 @Getter
-public abstract class MoonFakeEntity {
+public abstract class StonlexFakeEntity {
 
     protected static final WrappedDataWatcher.Serializer BYTE_SERIALIZER = WrappedDataWatcher.Registry.get(Byte.class);
     protected static final WrappedDataWatcher.Serializer INT_SERIALIZER = WrappedDataWatcher.Registry.get(Integer.class);
@@ -34,14 +34,14 @@ public abstract class MoonFakeEntity {
     private static final FieldAccessor ENTITY_ID = Accessors.getFieldAccessor(
             MinecraftReflection.getEntityClass(), "entityCount", true);
 
-    private static final List<MoonFakeEntity> ENTITIES = new ArrayList<>();
+    private static final List<StonlexFakeEntity> ENTITIES = new ArrayList<>();
 
-    public static List<MoonFakeEntity> getEntities() {
+    public static List<StonlexFakeEntity> getEntities() {
         return Collections.unmodifiableList(ENTITIES);
     }
 
-    public static MoonFakeEntity getEntityById(int id) {
-        for (MoonFakeEntity fakeEntity : ENTITIES) {
+    public static StonlexFakeEntity getEntityById(int id) {
+        for (StonlexFakeEntity fakeEntity : ENTITIES) {
             if (fakeEntity.getId() != id) {
                 continue;
             }
@@ -73,7 +73,7 @@ public abstract class MoonFakeEntity {
 
     private ChatColor glowingColor;
 
-    public MoonFakeEntity(EntityType entityType, Location location) {
+    public StonlexFakeEntity(EntityType entityType, Location location) {
         this.id = (int) ENTITY_ID.get(null);
         this.entityType = entityType;
         this.location = location;
@@ -82,7 +82,15 @@ public abstract class MoonFakeEntity {
         ENTITIES.add(this);
     }
 
-    public void addReceiver(@NonNull Player player) {
+    public void spawn() {
+        Bukkit.getOnlinePlayers().forEach(this::spawnToPlayer);
+    }
+
+    public void remove() {
+        receivers.forEach(this::removeToPlayer);
+    }
+
+    public void spawnToPlayer(@NonNull Player player) {
         receivers.add(player);
 
         sendSpawnPacket(player);
@@ -91,14 +99,14 @@ public abstract class MoonFakeEntity {
         getEntityEquipment().updateEquipmentPacket(player);
     }
 
-    public void removeReceiver(@NonNull Player player) {
+    public void removeToPlayer(@NonNull Player player) {
         receivers.remove(player);
 
         sendDestroyPacket(player);
         onReceiverRemove(player);
     }
 
-    public boolean hasReceiver(@NonNull Player player) {
+    public boolean hasSpawnedToPlayer(@NonNull Player player) {
         return receivers.contains(player);
     }
 

@@ -11,11 +11,11 @@ import java.util.List;
 import java.util.function.Consumer;
 
 @Getter
-public class MoonHologram {
+public class StonlexHologram {
 
     private Location location;
 
-    public MoonHologram(Location location) {
+    public StonlexHologram(Location location) {
         this.location = location;
     }
 

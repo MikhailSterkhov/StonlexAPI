@@ -1,30 +1,31 @@
-package ru.stonlex.bukkit.hologram;
+package ru.stonlex.bukkit.hologram.manager;
 
 import org.bukkit.Location;
+import ru.stonlex.bukkit.hologram.StonlexHologram;
 import ru.stonlex.global.Applicable;
 import ru.stonlex.global.utility.AbstractCacheManager;
 
-public final class HologramManager extends AbstractCacheManager<MoonHologram> {
+public final class HologramManager extends AbstractCacheManager<StonlexHologram> {
 
     /**
      * Кеширование голограммы в мапу по ее имени.
      */
-    public void cacheHologram(String hologramName, MoonHologram hologram) {
+    public void cacheHologram(String hologramName, StonlexHologram hologram) {
         cache(hologramName.toLowerCase(), hologram);
     }
 
     /**
      * Получение голограммы из кеша по ее имени.
      */
-    public MoonHologram getHologram(String hologramName) {
+    public StonlexHologram getHologram(String hologramName) {
         return get(hologramName.toLowerCase());
     }
 
     /**
      * Создание голограммы и ее получение.
      */
-    public MoonHologram createHologram(Location location) {
-        return new MoonHologram(location);
+    public StonlexHologram createHologram(Location location) {
+        return new StonlexHologram(location);
     }
 
     /**
@@ -33,8 +34,8 @@ public final class HologramManager extends AbstractCacheManager<MoonHologram> {
      * Все действия можно проводить через специальный для этого
      * Applicable, что указан в аргументах.
      */
-    public void createHologram(String hologramName, Location location, Applicable<MoonHologram> hologramApplicable) {
-        MoonHologram hologram = createHologram(location);
+    public void createHologram(String hologramName, Location location, Applicable<StonlexHologram> hologramApplicable) {
+        StonlexHologram hologram = createHologram(location);
 
         cacheHologram(hologramName, hologram);
 

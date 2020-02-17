@@ -5,7 +5,7 @@ import com.google.common.collect.Multimap;
 import com.google.common.collect.Multimaps;
 import lombok.Getter;
 import lombok.NonNull;
-import ru.stonlex.bukkit.board.MoonSidebar;
+import ru.stonlex.bukkit.board.StonlexSidebar;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -14,10 +14,10 @@ import java.util.function.Consumer;
 
 public class SidebarUpdater {
 
-    private final Multimap<Long, Consumer<MoonSidebar>> tasks;
+    private final Multimap<Long, Consumer<StonlexSidebar>> tasks;
 
     @Getter
-    private final MoonSidebar sidebar;
+    private final StonlexSidebar sidebar;
 
     private Thread executionThread;
 
@@ -29,7 +29,7 @@ public class SidebarUpdater {
      *
      * @param sidebar - скорборд
      */
-    public SidebarUpdater(@NonNull MoonSidebar sidebar) {
+    public SidebarUpdater(@NonNull StonlexSidebar sidebar) {
         this.sidebar = sidebar;
         this.tasks = Multimaps.synchronizedSetMultimap(Multimaps.newSetMultimap(new HashMap<>(), HashSet::new));
     }
@@ -39,7 +39,7 @@ public class SidebarUpdater {
      *
      * @return список задач
      */
-    public Multimap<Long, Consumer<MoonSidebar>> getTasks() {
+    public Multimap<Long, Consumer<StonlexSidebar>> getTasks() {
         return Multimaps.unmodifiableMultimap(tasks);
     }
 
@@ -67,7 +67,7 @@ public class SidebarUpdater {
      * @param delay - период ее вызова
      * @return инстанс этого класса
      */
-    public SidebarUpdater newTask(@NonNull Consumer<MoonSidebar> task, long delay) {
+    public SidebarUpdater newTask(@NonNull Consumer<StonlexSidebar> task, long delay) {
         if (delay < 0) throw new IllegalArgumentException("Delay value must be > 0");
         tasks.put(delay, task);
         return this;

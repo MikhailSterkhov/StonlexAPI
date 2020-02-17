@@ -13,7 +13,7 @@ import ru.stonlex.bukkit.protocol.packet.scoreboard.WrapperPlayServerScoreboardT
 
 import java.util.*;
 
-public class MoonSidebar {
+public class StonlexSidebar {
 
     private final Set<Player> players = new HashSet<>();
     private final Map<Integer, SidebarLine> lines = new HashMap<>();
@@ -27,7 +27,7 @@ public class MoonSidebar {
 
 
     @Getter
-    private static final Map<String, MoonSidebar> playerSidebarsMap = new HashMap<>();
+    private static final Map<String, StonlexSidebar> playerSidebarsMap = new HashMap<>();
 
     /**
      * Установка objective, если предыдущая objective здесь существует,

@@ -6,7 +6,7 @@ import com.google.common.base.Splitter;
 import lombok.Getter;
 import lombok.NonNull;
 import org.bukkit.ChatColor;
-import ru.stonlex.bukkit.board.MoonSidebar;
+import ru.stonlex.bukkit.board.StonlexSidebar;
 import ru.stonlex.bukkit.protocol.packet.AbstractPacket;
 import ru.stonlex.bukkit.protocol.packet.scoreboard.WrapperPlayServerScoreboardScore;
 import ru.stonlex.bukkit.protocol.packet.scoreboard.WrapperPlayServerScoreboardTeam;
@@ -19,7 +19,7 @@ public class SidebarLine {
 
     private final int index;
     private String text;
-    private final MoonSidebar sidebar;
+    private final StonlexSidebar sidebar;
 
     /**
      * Конструктор линии.
@@ -28,7 +28,7 @@ public class SidebarLine {
      * @param text    - текст линии
      * @param sidebar - текущий скорборд
      */
-    public SidebarLine(int index, @NonNull String text, @NonNull MoonSidebar sidebar) {
+    public SidebarLine(int index, @NonNull String text, @NonNull StonlexSidebar sidebar) {
         this.index = index;
         this.text = text;
         this.sidebar = sidebar;

@@ -1,7 +1,7 @@
 package ru.stonlex.bukkit.board.manager;
 
-import ru.stonlex.bukkit.board.MoonSidebar;
-import ru.stonlex.bukkit.board.MoonSidebarBuilder;
+import ru.stonlex.bukkit.board.StonlexSidebar;
+import ru.stonlex.bukkit.board.StonlexSidebarBuilder;
 import ru.stonlex.global.utility.AbstractCacheManager;
 
 /**
@@ -10,13 +10,13 @@ import ru.stonlex.global.utility.AbstractCacheManager;
  * <p>
  * (Created on 01.08.2019 15:25)
  */
-public final class SidebarManager extends AbstractCacheManager<MoonSidebar> {
+public final class SidebarManager extends AbstractCacheManager<StonlexSidebar> {
 
     /**
      * Вызов нового билдера
      */
-    public MoonSidebarBuilder newBuilder() {
-        return new MoonSidebarBuilder();
+    public StonlexSidebarBuilder newBuilder() {
+        return new StonlexSidebarBuilder();
     }
 
 
@@ -24,10 +24,10 @@ public final class SidebarManager extends AbstractCacheManager<MoonSidebar> {
      * Кеширование скорборда
      *
      * @param sidebarName - Кешированное имя скорборда.
-     * @param moonSidebar - Скорборд, который нужно закешировать.
+     * @param stonlexSidebar - Скорборд, который нужно закешировать.
      */
-    public void cacheSidebar(String sidebarName, MoonSidebar moonSidebar) {
-        cache(sidebarName.toLowerCase(), moonSidebar);
+    public void cacheSidebar(String sidebarName, StonlexSidebar stonlexSidebar) {
+        cache(sidebarName.toLowerCase(), stonlexSidebar);
     }
 
     /**
@@ -35,7 +35,7 @@ public final class SidebarManager extends AbstractCacheManager<MoonSidebar> {
      *
      * @param sidebarName - Имя получаемого скорборда
      */
-    public MoonSidebar getSidebar(String sidebarName) {
+    public StonlexSidebar getSidebar(String sidebarName) {
         return get(sidebarName.toLowerCase());
     }
 

@@ -4,7 +4,7 @@ import com.comphenix.protocol.wrappers.WrappedDataWatcher;
 import lombok.Getter;
 import org.bukkit.Location;
 import org.bukkit.entity.EntityType;
-import ru.stonlex.bukkit.protocol.entity.MoonFakeEntity;
+import ru.stonlex.bukkit.protocol.entity.StonlexFakeEntity;
 
 /**
  * @Author ItzStonlex.
@@ -12,7 +12,7 @@ import ru.stonlex.bukkit.protocol.entity.MoonFakeEntity;
  * <p>
  * (Created on 14.08.2019 8:32)
  */
-public class FakeBat extends MoonFakeEntity {
+public class FakeBat extends StonlexFakeEntity {
 
     @Getter
     private boolean hanging;

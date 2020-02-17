@@ -5,7 +5,7 @@ import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketEvent;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
-import ru.stonlex.bukkit.protocol.entity.MoonFakeEntity;
+import ru.stonlex.bukkit.protocol.entity.StonlexFakeEntity;
 import ru.stonlex.bukkit.utility.cooldown.PlayerCooldownUtil;
 
 public class FakeEntityClickListener extends PacketAdapter {
@@ -22,7 +22,7 @@ public class FakeEntityClickListener extends PacketAdapter {
             return;
         }
 
-        MoonFakeEntity fakeEntity = MoonFakeEntity.getEntityById(event.getPacket().getIntegers().read(0));
+        StonlexFakeEntity fakeEntity = StonlexFakeEntity.getEntityById(event.getPacket().getIntegers().read(0));
 
         if (fakeEntity == null || fakeEntity.getClickAction() == null) {
             return;

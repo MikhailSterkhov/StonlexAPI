@@ -7,7 +7,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
-public abstract class MoonCommand<S extends CommandSender> extends Command
+public abstract class StonlexCommand<S extends CommandSender> extends Command
         implements CommandExecutor {
 
 
@@ -15,7 +15,7 @@ public abstract class MoonCommand<S extends CommandSender> extends Command
      * На тот случай, если авторегистрация команды
      * не нужна
      */
-    public MoonCommand() {
+    public StonlexCommand() {
         super(null);
     }
 
@@ -25,7 +25,7 @@ public abstract class MoonCommand<S extends CommandSender> extends Command
      *
      * @param command - алиас
      */
-    public MoonCommand(String command) {
+    public StonlexCommand(String command) {
         this();
 
         BukkitAPI.getCommandFactory().registerCommand(this, command);
@@ -38,12 +38,16 @@ public abstract class MoonCommand<S extends CommandSender> extends Command
      * @param command - главный алиас
      * @param aliases - алиасы
      */
-    public MoonCommand(String command, String aliases) {
+    public StonlexCommand(String command, String aliases) {
         this();
 
         BukkitAPI.getCommandFactory().registerCommand(this, command, aliases);
     }
 
+    @Override
+    public boolean execute(CommandSender commandSender, String s, String[] strings) {
+        return false;
+    }
 
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String label, String[] args) {

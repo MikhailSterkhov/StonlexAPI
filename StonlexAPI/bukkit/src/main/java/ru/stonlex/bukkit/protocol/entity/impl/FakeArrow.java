@@ -4,7 +4,7 @@ import com.comphenix.protocol.wrappers.WrappedDataWatcher;
 import lombok.Getter;
 import org.bukkit.Location;
 import org.bukkit.entity.EntityType;
-import ru.stonlex.bukkit.protocol.entity.MoonFakeEntity;
+import ru.stonlex.bukkit.protocol.entity.StonlexFakeEntity;
 
 /**
  * @Author ItzStonlex.
@@ -12,7 +12,7 @@ import ru.stonlex.bukkit.protocol.entity.MoonFakeEntity;
  * <p>
  * (Created on 14.08.2019 8:27)
  */
-public class FakeArrow extends MoonFakeEntity {
+public class FakeArrow extends StonlexFakeEntity {
 
     @Getter
     private boolean critical, noClip;

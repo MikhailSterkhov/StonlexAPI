@@ -6,7 +6,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
-import ru.stonlex.bukkit.protocol.entity.MoonFakeEntity;
+import ru.stonlex.bukkit.protocol.entity.StonlexFakeEntity;
 import ru.stonlex.bukkit.protocol.packet.entity.WrapperPlayServerNamedEntitySpawn;
 import ru.stonlex.bukkit.protocol.packet.entity.WrapperPlayServerPlayerInfo;
 import ru.stonlex.bukkit.protocol.packet.scoreboard.WrapperPlayServerScoreboardTeam;
@@ -17,7 +17,7 @@ import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
 @Getter
-public class FakePlayer extends MoonFakeEntity {
+public class FakePlayer extends StonlexFakeEntity {
 
     private static final ThreadLocalRandom RANDOM = ThreadLocalRandom.current();
 
@@ -102,7 +102,8 @@ public class FakePlayer extends MoonFakeEntity {
     public void setGlowingColor(ChatColor glowingColor) {
         super.setGlowingColor(glowingColor);
 
-        getReceivers().forEach(receiver -> sendTeamPacket(getTeamName(), receiver, WrapperPlayServerScoreboardTeam.Mode.TEAM_UPDATED));
+        getReceivers().forEach(receiver ->
+                sendTeamPacket(getTeamName(), receiver, WrapperPlayServerScoreboardTeam.Mode.TEAM_UPDATED));
     }
 
     private String getTeamName() {

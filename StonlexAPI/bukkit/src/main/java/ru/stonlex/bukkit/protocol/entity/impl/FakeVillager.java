@@ -3,9 +3,9 @@ package ru.stonlex.bukkit.protocol.entity.impl;
 import com.comphenix.protocol.wrappers.WrappedDataWatcher;
 import org.bukkit.Location;
 import org.bukkit.entity.EntityType;
-import ru.stonlex.bukkit.protocol.entity.MoonFakeEntity;
+import ru.stonlex.bukkit.protocol.entity.StonlexFakeEntity;
 
-public class FakeVillager extends MoonFakeEntity {
+public class FakeVillager extends StonlexFakeEntity {
 
     public FakeVillager(Location location) {
         super(EntityType.VILLAGER, location);

@@ -3,7 +3,7 @@ package ru.stonlex.bukkit.board.objective;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.bukkit.entity.Player;
-import ru.stonlex.bukkit.board.MoonSidebar;
+import ru.stonlex.bukkit.board.StonlexSidebar;
 import ru.stonlex.bukkit.protocol.packet.scoreboard.WrapperPlayServerScoreboardDisplayObjective;
 import ru.stonlex.bukkit.protocol.packet.scoreboard.WrapperPlayServerScoreboardObjective;
 
@@ -16,7 +16,7 @@ public class SidebarObjective {
     private final String name;
     private String displayName;
 
-    public void setDisplayName(String displayName, MoonSidebar sidebar) {
+    public void setDisplayName(String displayName, StonlexSidebar sidebar) {
         this.displayName = displayName;
 
         WrapperPlayServerScoreboardObjective packet = getPacket();

@@ -11,11 +11,9 @@ import ru.stonlex.global.Clickable;
 import java.util.*;
 
 @Getter
-public abstract class PageStonlexInventory extends StonlexInventory {
+public abstract class PageStonlexMenu extends StonlexMenu {
 
     private int page, pagesCount;
-
-    private Player viewerPlayer;
 
 
     private final String inventoryTitle;
@@ -29,7 +27,7 @@ public abstract class PageStonlexInventory extends StonlexInventory {
      * @param inventoryTitle - Заголовок инвентаря
      * @param inventoryRows  - Количество строк в инвентаре
      */
-    public PageStonlexInventory(String inventoryTitle, int inventoryRows) {
+    public PageStonlexMenu(String inventoryTitle, int inventoryRows) {
         this(0, inventoryTitle, inventoryRows);
     }
 
@@ -40,7 +38,7 @@ public abstract class PageStonlexInventory extends StonlexInventory {
      * @param inventoryTitle - Заголовок инвентаря
      * @param inventoryRows  - Количество строк в инвентаре
      */
-    private PageStonlexInventory(int page, String inventoryTitle, int inventoryRows) {
+    private PageStonlexMenu(int page, String inventoryTitle, int inventoryRows) {
         super(inventoryTitle.concat(" | " + (page + 1)), inventoryRows);
 
         this.page = page;
@@ -80,8 +78,6 @@ public abstract class PageStonlexInventory extends StonlexInventory {
      * Построение страничного инвентаря
      */
     private void buildPage(Player player) {
-        this.viewerPlayer = player;
-
         drawPagedInventory(player, page + 1);
 
         this.pagesCount = itemMap.buttonMap.size() / itemMap.slotsList.size();

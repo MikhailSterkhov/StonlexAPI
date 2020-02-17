@@ -14,18 +14,18 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Getter
-public abstract class StonlexInventory {
+public abstract class StonlexMenu {
 
     private Inventory inventory;
     private final InventoryInfo info;
-    private final Map<Integer, InventoryButton> buttons;
+    private final Map<Integer, InventoryButton> buttonMap;
 
     @Getter
-    private static final Map<String, StonlexInventory> inventories = new HashMap<>();
+    private static final Map<String, StonlexMenu> inventoryMap = new HashMap<>();
 
-    public StonlexInventory(String title, int rows) {
-        this.info = new MoonInventoryInfo(title, rows * 9, rows);
-        this.buttons = new HashMap<>();
+    public StonlexMenu(String inventoryTitle, int inventoryRows) {
+        this.info = new MoonInventoryInfo(inventoryTitle, inventoryRows * 9, inventoryRows);
+        this.buttonMap = new HashMap<>();
         this.inventory = Bukkit.createInventory(null, info.getSize(), info.getTitle());
     }
 
@@ -73,7 +73,7 @@ public abstract class StonlexInventory {
      * Установка предмета в инвентарь
      */
     public void setItem(int slot, InventoryButton button) {
-        buttons.put(slot, button);
+        buttonMap.put(slot, button);
     }
 
     /**
@@ -98,7 +98,7 @@ public abstract class StonlexInventory {
      * Очистка предметов в инвентаре
      */
     public void clear() {
-        buttons.clear();
+        buttonMap.clear();
         inventory.clear();
     }
 
@@ -118,14 +118,15 @@ public abstract class StonlexInventory {
         if ( isOpen ) {
             player.openInventory(inventory);
 
-            inventories.put(player.getName().toLowerCase(), this);
+            onOpen(player);
+            inventoryMap.put(player.getName().toLowerCase(), this);
         }
 
         setupItems();
     }
 
     private void setupItems() {
-        for (Map.Entry<Integer, InventoryButton> buttonEntry : buttons.entrySet()) {
+        for (Map.Entry<Integer, InventoryButton> buttonEntry : buttonMap.entrySet()) {
             inventory.setItem(buttonEntry.getKey() - 1, buttonEntry.getValue().getItem());
         }
     }

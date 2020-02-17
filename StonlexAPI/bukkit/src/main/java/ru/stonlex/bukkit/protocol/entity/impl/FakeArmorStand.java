@@ -4,9 +4,9 @@ import com.comphenix.protocol.wrappers.WrappedDataWatcher;
 import lombok.Getter;
 import org.bukkit.Location;
 import org.bukkit.entity.EntityType;
-import ru.stonlex.bukkit.protocol.entity.MoonFakeEntity;
+import ru.stonlex.bukkit.protocol.entity.StonlexFakeEntity;
 
-public class FakeArmorStand extends MoonFakeEntity {
+public class FakeArmorStand extends StonlexFakeEntity {
 
     @Getter
     private boolean marker, small, basePlate, arms;
