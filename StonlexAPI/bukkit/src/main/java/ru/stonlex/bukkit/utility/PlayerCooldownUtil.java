@@ -1,4 +1,4 @@
-package ru.stonlex.bukkit.utility.cooldown;
+package ru.stonlex.bukkit.utility;
 
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
@@ -32,7 +32,7 @@ public class PlayerCooldownUtil {
         Long playerCooldown = cooldownTable.get(cooldownName, player.getName());
 
         return playerCooldown == null ? 0 :
-                (hasCooldown(cooldownName, player) ? 0 : playerCooldown - System.currentTimeMillis());
+                (hasCooldown(cooldownName, player) ? playerCooldown - System.currentTimeMillis() : 0);
     }
 
     /**
@@ -55,7 +55,7 @@ public class PlayerCooldownUtil {
 
         Long playerCooldown = cooldownTable.get(cooldownName, player.getName());
 
-        return playerCooldown != null && (playerCooldown - System.currentTimeMillis()) <= 0;
+        return playerCooldown != null && (playerCooldown - System.currentTimeMillis()) > 0;
     }
 
 }

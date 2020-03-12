@@ -12,11 +12,10 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicReference;
 
 @RequiredArgsConstructor
-@Getter
 public class MysqlExecutor {
 
+    @Getter
     private final MysqlConnection connection;
-
 
     /**
      * Выполнение SQL запроса

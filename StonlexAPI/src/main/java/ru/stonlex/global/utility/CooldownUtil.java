@@ -1,4 +1,4 @@
-package ru.stonlex.bukkit.utility.cooldown;
+package ru.stonlex.global.utility;
 
 import lombok.experimental.UtilityClass;
 
@@ -29,7 +29,7 @@ public class CooldownUtil {
         Long playerCooldown = cooldownMap.get(cooldownName);
 
         return playerCooldown == null ? 0 :
-                (hasCooldown(cooldownName) ? 0 : playerCooldown - System.currentTimeMillis());
+                (hasCooldown(cooldownName) ? playerCooldown - System.currentTimeMillis() : 0);
     }
 
     /**
@@ -50,7 +50,7 @@ public class CooldownUtil {
 
         Long playerCooldown = cooldownMap.get(cooldownName);
 
-        return playerCooldown != null && (playerCooldown - System.currentTimeMillis()) <= 0;
+        return playerCooldown != null && (playerCooldown - System.currentTimeMillis()) > 0;
     }
     
 }

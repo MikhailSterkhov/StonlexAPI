@@ -87,7 +87,7 @@ public abstract class StonlexFakeEntity {
     }
 
     public void remove() {
-        receivers.forEach(this::removeToPlayer);
+        Bukkit.getOnlinePlayers().forEach(this::removeToPlayer);
     }
 
     public void spawnToPlayer(@NonNull Player player) {
@@ -102,8 +102,8 @@ public abstract class StonlexFakeEntity {
     public void removeToPlayer(@NonNull Player player) {
         receivers.remove(player);
 
-        sendDestroyPacket(player);
         onReceiverRemove(player);
+        sendDestroyPacket(player);
     }
 
     public boolean hasSpawnedToPlayer(@NonNull Player player) {
@@ -206,11 +206,11 @@ public abstract class StonlexFakeEntity {
     }
 
     public void look(Player player, Location location) {
-        Vector vector = location.clone().subtract(location).toVector().normalize();
+        Vector vector = location.clone().subtract(this.location).toVector().normalize();
 
         this.location.setDirection(vector);
-        this.location.setYaw(location.getYaw());
-        this.location.setPitch(location.getPitch());
+        this.location.setYaw(this.location.getYaw());
+        this.location.setPitch(this.location.getPitch());
 
         sendEntityLookPacket(player);
         sendHeadRotationPacket(player);

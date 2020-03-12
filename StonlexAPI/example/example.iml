@@ -13,7 +13,7 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="Maven: org.spigotmc:spigot:1.12.2-R0.1-SNAPSHOT" level="project" />
     <orderEntry type="library" name="Maven: net.md-5:bungeecord:1.12" level="project" />
-    <orderEntry type="module" module-name="bukkit-api" />
+    <orderEntry type="module" module-name="bukkit" />
     <orderEntry type="library" name="Maven: com.github.azbh111:ProtocolLib:4.4.0" level="project" />
     <orderEntry type="module" module-name="StonlexAPI" />
     <orderEntry type="module" module-name="bungee" />

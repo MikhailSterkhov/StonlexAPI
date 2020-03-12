@@ -54,8 +54,9 @@ public class MailSender {
         AsyncUtil.runAsync(messageSender);
     }
 
-
-
+    /**
+     * Создать и инициализировать сессию
+     */
     private Session createSession() {
         Properties properties = new Properties();
 
@@ -66,10 +67,12 @@ public class MailSender {
         properties.put("ru.stonlex.global.mail.smtp.port", "465");
 
         return Session.getInstance(properties, new Authenticator() {
+
             @Override
             protected PasswordAuthentication getPasswordAuthentication() {
                 return new PasswordAuthentication(username, password);
             }
+
         });
     }
 

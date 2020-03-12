@@ -9,6 +9,8 @@ import ru.stonlex.bukkit.protocol.entity.impl.FakePlayer;
 import ru.stonlex.bukkit.utility.location.LocationUtil;
 import ru.stonlex.example.command.ConsoleCommand;
 import ru.stonlex.example.command.PlayerCommand;
+import ru.stonlex.global.mail.MailSender;
+import ru.stonlex.global.utility.MailUtil;
 
 public final class StonlexExample {
 
@@ -76,6 +78,22 @@ public final class StonlexExample {
 
         fakePlayer.spawn(); //заспавнить для всех игроков онлайн
         fakePlayer.spawnToPlayer(receiver); //заспавнить только для одного игрока
+    }
+
+    /**
+     * Отправить сообщение человеку на электронную почту
+     *
+     * @param toMail - e-mail получателя сообщения
+     * @param subject - заголовок сообщения
+     * @param contentMessage - текст сообщения
+     */
+    public void exampleSendMailMessage(String toMail, String subject, String contentMessage) {
+        //создаем и получаем отправителя
+        MailSender mailSender = MailUtil.getMailSender(
+                "mail_sender@mail.ru", "***password***");
+
+        //кидаем сообщение получателю
+        MailUtil.sendMessage(mailSender, subject, contentMessage, toMail);
     }
 
 }

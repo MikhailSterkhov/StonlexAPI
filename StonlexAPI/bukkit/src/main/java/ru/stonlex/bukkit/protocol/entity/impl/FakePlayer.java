@@ -6,6 +6,8 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
+import ru.stonlex.bukkit.BukkitAPI;
 import ru.stonlex.bukkit.protocol.entity.StonlexFakeEntity;
 import ru.stonlex.bukkit.protocol.packet.entity.WrapperPlayServerNamedEntitySpawn;
 import ru.stonlex.bukkit.protocol.packet.entity.WrapperPlayServerPlayerInfo;
@@ -25,6 +27,9 @@ public class FakePlayer extends StonlexFakeEntity {
     private final MojangUtil.Skin skin;
 
     private final String name;
+
+    private WrappedGameProfile wrappedGameProfile;
+
 
     public FakePlayer(String skin, Location location) {
         super(EntityType.PLAYER, location);
@@ -56,12 +61,21 @@ public class FakePlayer extends StonlexFakeEntity {
         sendHeadRotationPacket(player);
 
         sendTeamPacket(teamName, player, WrapperPlayServerScoreboardTeam.Mode.PLAYERS_ADDED);
+
+        new BukkitRunnable() {
+
+            @Override
+            public void run() {
+                removeFakePlayer(player);
+            }
+
+        }.runTaskLater(BukkitAPI.getPlugin(BukkitAPI.class), 20);
     }
 
     private void sendPlayerInfoPacket(EnumWrappers.PlayerInfoAction action, Player player) {
         WrapperPlayServerPlayerInfo playerInfoPacket = new WrapperPlayServerPlayerInfo();
 
-        WrappedGameProfile wrappedGameProfile = new WrappedGameProfile(uuid, name);
+        this.wrappedGameProfile = new WrappedGameProfile(uuid, name);
 
         if (skin != null && action == EnumWrappers.PlayerInfoAction.ADD_PLAYER) {
             wrappedGameProfile.getProperties().put("textures", new WrappedSignedProperty("textures",
@@ -104,6 +118,20 @@ public class FakePlayer extends StonlexFakeEntity {
 
         getReceivers().forEach(receiver ->
                 sendTeamPacket(getTeamName(), receiver, WrapperPlayServerScoreboardTeam.Mode.TEAM_UPDATED));
+    }
+
+    private void removeFakePlayer(Player player) {
+        WrapperPlayServerPlayerInfo playerInfoPacket = new WrapperPlayServerPlayerInfo();
+
+        playerInfoPacket.setAction(EnumWrappers.PlayerInfoAction.REMOVE_PLAYER);
+        playerInfoPacket.setData(Collections.singletonList(
+                new PlayerInfoData(wrappedGameProfile,
+                        0,
+                        EnumWrappers.NativeGameMode.NOT_SET,
+                        WrappedChatComponent.fromText(name))
+        ));
+
+        playerInfoPacket.sendPacket(player);
     }
 
     private String getTeamName() {

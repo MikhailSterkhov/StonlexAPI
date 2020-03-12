@@ -8,14 +8,12 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="example" />
-        <module name="bukkit-api" />
-        <module name="bukkit" />
         <module name="bungee" />
+        <module name="bukkit" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="bukkit" target="8" />
-      <module name="bukkit-api" target="8" />
       <module name="bungee" target="8" />
       <module name="example" target="8" />
       <module name="StonlexAPI" target="8" />

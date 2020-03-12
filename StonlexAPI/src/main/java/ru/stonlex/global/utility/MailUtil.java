@@ -1,15 +1,21 @@
-package ru.stonlex.global.mail.manager;
+package ru.stonlex.global.utility;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.UtilityClass;
 import ru.stonlex.global.mail.MailSender;
-import ru.stonlex.global.utility.AbstractCacheManager;
 
-public final class MailManager extends AbstractCacheManager<MailSender> {
+import java.util.HashMap;
+import java.util.Map;
+
+@UtilityClass
+public class MailUtil {
 
     @Getter
     @Setter
     private String smtpHost = "smtp.yandex.ru";
+
+    private final Map<String, MailSender> mailSenderMap = new HashMap<>();
 
 
     /**
@@ -22,7 +28,7 @@ public final class MailManager extends AbstractCacheManager<MailSender> {
      * @param password - пароль отправилеля
      */
     public MailSender getMailSender(String username, String password) {
-        return get(username, f -> new MailSender(username, username, password, smtpHost));
+        return mailSenderMap.computeIfAbsent(username, f -> new MailSender(username, username, password, smtpHost));
     }
 
     /**

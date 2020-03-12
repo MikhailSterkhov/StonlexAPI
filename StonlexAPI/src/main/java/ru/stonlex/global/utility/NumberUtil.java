@@ -6,6 +6,7 @@ import lombok.experimental.UtilityClass;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -59,6 +60,27 @@ public class NumberUtil {
             number *= number;
         }
         return number;
+    }
+
+    /**
+     * Создать массив, который будет иметь в себе
+     * множество значений между минимальным и
+     * максимальным указанным индексом
+     *
+     * @param minIndex - минимальный индекс
+     * @param maxIndex - максимальный индекс
+     */
+    public int[] toManyArray(int minIndex, int maxIndex) {
+        int[] resultArray = new int[maxIndex];
+
+        int counter = 0;
+        for (int i = minIndex ; i < maxIndex ; i++) {
+            resultArray[counter] = i;
+
+            counter++;
+        }
+
+        return resultArray;
     }
 
     /**

@@ -6,7 +6,7 @@ import com.comphenix.protocol.events.PacketEvent;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import ru.stonlex.bukkit.protocol.entity.StonlexFakeEntity;
-import ru.stonlex.bukkit.utility.cooldown.PlayerCooldownUtil;
+import ru.stonlex.bukkit.utility.PlayerCooldownUtil;
 
 public class FakeEntityClickListener extends PacketAdapter {
 

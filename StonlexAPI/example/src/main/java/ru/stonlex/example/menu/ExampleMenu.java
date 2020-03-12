@@ -25,4 +25,14 @@ public class ExampleMenu extends StonlexMenu {
                 .setName("§aОбновить инвентарь").build(), this::updateInventory);
     }
 
+    @Override //передающийся метод
+    public void onOpen(Player player) {
+        player.sendMessage("§aТы открыл Example-инвентарь");
+    }
+
+    @Override //передающийся метод
+    public void onClose(Player player) {
+        player.sendMessage("§cТы закрыл Example-инвентарь");
+    }
+
 }

@@ -18,9 +18,9 @@ public class ExamplePageMenu extends PageStonlexMenu {
                 .setName("§aИнформация")
                 .setLore("§7Страница: §e" + page).build());
 
-        setPageSize(11, 12, 13, 14, 15, 16, 17,
-                20, 21, 22, 23, 24, 25, 26,
-                29, 30, 31, 32, 33, 34, 35);
+        addRowToPageSize(2, false);
+        addRowToPageSize(3, false);
+        addRowToPageSize(4, false);
 
         addItemToPage(new ItemStack(Material.STONE), Player::closeInventory);
         addItemToPage(new ItemStack(Material.DIAMOND), Player::closeInventory);
@@ -28,4 +28,15 @@ public class ExamplePageMenu extends PageStonlexMenu {
         addItemToPage(new ItemStack(Material.BARRIER), Player::closeInventory);
         addItemToPage(new ItemStack(Material.CACTUS), Player::closeInventory);
     }
+
+    @Override //передающийся метод
+    public void onOpen(Player player) {
+        player.sendMessage("§aТы открыл страничный Example-инвентарь");
+    }
+
+    @Override //передающийся метод
+    public void onClose(Player player) {
+        player.sendMessage("§cТы закрыл страничный Example-инвентарь");
+    }
+
 }

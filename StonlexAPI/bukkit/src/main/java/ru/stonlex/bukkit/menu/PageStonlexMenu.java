@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import ru.stonlex.bukkit.utility.ItemUtil;
 import ru.stonlex.global.Clickable;
+import ru.stonlex.global.utility.NumberUtil;
 
 import java.util.*;
 
@@ -144,6 +145,43 @@ public abstract class PageStonlexMenu extends StonlexMenu {
      */
     public void setPageSize(List<Integer> slotList) {
         itemMap.setSlotsList( slotList );
+    }
+
+    /**
+     * Добавить линию в разметку страницы
+     *
+     * @param rowIndex - индекс линии
+     * @param sideTab - отступ по слотам для боков линии
+     * @param sidesEnable - слоты по бокам линии (true - оставить, false - убрать)
+     */
+    public void addRowToPageSize(int rowIndex, int sideTab, boolean sidesEnable) {
+        List<Integer> currentSlotsSize = itemMap.getSlotsList();
+
+        if (rowIndex <= 0) {
+            throw new IllegalArgumentException("row index must be > 0");
+        }
+
+        if (rowIndex >= 7) {
+            throw new IllegalArgumentException("row index must be < 6");
+        }
+
+        int endSlotIndex = rowIndex * 9;
+        int startSlotIndex = endSlotIndex - 9;
+
+        if ( !sidesEnable ) {
+            if ( sideTab < 0 ) {
+                throw new IllegalArgumentException("side tab must be > 0");
+            }
+
+            startSlotIndex += sideTab;
+            endSlotIndex -= sideTab;
+        }
+
+        for ( int slotIndex : NumberUtil.toManyArray(startSlotIndex, endSlotIndex) ) {
+            currentSlotsSize.add( slotIndex );
+        }
+
+        setPageSize( currentSlotsSize );
     }
 
 

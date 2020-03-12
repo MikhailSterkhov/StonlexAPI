@@ -1,4 +1,4 @@
-name: mw-api
-main: me.moonways.bukkit.BukkitAPI
+name: StonlexAPI
+main: ru.stonlex.bukkit.BukkitAPI
 version: 1.0
-authors: [ItzStonlex, PastuhGitCoder]
+author: ItzStonlex

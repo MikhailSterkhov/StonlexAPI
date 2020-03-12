@@ -24,7 +24,7 @@ public abstract class StonlexMenu {
     private static final Map<String, StonlexMenu> inventoryMap = new HashMap<>();
 
     public StonlexMenu(String inventoryTitle, int inventoryRows) {
-        this.info = new MoonInventoryInfo(inventoryTitle, inventoryRows * 9, inventoryRows);
+        this.info = new StonlexInventoryInfo(inventoryTitle, inventoryRows * 9, inventoryRows);
         this.buttonMap = new HashMap<>();
         this.inventory = Bukkit.createInventory(null, info.getSize(), info.getTitle());
     }
@@ -80,7 +80,7 @@ public abstract class StonlexMenu {
      * Установка предмета в инвентарь
      */
     public void setItem(int slot, ItemStack itemStack, Clickable<Player> clickable) {
-        InventoryButton button = new MoonInventoryButton(itemStack, clickable);
+        InventoryButton button = new StonlexInventoryButton(itemStack, clickable);
 
         setItem(slot, button);
     }
@@ -89,7 +89,7 @@ public abstract class StonlexMenu {
      * Установка предмета в инвентарь
      */
     public void setItem(int slot, ItemStack itemStack) {
-        InventoryButton button = new MoonInventoryButton(itemStack, player -> {});
+        InventoryButton button = new StonlexInventoryButton(itemStack, player -> {});
 
         setItem(slot, button);
     }
@@ -152,7 +152,7 @@ public abstract class StonlexMenu {
 
     @RequiredArgsConstructor
     @Getter
-    public static class MoonInventoryButton implements InventoryButton {
+    private static class StonlexInventoryButton implements InventoryButton {
 
         private final ItemStack item;
         private final Clickable<Player> command;
@@ -160,7 +160,7 @@ public abstract class StonlexMenu {
 
     @RequiredArgsConstructor
     @Getter
-    public static class MoonInventoryInfo implements InventoryInfo {
+    private static class StonlexInventoryInfo implements InventoryInfo {
 
         private final String title;
         private final int size;

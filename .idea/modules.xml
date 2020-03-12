@@ -3,7 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/StonlexAPI/StonlexAPI.iml" filepath="$PROJECT_DIR$/StonlexAPI/StonlexAPI.iml" />
-      <module fileurl="file://$PROJECT_DIR$/StonlexAPI/bukkit/bukkit-api.iml" filepath="$PROJECT_DIR$/StonlexAPI/bukkit/bukkit-api.iml" />
+      <module fileurl="file://$PROJECT_DIR$/StonlexAPI/bukkit/bukkit.iml" filepath="$PROJECT_DIR$/StonlexAPI/bukkit/bukkit.iml" />
       <module fileurl="file://$PROJECT_DIR$/StonlexAPI/bungee/bungee.iml" filepath="$PROJECT_DIR$/StonlexAPI/bungee/bungee.iml" />
       <module fileurl="file://$PROJECT_DIR$/StonlexAPI/example/example.iml" filepath="$PROJECT_DIR$/StonlexAPI/example/example.iml" />
     </modules>

@@ -52,7 +52,7 @@ public final class CommandFactory {
                 commandMap = (SimpleCommandMap)commandMapField.get(craftServerObject);
             }
 
-            commandMap.register(BukkitAPI.getPlugin(BukkitAPI.class).getDescription().getName(), stonlexCommand);
+            commandMap.register("StonlexAPI", stonlexCommand);
         } catch (Exception e) {
             e.printStackTrace();
         }

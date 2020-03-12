@@ -63,7 +63,7 @@ public class StonlexHologram {
 
         stand.setClickAction(clickAction);
 
-        Bukkit.getOnlinePlayers().forEach(stand::addReceiver);
+        Bukkit.getOnlinePlayers().forEach(stand::spawnToPlayer);
 
         entities.add(stand);
         lines.add(line);
@@ -95,7 +95,7 @@ public class StonlexHologram {
      * @param player - игрок
      */
     public void spawnToPlayer(Player player) {
-        entities.forEach(fakeArmorStand -> fakeArmorStand.addReceiver(player));
+        entities.forEach(fakeArmorStand -> fakeArmorStand.spawnToPlayer(player));
     }
 
     /**
@@ -113,7 +113,7 @@ public class StonlexHologram {
      * @param player - игрок
      */
     public void removeToPlayer(Player player) {
-        entities.forEach(fakeArmorStand -> fakeArmorStand.removeReceiver(player));
+        entities.forEach(fakeArmorStand -> fakeArmorStand.removeToPlayer(player));
     }
 
     /**
