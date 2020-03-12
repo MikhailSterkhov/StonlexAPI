@@ -18,9 +18,9 @@ public class ExamplePageMenu extends PageStonlexMenu {
                 .setName("§aИнформация")
                 .setLore("§7Страница: §e" + page).build());
 
-        addRowToPageSize(2, false);
-        addRowToPageSize(3, false);
-        addRowToPageSize(4, false);
+        addRowToPageSize(2, 1, true);
+        addRowToPageSize(3, 0, false);
+        addRowToPageSize(4, 1,  true);
 
         addItemToPage(new ItemStack(Material.STONE), Player::closeInventory);
         addItemToPage(new ItemStack(Material.DIAMOND), Player::closeInventory);
