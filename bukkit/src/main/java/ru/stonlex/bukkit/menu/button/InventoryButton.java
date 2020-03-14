@@ -1,11 +1,14 @@
 package ru.stonlex.bukkit.menu.button;
 
-import org.bukkit.entity.Player;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.bukkit.inventory.ItemStack;
-import ru.stonlex.global.Clickable;
+import ru.stonlex.bukkit.menu.button.applicable.ButtonApplicable;
 
-public interface InventoryButton {
+@RequiredArgsConstructor
+@Getter
+public class InventoryButton {
 
-    Clickable<Player> getCommand();
-    ItemStack getItem();
+    private final ItemStack itemStack;
+    private final ButtonApplicable buttonApplicable;
 }

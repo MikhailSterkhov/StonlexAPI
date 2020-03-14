@@ -22,11 +22,11 @@ public class ExamplePageMenu extends PageStonlexMenu {
         addRowToPageSize(3, 0, false);
         addRowToPageSize(4, 1,  true);
 
-        addItemToPage(new ItemStack(Material.STONE), Player::closeInventory);
-        addItemToPage(new ItemStack(Material.DIAMOND), Player::closeInventory);
-        addItemToPage(new ItemStack(Material.BANNER), Player::closeInventory);
-        addItemToPage(new ItemStack(Material.BARRIER), Player::closeInventory);
-        addItemToPage(new ItemStack(Material.CACTUS), Player::closeInventory);
+        addItemToPage(new ItemStack(Material.STONE), (player1, event) -> player.closeInventory());
+        addItemToPage(new ItemStack(Material.DIAMOND), (player1, event) -> player.closeInventory());
+        addItemToPage(new ItemStack(Material.BANNER), (player1, event) -> player.closeInventory());
+        addItemToPage(new ItemStack(Material.BARRIER), (player1, event) -> player.closeInventory());
+        addItemToPage(new ItemStack(Material.CACTUS), (player1, event) -> player.closeInventory());
     }
 
     @Override //передающийся метод

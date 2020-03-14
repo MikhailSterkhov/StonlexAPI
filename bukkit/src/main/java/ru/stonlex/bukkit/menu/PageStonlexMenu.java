@@ -5,8 +5,8 @@ import lombok.Setter;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import ru.stonlex.bukkit.menu.button.applicable.ButtonApplicable;
 import ru.stonlex.bukkit.utility.ItemUtil;
-import ru.stonlex.global.Clickable;
 import ru.stonlex.global.utility.NumberUtil;
 
 import java.util.*;
@@ -88,12 +88,12 @@ public abstract class PageStonlexMenu extends StonlexMenu {
 
         if ( !(page >= pagesCount) ) {
             setItem(getInventory().getSize() - 3, ItemUtil.getItemStack(Material.ARROW,
-                    "§eВперед"), player1 -> forward(player));
+                    "§eВперед"), (player1, event) -> forward(player));
         }
 
         if ( !(page - 1 < 0) ) {
             setItem(getInventory().getSize() - 5, ItemUtil.getItemStack(Material.ARROW,
-                    "§eНазад"), player1 -> backward(player));
+                    "§eНазад"), (player1, event) -> backward(player));
         }
 
 
@@ -106,7 +106,7 @@ public abstract class PageStonlexMenu extends StonlexMenu {
 
             int slot = itemMap.getSlotsList().get(i);
 
-            Map.Entry<ItemStack, Clickable<Player>> itemEntry = new ArrayList<>(itemMap.buttonMap.entrySet()).get(index);
+            Map.Entry<ItemStack, ButtonApplicable> itemEntry = new ArrayList<>(itemMap.getButtonMap().entrySet()).get(index);
             ItemStack itemStack = itemEntry.getKey();
 
             setItem(slot, itemStack, itemEntry.getValue());
@@ -126,10 +126,10 @@ public abstract class PageStonlexMenu extends StonlexMenu {
      * Добавить предмет на страницу
      *
      * @param itemStack - предмет
-     * @param clickable - действие при клике
+     * @param buttonApplicable - действие при клике
      */
-    public void addItemToPage(ItemStack itemStack, Clickable<Player> clickable) {
-        itemMap.addItem(itemStack, clickable);
+    public void addItemToPage(ItemStack itemStack, ButtonApplicable buttonApplicable) {
+        itemMap.addItem(itemStack, buttonApplicable);
     }
 
     /**
@@ -217,7 +217,7 @@ public abstract class PageStonlexMenu extends StonlexMenu {
     @Getter
     public static class PageItemMap {
 
-        private Map<ItemStack, Clickable<Player>> buttonMap = new LinkedHashMap<>();
+        private Map<ItemStack, ButtonApplicable> buttonMap = new LinkedHashMap<>();
 
         @Setter
         private List<Integer> slotsList = new ArrayList<>();
@@ -229,17 +229,17 @@ public abstract class PageStonlexMenu extends StonlexMenu {
          * @param itemStack - предмет
          */
         public void addItem(ItemStack itemStack) {
-            addItem(itemStack, player -> {});
+            addItem(itemStack, (player, event) -> {});
         }
 
         /**
          * Добавление кликабельной кнопки в инвентарь
          *
          * @param itemStack - предмет
-         * @param clickable - кликабельность
+         * @param buttonApplicable - кликабельность
          */
-        public void addItem(ItemStack itemStack, Clickable<Player> clickable) {
-            buttonMap.put(itemStack, clickable);
+        public void addItem(ItemStack itemStack, ButtonApplicable buttonApplicable) {
+            buttonMap.put(itemStack, buttonApplicable);
         }
 
         /**

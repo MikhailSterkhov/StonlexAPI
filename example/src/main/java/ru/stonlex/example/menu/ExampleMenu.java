@@ -15,14 +15,14 @@ public class ExampleMenu extends StonlexMenu {
     public void drawInventory(Player player) {
         setItem(5, ItemUtil.newBuilder(Material.STONE)
                 .setName("§eБаклажан")
-                .build(), player1 -> {
+                .build(), (player1, event) -> {
 
             player.sendMessage("§eКлик прошел, закрываю инвентарь");
             player.closeInventory();
         });
 
         setItem(6, ItemUtil.newBuilder(Material.CHEST)
-                .setName("§aОбновить инвентарь").build(), this::updateInventory);
+                .setName("§aОбновить инвентарь").build(), (player1, event) -> updateInventory(player));
     }
 
     @Override //передающийся метод

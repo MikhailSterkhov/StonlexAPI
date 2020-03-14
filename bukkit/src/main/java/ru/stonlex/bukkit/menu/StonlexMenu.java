@@ -1,14 +1,13 @@
 package ru.stonlex.bukkit.menu;
 
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import ru.stonlex.bukkit.menu.button.applicable.ButtonApplicable;
 import ru.stonlex.bukkit.menu.button.InventoryButton;
 import ru.stonlex.bukkit.menu.info.InventoryInfo;
-import ru.stonlex.global.Clickable;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -24,7 +23,7 @@ public abstract class StonlexMenu {
     private static final Map<String, StonlexMenu> inventoryMap = new HashMap<>();
 
     public StonlexMenu(String inventoryTitle, int inventoryRows) {
-        this.info = new StonlexInventoryInfo(inventoryTitle, inventoryRows * 9, inventoryRows);
+        this.info = new InventoryInfo(inventoryTitle, inventoryRows * 9, inventoryRows);
         this.buttonMap = new HashMap<>();
         this.inventory = Bukkit.createInventory(null, info.getSize(), info.getTitle());
     }
@@ -79,8 +78,8 @@ public abstract class StonlexMenu {
     /**
      * Установка предмета в инвентарь
      */
-    public void setItem(int slot, ItemStack itemStack, Clickable<Player> clickable) {
-        InventoryButton button = new StonlexInventoryButton(itemStack, clickable);
+    public void setItem(int slot, ItemStack itemStack, ButtonApplicable buttonApplicable) {
+        InventoryButton button = new InventoryButton(itemStack, buttonApplicable);
 
         setItem(slot, button);
     }
@@ -89,7 +88,7 @@ public abstract class StonlexMenu {
      * Установка предмета в инвентарь
      */
     public void setItem(int slot, ItemStack itemStack) {
-        InventoryButton button = new StonlexInventoryButton(itemStack, player -> {});
+        InventoryButton button = new InventoryButton(itemStack, (player, event) -> {});
 
         setItem(slot, button);
     }
@@ -127,7 +126,7 @@ public abstract class StonlexMenu {
 
     private void setupItems() {
         for (Map.Entry<Integer, InventoryButton> buttonEntry : buttonMap.entrySet()) {
-            inventory.setItem(buttonEntry.getKey() - 1, buttonEntry.getValue().getItem());
+            inventory.setItem(buttonEntry.getKey() - 1, buttonEntry.getValue().getItemStack());
         }
     }
 
@@ -144,27 +143,7 @@ public abstract class StonlexMenu {
         clear();
 
         command.run();
-
         openInventory(player, false);
-    }
-
-
-
-    @RequiredArgsConstructor
-    @Getter
-    private static class StonlexInventoryButton implements InventoryButton {
-
-        private final ItemStack item;
-        private final Clickable<Player> command;
-    }
-
-    @RequiredArgsConstructor
-    @Getter
-    private static class StonlexInventoryInfo implements InventoryInfo {
-
-        private final String title;
-        private final int size;
-        private final int rows;
     }
 
 }

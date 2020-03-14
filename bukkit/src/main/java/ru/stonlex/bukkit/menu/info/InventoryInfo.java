@@ -1,8 +1,13 @@
 package ru.stonlex.bukkit.menu.info;
 
-public interface InventoryInfo {
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
-    String getTitle();
-    int getRows();
-    int getSize();
+@RequiredArgsConstructor
+@Getter
+public class InventoryInfo {
+
+    private final String title;
+    private final int size;
+    private final int rows;
 }

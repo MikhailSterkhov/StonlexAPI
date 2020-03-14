@@ -12,21 +12,21 @@ import ru.stonlex.bukkit.menu.button.InventoryButton;
 public class InventoryListener implements Listener {
 
     @EventHandler
-    public void onClick(InventoryClickEvent e) {
-        Player player = (Player) e.getWhoClicked();
+    public void onClick(InventoryClickEvent event) {
+        Player player = (Player) event.getWhoClicked();
         StonlexMenu inventory = StonlexMenu.getInventoryMap().get(player.getName().toLowerCase());
 
-        int slot = e.getSlot();
+        int slot = event.getSlot();
 
-        if (e.getCurrentItem() == null || e.getCurrentItem().getType() == Material.AIR || inventory == null || !inventory.getButtonMap().containsKey(slot + 1)) {
+        if (event.getCurrentItem() == null || event.getCurrentItem().getType() == Material.AIR || inventory == null || !inventory.getButtonMap().containsKey(slot + 1)) {
             return;
         }
 
-        e.setCancelled(true);
+        event.setCancelled(true);
 
         InventoryButton button = inventory.getButtonMap().get(slot + 1);
 
-        button.getCommand().onClick(player);
+        button.getButtonApplicable().execute(player, event);
     }
 
     @EventHandler
