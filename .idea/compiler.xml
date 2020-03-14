@@ -8,8 +8,8 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="example" />
-        <module name="bungee" />
         <module name="bukkit" />
+        <module name="bungee" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>

@@ -2,10 +2,10 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/StonlexAPI/StonlexAPI.iml" filepath="$PROJECT_DIR$/StonlexAPI/StonlexAPI.iml" />
-      <module fileurl="file://$PROJECT_DIR$/StonlexAPI/bukkit/bukkit.iml" filepath="$PROJECT_DIR$/StonlexAPI/bukkit/bukkit.iml" />
-      <module fileurl="file://$PROJECT_DIR$/StonlexAPI/bungee/bungee.iml" filepath="$PROJECT_DIR$/StonlexAPI/bungee/bungee.iml" />
-      <module fileurl="file://$PROJECT_DIR$/StonlexAPI/example/example.iml" filepath="$PROJECT_DIR$/StonlexAPI/example/example.iml" />
+      <module fileurl="file://$PROJECT_DIR$/StonlexAPI.iml" filepath="$PROJECT_DIR$/StonlexAPI.iml" />
+      <module fileurl="file://$PROJECT_DIR$/bukkit/bukkit.iml" filepath="$PROJECT_DIR$/bukkit/bukkit.iml" />
+      <module fileurl="file://$PROJECT_DIR$/bungee/bungee.iml" filepath="$PROJECT_DIR$/bungee/bungee.iml" />
+      <module fileurl="file://$PROJECT_DIR$/example/example.iml" filepath="$PROJECT_DIR$/example/example.iml" />
     </modules>
   </component>
 </project>

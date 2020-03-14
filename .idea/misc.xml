@@ -6,6 +6,8 @@
         <option value="$PROJECT_DIR$/StonlexAPI/pom.xml" />
         <option value="$PROJECT_DIR$/bukkit/pom.xml" />
         <option value="$PROJECT_DIR$/bungee/pom.xml" />
+        <option value="$PROJECT_DIR$/example/pom.xml" />
+        <option value="$PROJECT_DIR$/pom.xml" />
       </list>
     </option>
   </component>
