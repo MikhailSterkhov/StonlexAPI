@@ -7,12 +7,16 @@ import ru.stonlex.bukkit.protocol.packet.scoreboard.WrapperPlayServerScoreboardT
 import ru.stonlex.bukkit.tab.PlayerTag;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public final class TagManager {
 
     @Getter
     private final Map<String, PlayerTag> playerTagMap = new HashMap<>();
+
+    @Getter // тут будем кешировать тимы
+    private final Map<String, List<String>> teamCacheMap = new HashMap<>();
 
 
     /**
@@ -53,13 +57,12 @@ public final class TagManager {
             playerTag.sendPacket(receiver, WrapperPlayServerScoreboardTeam.Mode.PLAYERS_ADDED);
 
             playerTagMap.put(player.getName().toLowerCase(), playerTag);
-
             return;
         }
 
+        playerTag.setTeamName(teamName);
         playerTag.setPrefix(prefix);
         playerTag.setSuffix(suffix);
-        playerTag.setTeamName(teamName);
 
         playerTag.sendPacket(receiver, WrapperPlayServerScoreboardTeam.Mode.TEAM_UPDATED);
     }
@@ -108,7 +111,7 @@ public final class TagManager {
      */
     public void setTag(Player player, String teamName, String prefix, String suffix) {
         Bukkit.getOnlinePlayers().forEach(
-                receiver -> setTagToPlayer(player, receiver, player.getName(), prefix, suffix));
+                receiver -> setTagToPlayer(player, receiver, teamName, prefix, suffix));
     }
 
     /**
