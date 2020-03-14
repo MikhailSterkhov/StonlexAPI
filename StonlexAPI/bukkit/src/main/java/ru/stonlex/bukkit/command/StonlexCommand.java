@@ -1,13 +1,13 @@
 package ru.stonlex.bukkit.command;
 
-import ru.stonlex.bukkit.BukkitAPI;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
+import ru.stonlex.bukkit.BukkitAPI;
 
-public abstract class StonlexCommand<S extends CommandSender> extends Command
+public abstract class StonlexCommand<S extends CommandSender>
+        extends Command
         implements CommandExecutor {
 
 
@@ -45,29 +45,33 @@ public abstract class StonlexCommand<S extends CommandSender> extends Command
     }
 
     @Override
-    public boolean execute(CommandSender commandSender, String s, String[] strings) {
+    public boolean execute(CommandSender commandSender, String label, String[] args) {
+        S castedSender = ((S) commandSender);
+
+        // пишем ебаный ИИ
+        if ( !castedSender.getClass().equals(CommandSender.class) ) {
+            // пошел через костыли, ибо нормально работать он никак не хочет...
+            //  от слова совсем...
+            boolean isPlayer = getClass().getGenericSuperclass().getTypeName().contains("org.bukkit.entity.Player");
+
+            if ( !(commandSender instanceof Player) && isPlayer ) {
+                return true;
+            }
+
+            if ( commandSender instanceof Player && !isPlayer ) {
+                return true;
+            }
+        }
+
+        // ну все, щас он поработит галактику
+        CommandInfo commandInfo = new CommandInfo(this, label, args);
+        execute( castedSender, commandInfo );
+
         return false;
     }
 
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String label, String[] args) {
-        S castedSender = ((S) commandSender);
-
-        //пишем ебаный ИИ
-        if ( !castedSender.getClass().equals(CommandSender.class) ) {
-            if ( !(commandSender instanceof Player) && castedSender instanceof ConsoleCommandSender ) {
-                return true;
-            }
-
-            if ( !(commandSender instanceof ConsoleCommandSender) && castedSender instanceof Player ) {
-                return true;
-            }
-        }
-
-        //ну все, щас он поработит галактику
-        CommandInfo commandInfo = new CommandInfo(command, label, args);
-        execute( castedSender, commandInfo );
-
         return false;
     }
 

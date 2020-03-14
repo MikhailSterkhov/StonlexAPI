@@ -1,0 +1,14 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="StonlexAPI:jar">
+    <output-path>$USER_HOME$/Desktop/Minecraft projects</output-path>
+    <root id="archive" name="StonlexAPI.jar">
+      <element id="module-output" name="StonlexAPI" />
+      <element id="module-output" name="example" />
+      <element id="module-output" name="bukkit" />
+      <element id="module-output" name="bungee" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/javax/mail/mail/1.5.0-b01/mail-1.5.0-b01.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/mysql/mysql-connector-java/5.1.47/mysql-connector-java-5.1.47.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/google/code/gson/gson/2.8.0/gson-2.8.0.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>

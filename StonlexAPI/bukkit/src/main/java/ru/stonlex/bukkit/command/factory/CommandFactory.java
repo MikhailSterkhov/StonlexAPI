@@ -2,6 +2,7 @@ package ru.stonlex.bukkit.command.factory;
 
 import com.google.common.collect.Lists;
 import lombok.Getter;
+import org.bukkit.plugin.Plugin;
 import ru.stonlex.bukkit.BukkitAPI;
 import ru.stonlex.bukkit.command.StonlexCommand;
 import org.bukkit.Bukkit;
@@ -32,12 +33,27 @@ public final class CommandFactory {
      */
     public void registerCommand(StonlexCommand stonlexCommand,
                                 String command, String... aliases) {
+        registerCommand(BukkitAPI.getPlugin(BukkitAPI.class), stonlexCommand, command, aliases);
+    }
+
+    /**
+     * Регистрация комманд при помощи org.bukkit.command.CommandMap
+     *
+     *  (Код старый, переписывать его было лень, так как он и так
+     *   стабильно и правильно работает. Сделал его только чуток красивее)
+     *
+     * @param plugin - плагин, от имени котрого регистрируется команда
+     * @param stonlexCommand - команда
+     * @param command - главная команда
+     * @param aliases - ее алиасы
+     */
+    public void registerCommand(Plugin plugin, StonlexCommand stonlexCommand,
+                                String command, String... aliases) {
         commandList.add(stonlexCommand);
 
+        stonlexCommand.setLabel(command);
         stonlexCommand.setName(command);
         stonlexCommand.setAliases(Lists.newArrayList(aliases));
-        stonlexCommand.setUsage("");
-        stonlexCommand.setDescription("");
 
         try {
             if (commandMap == null) {
@@ -52,7 +68,7 @@ public final class CommandFactory {
                 commandMap = (SimpleCommandMap)commandMapField.get(craftServerObject);
             }
 
-            commandMap.register("StonlexAPI", stonlexCommand);
+            commandMap.register(plugin.getName(), stonlexCommand);
         } catch (Exception e) {
             e.printStackTrace();
         }

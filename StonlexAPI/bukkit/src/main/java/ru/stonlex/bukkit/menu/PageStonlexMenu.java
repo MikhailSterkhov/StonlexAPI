@@ -79,6 +79,9 @@ public abstract class PageStonlexMenu extends StonlexMenu {
      * Построение страничного инвентаря
      */
     private void buildPage(Player player) {
+        this.itemMap.clear();
+        this.clear();
+
         drawPagedInventory(player, page + 1);
 
         this.pagesCount = itemMap.buttonMap.size() / itemMap.slotsList.size();
@@ -98,10 +101,10 @@ public abstract class PageStonlexMenu extends StonlexMenu {
             int index = page * itemMap.slotsList.size() + i;
 
             if (itemMap.buttonMap.size() <= index) {
-                return;
+                break;
             }
 
-            int slot = itemMap.slotsList.get(i);
+            int slot = itemMap.getSlotsList().get(i);
 
             Map.Entry<ItemStack, Clickable<Player>> itemEntry = new ArrayList<>(itemMap.buttonMap.entrySet()).get(index);
             ItemStack itemStack = itemEntry.getKey();
@@ -165,10 +168,10 @@ public abstract class PageStonlexMenu extends StonlexMenu {
             throw new IllegalArgumentException("row index must be < 6");
         }
 
-        int endSlotIndex = rowIndex * 9;
-        int startSlotIndex = endSlotIndex - 9;
+        int startSlotIndex = (rowIndex * 9) - 8;
+        int endSlotIndex = startSlotIndex + 9;
 
-        if ( !sidesEnable ) {
+        if ( sidesEnable ) {
             if ( sideTab < 0 ) {
                 throw new IllegalArgumentException("side tab must be > 0");
             }
@@ -182,19 +185,6 @@ public abstract class PageStonlexMenu extends StonlexMenu {
         }
 
         setPageSize( currentSlotsSize );
-    }
-
-
-    /**
-     * Открытие инвентаря игроку
-     */
-    @Override
-    public void openInventory(Player player) {
-        clear();
-
-        buildPage(player);
-
-        super.openInventory(player);
     }
 
     /**
@@ -212,7 +202,7 @@ public abstract class PageStonlexMenu extends StonlexMenu {
 
     @Override
     public void drawInventory(Player player) {
-        drawPagedInventory(player, 1);
+        buildPage(player);
     }
 
     /**
@@ -250,6 +240,14 @@ public abstract class PageStonlexMenu extends StonlexMenu {
          */
         public void addItem(ItemStack itemStack, Clickable<Player> clickable) {
             buttonMap.put(itemStack, clickable);
+        }
+
+        /**
+         * Очистить все списки
+         */
+        public void clear() {
+            this.slotsList.clear();
+            this.buttonMap.clear();
         }
 
     }

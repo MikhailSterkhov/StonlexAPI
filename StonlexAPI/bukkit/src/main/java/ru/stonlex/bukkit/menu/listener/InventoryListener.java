@@ -1,21 +1,15 @@
 package ru.stonlex.bukkit.menu.listener;
 
-import lombok.RequiredArgsConstructor;
-import ru.stonlex.bukkit.BukkitAPI;
-import ru.stonlex.bukkit.menu.StonlexMenu;
-import ru.stonlex.bukkit.menu.button.InventoryButton;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
+import ru.stonlex.bukkit.menu.StonlexMenu;
+import ru.stonlex.bukkit.menu.button.InventoryButton;
 
-@RequiredArgsConstructor
 public class InventoryListener implements Listener {
-
-    private final BukkitAPI bukkitAPI;
-
 
     @EventHandler
     public void onClick(InventoryClickEvent e) {

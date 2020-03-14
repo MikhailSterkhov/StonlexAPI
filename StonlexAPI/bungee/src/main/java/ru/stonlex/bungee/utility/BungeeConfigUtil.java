@@ -18,4 +18,5 @@ public class BungeeConfigUtil {
     public BungeePluginConfig getPluginConfig(Plugin plugin) {
         return pluginConfigMap.computeIfAbsent(plugin, f -> new BungeePluginConfig(plugin.getDataFolder() + File.separator + "config.yml"));
     }
+
 }

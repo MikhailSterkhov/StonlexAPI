@@ -25,6 +25,7 @@
             <groupId>com.github.azbh111</groupId>
             <artifactId>ProtocolLib</artifactId>
             <version>4.4.0</version>
+            <scope>provided</scope>
         </dependency>
 
         <dependency>
@@ -38,7 +39,7 @@
             <groupId>net.milkbowl</groupId>
             <artifactId>Vault</artifactId>
             <version>1.7.1-b91</version>
-            <scope>compile</scope>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 

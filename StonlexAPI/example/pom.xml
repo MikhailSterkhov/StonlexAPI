@@ -23,6 +23,7 @@
             <groupId>net.md-5</groupId>
             <artifactId>bungeecord</artifactId>
             <version>1.12</version>
+            <scope>provided</scope>
         </dependency>
 
         <dependency>
@@ -43,7 +44,7 @@
             <groupId>net.milkbowl</groupId>
             <artifactId>Vault</artifactId>
             <version>1.7.1-b91</version>
-            <scope>compile</scope>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 

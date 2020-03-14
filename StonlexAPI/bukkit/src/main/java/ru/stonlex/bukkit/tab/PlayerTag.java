@@ -1,23 +1,22 @@
 package ru.stonlex.bukkit.tab;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import ru.stonlex.bukkit.protocol.packet.scoreboard.WrapperPlayServerScoreboardTeam;
 
 import java.util.Collections;
 
-@RequiredArgsConstructor
+@AllArgsConstructor
+@Getter
 public class PlayerTag {
 
-    @Getter
     private final Player player;
 
-    @Getter
-    private final String prefix, suffix, teamName;
-
-
-    private WrapperPlayServerScoreboardTeam scoreboardTeamPacket = new WrapperPlayServerScoreboardTeam();
+    @Setter
+    private String prefix, suffix, teamName;
 
 
     /**
@@ -27,6 +26,8 @@ public class PlayerTag {
      * @param mode - тип пакета
      */
     public void sendPacket(Player receiver, int mode) {
+        WrapperPlayServerScoreboardTeam scoreboardTeamPacket = new WrapperPlayServerScoreboardTeam();
+
         scoreboardTeamPacket.setName(teamName);
         scoreboardTeamPacket.setMode(mode);
 
@@ -44,6 +45,15 @@ public class PlayerTag {
         }
 
         scoreboardTeamPacket.sendPacket(receiver);
+    }
+
+    /**
+     * Отправить пакет всем игрокам онлайн
+     *
+     * @param mode - тип пакета
+     */
+    public void broadcastPacket(int mode) {
+        Bukkit.getOnlinePlayers().forEach(receiver -> sendPacket(receiver, mode));
     }
 
 }

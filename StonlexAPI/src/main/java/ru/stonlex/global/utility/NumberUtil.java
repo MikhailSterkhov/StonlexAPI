@@ -71,7 +71,7 @@ public class NumberUtil {
      * @param maxIndex - максимальный индекс
      */
     public int[] toManyArray(int minIndex, int maxIndex) {
-        int[] resultArray = new int[maxIndex];
+        int[] resultArray = new int[maxIndex - minIndex];
 
         int counter = 0;
         for (int i = minIndex ; i < maxIndex ; i++) {

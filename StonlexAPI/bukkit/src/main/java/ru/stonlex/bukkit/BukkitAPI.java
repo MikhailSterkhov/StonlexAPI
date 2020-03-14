@@ -14,6 +14,7 @@ import ru.stonlex.bukkit.game.GameManager;
 import ru.stonlex.bukkit.hologram.manager.HologramManager;
 import ru.stonlex.bukkit.menu.listener.InventoryListener;
 import ru.stonlex.bukkit.protocol.entity.listener.FakeEntityClickListener;
+import ru.stonlex.bukkit.tab.listener.TagListener;
 import ru.stonlex.bukkit.tab.manager.TagManager;
 import ru.stonlex.bukkit.vault.manager.VaultManager;
 
@@ -49,7 +50,8 @@ public final class BukkitAPI extends JavaPlugin implements PluginMessageListener
     public void onEnable() {
         registerFakeEntityClicker();
 
-        getServer().getPluginManager().registerEvents(new InventoryListener(this), this);
+        getServer().getPluginManager().registerEvents(new InventoryListener(), this);
+        getServer().getPluginManager().registerEvents(new TagListener(), this);
 
         getServer().getMessenger().registerOutgoingPluginChannel(this, PLUGIN_MESSAGE_TAG);
         getServer().getMessenger().registerIncomingPluginChannel(this, PLUGIN_MESSAGE_TAG, this);

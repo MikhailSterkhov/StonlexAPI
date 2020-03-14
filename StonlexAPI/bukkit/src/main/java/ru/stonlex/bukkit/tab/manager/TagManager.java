@@ -51,11 +51,17 @@ public final class TagManager {
 
             playerTag.sendPacket(receiver, WrapperPlayServerScoreboardTeam.Mode.TEAM_CREATED);
             playerTag.sendPacket(receiver, WrapperPlayServerScoreboardTeam.Mode.PLAYERS_ADDED);
+
+            playerTagMap.put(player.getName().toLowerCase(), playerTag);
+
+            return;
         }
 
-        playerTag.sendPacket(receiver, WrapperPlayServerScoreboardTeam.Mode.TEAM_UPDATED);
+        playerTag.setPrefix(prefix);
+        playerTag.setSuffix(suffix);
+        playerTag.setTeamName(teamName);
 
-        playerTagMap.put(player.getName().toLowerCase(), playerTag);
+        playerTag.sendPacket(receiver, WrapperPlayServerScoreboardTeam.Mode.TEAM_UPDATED);
     }
 
     /**
@@ -78,18 +84,7 @@ public final class TagManager {
      * @param prefix - префикс
      */
     public void setPrefixToPlayer(Player player, Player receiver, String prefix) {
-        PlayerTag playerTag = getPlayerTag(player);
-
-        if (playerTag == null) {
-            playerTag = new PlayerTag(player, prefix, "", player.getName());
-
-            playerTag.sendPacket(receiver, WrapperPlayServerScoreboardTeam.Mode.TEAM_CREATED);
-            playerTag.sendPacket(receiver, WrapperPlayServerScoreboardTeam.Mode.PLAYERS_ADDED);
-        }
-
-        playerTag.sendPacket(receiver, WrapperPlayServerScoreboardTeam.Mode.TEAM_UPDATED);
-
-        playerTagMap.put(player.getName().toLowerCase(), playerTag);
+        setTagToPlayer(player, receiver, prefix, "");
     }
 
     /**
@@ -100,18 +95,7 @@ public final class TagManager {
      * @param suffix - суффикс
      */
     public void setSuffixToPlayer(Player player, Player receiver, String suffix) {
-        PlayerTag playerTag = getPlayerTag(player);
-
-        if (playerTag == null) {
-            playerTag = new PlayerTag(player, "", suffix, player.getName());
-
-            playerTag.sendPacket(receiver, WrapperPlayServerScoreboardTeam.Mode.TEAM_CREATED);
-            playerTag.sendPacket(receiver, WrapperPlayServerScoreboardTeam.Mode.PLAYERS_ADDED);
-        }
-
-        playerTag.sendPacket(receiver, WrapperPlayServerScoreboardTeam.Mode.TEAM_UPDATED);
-
-        playerTagMap.put(player.getName().toLowerCase(), playerTag);
+        setTagToPlayer(player, receiver, "", suffix);
     }
 
     /**
