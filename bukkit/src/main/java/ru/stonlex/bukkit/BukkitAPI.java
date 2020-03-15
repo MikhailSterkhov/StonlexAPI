@@ -18,6 +18,11 @@ import ru.stonlex.bukkit.tab.listener.TagListener;
 import ru.stonlex.bukkit.tab.manager.TagManager;
 import ru.stonlex.bukkit.vault.manager.VaultManager;
 
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
 public final class BukkitAPI extends JavaPlugin implements PluginMessageListener {
 
     @Getter

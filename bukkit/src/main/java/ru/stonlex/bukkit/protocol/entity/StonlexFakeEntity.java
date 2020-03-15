@@ -73,12 +73,13 @@ public abstract class StonlexFakeEntity {
 
     private ChatColor glowingColor;
 
+
     public StonlexFakeEntity(EntityType entityType, Location location) {
-        this.id = (int) ENTITY_ID.get(null);
+        this.id = (int) ENTITY_ID.get(null) + 1;
         this.entityType = entityType;
         this.location = location;
 
-        ENTITY_ID.set(null, id + 1);
+        ENTITY_ID.set(null, id);
         ENTITIES.add(this);
     }
 

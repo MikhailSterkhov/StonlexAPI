@@ -5,6 +5,7 @@ import lombok.Setter;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import ru.stonlex.bukkit.menu.button.InventoryButton;
 import ru.stonlex.bukkit.menu.button.applicable.ButtonApplicable;
 import ru.stonlex.bukkit.utility.ItemUtil;
 import ru.stonlex.global.utility.NumberUtil;
@@ -84,7 +85,7 @@ public abstract class PageStonlexMenu extends StonlexMenu {
 
         drawPagedInventory(player, page + 1);
 
-        this.pagesCount = itemMap.buttonMap.size() / itemMap.slotsList.size();
+        this.pagesCount = itemMap.getButtonList().size() / itemMap.slotsList.size();
 
         if ( !(page >= pagesCount) ) {
             setItem(getInventory().getSize() - 3, ItemUtil.getItemStack(Material.ARROW,
@@ -100,16 +101,16 @@ public abstract class PageStonlexMenu extends StonlexMenu {
         for (int i = 0; i < itemMap.slotsList.size(); i++) {
             int index = page * itemMap.slotsList.size() + i;
 
-            if (itemMap.buttonMap.size() <= index) {
+            if (itemMap.getButtonList().size() <= index) {
                 break;
             }
 
             int slot = itemMap.getSlotsList().get(i);
 
-            Map.Entry<ItemStack, ButtonApplicable> itemEntry = new ArrayList<>(itemMap.getButtonMap().entrySet()).get(index);
-            ItemStack itemStack = itemEntry.getKey();
+            InventoryButton inventoryButton = itemMap.getButtonList().get(index);
+            ItemStack itemStack = inventoryButton.getItemStack();
 
-            setItem(slot, itemStack, itemEntry.getValue());
+            setItem(slot, itemStack, inventoryButton.getButtonApplicable());
         }
     }
 
@@ -217,7 +218,7 @@ public abstract class PageStonlexMenu extends StonlexMenu {
     @Getter
     public static class PageItemMap {
 
-        private Map<ItemStack, ButtonApplicable> buttonMap = new LinkedHashMap<>();
+        private List<InventoryButton> buttonList = new LinkedList<>();
 
         @Setter
         private List<Integer> slotsList = new ArrayList<>();
@@ -239,7 +240,9 @@ public abstract class PageStonlexMenu extends StonlexMenu {
          * @param buttonApplicable - кликабельность
          */
         public void addItem(ItemStack itemStack, ButtonApplicable buttonApplicable) {
-            buttonMap.put(itemStack, buttonApplicable);
+            InventoryButton inventoryButton = new InventoryButton(itemStack, buttonApplicable);
+
+            buttonList.add(inventoryButton);
         }
 
         /**
@@ -247,7 +250,7 @@ public abstract class PageStonlexMenu extends StonlexMenu {
          */
         public void clear() {
             this.slotsList.clear();
-            this.buttonMap.clear();
+            this.buttonList.clear();
         }
 
     }

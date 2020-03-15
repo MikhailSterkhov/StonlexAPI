@@ -1,11 +1,14 @@
 package ru.stonlex.global.utility;
 
+import lombok.Getter;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
 public abstract class AbstractCacheManager<T> {
 
+    @Getter
     protected final Map<String, T> cacheMap = new HashMap<>();
 
 

@@ -33,7 +33,7 @@ public class StonlexHologram {
      * Получить количество строк
      */
     public int getLineCount() {
-        return getLines().size();
+        return lines.size();
     }
 
     /**
@@ -148,11 +148,7 @@ public class StonlexHologram {
      */
     public void refreshHologram() {
         for (int i = 0; i < lines.size(); i++) {
-
-            String line = lines.get(i);
-            FakeArmorStand stand = entities.get(i);
-
-            stand.setCustomName(line);
+            entities.get(i).setCustomName(lines.get(i));
         }
 
         teleport(location);

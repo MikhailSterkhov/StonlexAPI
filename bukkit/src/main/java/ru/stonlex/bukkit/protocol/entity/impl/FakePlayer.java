@@ -13,6 +13,7 @@ import ru.stonlex.bukkit.protocol.packet.entity.WrapperPlayServerNamedEntitySpaw
 import ru.stonlex.bukkit.protocol.packet.entity.WrapperPlayServerPlayerInfo;
 import ru.stonlex.bukkit.protocol.packet.scoreboard.WrapperPlayServerScoreboardTeam;
 import ru.stonlex.bukkit.utility.MojangUtil;
+import ru.stonlex.global.utility.NumberUtil;
 
 import java.util.Collections;
 import java.util.UUID;
@@ -20,8 +21,6 @@ import java.util.concurrent.ThreadLocalRandom;
 
 @Getter
 public class FakePlayer extends StonlexFakeEntity {
-
-    private static final ThreadLocalRandom RANDOM = ThreadLocalRandom.current();
 
     private final UUID uuid;
     private final MojangUtil.Skin skin;
@@ -34,7 +33,7 @@ public class FakePlayer extends StonlexFakeEntity {
     public FakePlayer(String skin, Location location) {
         super(EntityType.PLAYER, location);
 
-        this.name = "§8NPC [" + RANDOM.nextInt(999999) + "]";
+        this.name = "§8NPC [" + NumberUtil.getRandom().nextInt(999999) + "]";
         this.uuid = UUID.randomUUID();
         this.skin = MojangUtil.getSkinTextures(skin);
     }
