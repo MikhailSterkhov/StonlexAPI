@@ -7,9 +7,9 @@ import lombok.Getter;
 import lombok.NonNull;
 import org.bukkit.ChatColor;
 import ru.stonlex.bukkit.board.StonlexSidebar;
-import ru.stonlex.bukkit.protocol.packet.AbstractPacket;
-import ru.stonlex.bukkit.protocol.packet.scoreboard.WrapperPlayServerScoreboardScore;
-import ru.stonlex.bukkit.protocol.packet.scoreboard.WrapperPlayServerScoreboardTeam;
+import ru.stonlex.bukkit.module.protocol.packet.AbstractPacket;
+import ru.stonlex.bukkit.module.protocol.packet.scoreboard.WrapperPlayServerScoreboardScore;
+import ru.stonlex.bukkit.module.protocol.packet.scoreboard.WrapperPlayServerScoreboardTeam;
 
 import java.util.Collections;
 import java.util.Iterator;

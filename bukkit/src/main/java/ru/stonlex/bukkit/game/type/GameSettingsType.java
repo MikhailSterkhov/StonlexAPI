@@ -15,5 +15,4 @@ public enum GameSettingsType {
     DENY_DAMAGE,
     DENY_FIGHT,
     DENY_BUILD
-
 }

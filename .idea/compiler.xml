@@ -7,6 +7,7 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="global" />
         <module name="example" />
         <module name="bukkit" />
         <module name="bungee" />
@@ -16,6 +17,8 @@
       <module name="bukkit" target="8" />
       <module name="bungee" target="8" />
       <module name="example" target="8" />
+      <module name="global" target="8" />
+      <module name="protocol" target="8" />
       <module name="StonlexAPI" target="8" />
     </bytecodeTargetLevel>
   </component>

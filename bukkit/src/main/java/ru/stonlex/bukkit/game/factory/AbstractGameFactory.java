@@ -1,9 +1,12 @@
 package ru.stonlex.bukkit.game.factory;
 
+import com.google.common.io.ByteArrayDataOutput;
+import com.google.common.io.ByteStreams;
 import lombok.Getter;
 import lombok.NonNull;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 import ru.stonlex.bukkit.BukkitAPI;
 import ru.stonlex.bukkit.game.GameManager;
 import ru.stonlex.bukkit.game.GameSettings;
@@ -13,20 +16,29 @@ import ru.stonlex.bukkit.game.type.GameType;
 
 import java.util.Collection;
 
-@Getter
 public abstract class AbstractGameFactory extends GameListener {
 
-//---------------------------------------------------------------//
+    private final Plugin plugin;
+
+//=======================================================================================//
+
+    @Getter
     protected final GameManager gameManager = BukkitAPI.getGameManager();
 
+    @Getter
     protected final GameSettings gameSettings = gameManager.getGameSettings();
-//---------------------------------------------------------------//
+
+//=======================================================================================//
 
     /**
      * Инициализация некоторых настроек игры
      */
-    public AbstractGameFactory(@NonNull GameType gameType, int startSecondsTimer) {
+    public AbstractGameFactory(@NonNull GameType gameType,
+                               @NonNull Plugin plugin,
+                               int startSecondsTimer) {
+
         super(true);
+        this.plugin = plugin;
 
         gameSettings.GAME_TYPE = gameType;
         gameSettings.LOBBY_TIMER_START_SECONDS = startSecondsTimer;
@@ -40,12 +52,7 @@ public abstract class AbstractGameFactory extends GameListener {
     public abstract void onStartGame();
 
     /**
-     * Вызывается при окончании игры с победителями
-     */
-    public abstract void onStopGame(@NonNull Player... winnerPlayers);
-
-    /**
-     * Вызывается тогда, когда необходимо выключить игру
+     * Вызывается при окончании игры
      */
     public abstract void onStopGame();
 
@@ -65,7 +72,7 @@ public abstract class AbstractGameFactory extends GameListener {
      */
     protected void broadcastToAll(String text) {
         Bukkit.getOnlinePlayers().forEach(player -> {
-            String message = gameSettings.SUCCESSFULLY_PREFIX.concat(text);
+            String message = gameSettings.BROADCAST_PREFIX.concat(text);
 
             player.sendMessage(message);
         });
@@ -80,7 +87,7 @@ public abstract class AbstractGameFactory extends GameListener {
      */
     protected void broadcast(Collection<GamePlayer> players, String text) {
         players.forEach(gamePlayer -> {
-            String message = gameSettings.SUCCESSFULLY_PREFIX.concat(text);
+            String message = gameSettings.BROADCAST_PREFIX.concat(text);
 
             gamePlayer.getPlayer().sendMessage(message);
         });
@@ -104,6 +111,32 @@ public abstract class AbstractGameFactory extends GameListener {
      */
     protected void broadcastToPlayers(String text) {
         broadcast(gameManager.getAlivePlayers(), text);
+    }
+
+    /**
+     * Принудительно остановить игру
+     */
+    protected void stop() {
+        for (Player player : Bukkit.getOnlinePlayers()) {
+
+            //broadcast
+            broadcastToAll("§e[Game] Арена перезагружается!");
+
+            //connect to lobby
+            ByteArrayDataOutput dataOutput = ByteStreams.newDataOutput();
+
+            dataOutput.writeUTF("Connect");
+
+            dataOutput.writeUTF(player.getName());
+            dataOutput.writeUTF(gameSettings.LOBBY_SERVER_NAME);
+
+            Bukkit.getServer().sendPluginMessage(BukkitAPI.getInstance(), "BungeeCord", dataOutput.toByteArray());
+        }
+
+        plugin.onEnable();
+
+        Bukkit.unloadWorld(gameSettings.ARENA_WORLD_NAME, false);
+        Bukkit.shutdown();
     }
 
 }

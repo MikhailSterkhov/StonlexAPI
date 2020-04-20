@@ -6,6 +6,7 @@
       <module fileurl="file://$PROJECT_DIR$/bukkit/bukkit.iml" filepath="$PROJECT_DIR$/bukkit/bukkit.iml" />
       <module fileurl="file://$PROJECT_DIR$/bungee/bungee.iml" filepath="$PROJECT_DIR$/bungee/bungee.iml" />
       <module fileurl="file://$PROJECT_DIR$/example/example.iml" filepath="$PROJECT_DIR$/example/example.iml" />
+      <module fileurl="file://$PROJECT_DIR$/global/global.iml" filepath="$PROJECT_DIR$/global/global.iml" />
     </modules>
   </component>
 </project>

@@ -1,29 +1,25 @@
 package ru.stonlex.bukkit;
 
 import com.comphenix.protocol.ProtocolLibrary;
-import com.google.common.io.ByteArrayDataInput;
-import com.google.common.io.ByteStreams;
 import lombok.Getter;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.plugin.messaging.PluginMessageListener;
 import ru.stonlex.bukkit.board.manager.SidebarManager;
 import ru.stonlex.bukkit.command.factory.CommandFactory;
 import ru.stonlex.bukkit.event.EventRegisterManager;
 import ru.stonlex.bukkit.game.GameManager;
+import ru.stonlex.bukkit.game.factory.AbstractGameFactory;
+import ru.stonlex.bukkit.game.factory.AbstractGameTimer;
+import ru.stonlex.bukkit.game.listener.GameFactoryListener;
+import ru.stonlex.bukkit.game.setup.SetupManager;
+import ru.stonlex.bukkit.game.setup.builder.SetupBuilder;
 import ru.stonlex.bukkit.hologram.manager.HologramManager;
 import ru.stonlex.bukkit.menu.listener.InventoryListener;
-import ru.stonlex.bukkit.protocol.entity.listener.FakeEntityClickListener;
+import ru.stonlex.bukkit.module.protocol.entity.listener.FakeEntityClickListener;
+import ru.stonlex.bukkit.module.vault.manager.VaultManager;
 import ru.stonlex.bukkit.tab.listener.TagListener;
 import ru.stonlex.bukkit.tab.manager.TagManager;
-import ru.stonlex.bukkit.vault.manager.VaultManager;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-
-public final class BukkitAPI extends JavaPlugin implements PluginMessageListener {
+public final class BukkitAPI extends JavaPlugin {
 
     @Getter
     private static final CommandFactory commandFactory = new CommandFactory();
@@ -47,19 +43,19 @@ public final class BukkitAPI extends JavaPlugin implements PluginMessageListener
     private static VaultManager vaultManager = null;
 
 
-    public static final String PLUGIN_MESSAGE_TAG = "StonlexChannel";
-
+    @Getter
+    private static BukkitAPI instance; {
+        instance = this;
+    }
 
 
     @Override
     public void onEnable() {
         registerFakeEntityClicker();
+        registerGameApi();
 
         getServer().getPluginManager().registerEvents(new InventoryListener(), this);
         getServer().getPluginManager().registerEvents(new TagListener(), this);
-
-        getServer().getMessenger().registerOutgoingPluginChannel(this, PLUGIN_MESSAGE_TAG);
-        getServer().getMessenger().registerIncomingPluginChannel(this, PLUGIN_MESSAGE_TAG, this);
 
         vaultManager = new VaultManager();
     }
@@ -75,19 +71,17 @@ public final class BukkitAPI extends JavaPlugin implements PluginMessageListener
         ProtocolLibrary.getProtocolManager().addPacketListener(entityClickListener);
     }
 
-    @Override
-    public void onPluginMessageReceived(String messageTag, Player player, byte[] bytes) {
-        ByteArrayDataInput dataInput = ByteStreams.newDataInput( bytes );
+    /**
+     * Инициализация и регистрация фабрик игрового АПИ
+     */
+    private void registerGameApi() {
+        SetupBuilder setupBuilder = gameManager.getSetupManager().getSetupBuilder();
 
-        if ( !messageTag.equals(PLUGIN_MESSAGE_TAG) ) {
+        if (setupBuilder != null && setupBuilder.isSetupMode()) {
             return;
         }
 
-        String channel = dataInput.readLine();
-
-        switch (channel) {
-            //todo
-        }
+        new GameFactoryListener();
     }
 
 }

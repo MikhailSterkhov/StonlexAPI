@@ -17,9 +17,7 @@ public abstract class PageStonlexMenu extends StonlexMenu {
 
     private int page, pagesCount;
 
-
     private final String inventoryTitle;
-
     private final PageItemMap itemMap = new PageItemMap();
 
 
@@ -80,20 +78,20 @@ public abstract class PageStonlexMenu extends StonlexMenu {
      * Построение страничного инвентаря
      */
     private void buildPage(Player player) {
-        this.itemMap.clear();
-        this.clear();
+        itemMap.clear();
 
+        clearInventory();
         drawPagedInventory(player, page + 1);
 
         this.pagesCount = itemMap.getButtonList().size() / itemMap.slotsList.size();
 
         if ( !(page >= pagesCount) ) {
-            setItem(getInventory().getSize() - 3, ItemUtil.getItemStack(Material.ARROW,
+            setItem(getBukkitInventory().getSize() - 3, ItemUtil.getItemStack(Material.ARROW,
                     "§eВперед"), (player1, event) -> forward(player));
         }
 
         if ( !(page - 1 < 0) ) {
-            setItem(getInventory().getSize() - 5, ItemUtil.getItemStack(Material.ARROW,
+            setItem(getBukkitInventory().getSize() - 5, ItemUtil.getItemStack(Material.ARROW,
                     "§eНазад"), (player1, event) -> backward(player));
         }
 
@@ -186,19 +184,6 @@ public abstract class PageStonlexMenu extends StonlexMenu {
         }
 
         setPageSize( currentSlotsSize );
-    }
-
-    /**
-     * Обновление инвентаря игроку
-     */
-    @Override
-    public void updateInventory(Player player) {
-        super.updateInventory(player, () -> {
-            clear();
-
-            buildPage(player);
-            drawInventory(player);
-        });
     }
 
     @Override

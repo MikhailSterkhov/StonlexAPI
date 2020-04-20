@@ -2,3 +2,7 @@ name: StonlexAPI
 main: ru.stonlex.bukkit.BukkitAPI
 version: 1.0
 author: ItzStonlex
+
+depend:
+  - ProtocolLib
+  - Vault

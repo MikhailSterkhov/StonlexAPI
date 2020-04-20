@@ -49,16 +49,14 @@ public abstract class StonlexCommand<S extends CommandSender>
         S castedSender = ((S) commandSender);
 
         // пишем ебаный ИИ
-        if ( !castedSender.getClass().equals(CommandSender.class) ) {
-            // пошел через костыли, ибо нормально работать он никак не хочет...
-            //  от слова совсем...
-            boolean isPlayer = getClass().getGenericSuperclass().getTypeName().contains("org.bukkit.entity.Player");
+        if (!castedSender.getClass().isAssignableFrom(CommandSender.class)) {
+            boolean isPlayer = commandSender.getClass().isAssignableFrom(Player.class);
 
-            if ( !(commandSender instanceof Player) && isPlayer ) {
+            if (!(commandSender instanceof Player) && isPlayer) {
                 return true;
             }
 
-            if ( commandSender instanceof Player && !isPlayer ) {
+            if (commandSender instanceof Player && !isPlayer) {
                 return true;
             }
         }

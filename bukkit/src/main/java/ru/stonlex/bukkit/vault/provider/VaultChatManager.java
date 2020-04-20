@@ -32,7 +32,6 @@ public final class VaultChatManager {
         if (vaultChat == null) {
             Bukkit.getConsoleSender().sendMessage(NO_INIT_MESSAGE);
         }
-
     }
 
 }

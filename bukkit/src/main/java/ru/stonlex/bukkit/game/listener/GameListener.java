@@ -15,7 +15,7 @@ public abstract class GameListener implements Listener {
     }
 
     public void register() {
-        Bukkit.getPluginManager().registerEvents(this, BukkitAPI.getPlugin(BukkitAPI.class));
+        Bukkit.getPluginManager().registerEvents(this, BukkitAPI.getInstance());
     }
 
 }

@@ -1,10 +1,19 @@
 package ru.stonlex.bukkit.game.player;
 
+import gnu.trove.map.TIntObjectMap;
+import gnu.trove.map.hash.TIntObjectHashMap;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import ru.stonlex.bukkit.BukkitAPI;
+import ru.stonlex.bukkit.game.item.GameItem;
+import ru.stonlex.bukkit.module.vault.player.VaultPlayer;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 public class GamePlayer {
 
@@ -13,6 +22,10 @@ public class GamePlayer {
 
     @Getter
     private final Player player;
+
+
+    @Getter
+    private TIntObjectMap<List<GameItem>> boughtItemMap = new TIntObjectHashMap<>();
 
 
     @Getter
@@ -42,6 +55,23 @@ public class GamePlayer {
         player.setFlying(true);
 
         player.getInventory().clear();
+    }
+
+    /**
+     * Создать из данного игрока объект получения
+     * данных Vault для этого игрока
+     */
+    public VaultPlayer getVaultPlayer() {
+        return BukkitAPI.getVaultManager().getVaultPlayer(name);
+    }
+
+    /**
+     * Если предмет куплен у игрока
+     *
+     * @param gameItem - предмет
+     */
+    public boolean isItemBought(GameItem gameItem) {
+        return boughtItemMap.containsKey(gameItem.getItemId());
     }
 
 }

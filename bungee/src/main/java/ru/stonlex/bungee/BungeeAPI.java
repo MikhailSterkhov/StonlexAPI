@@ -1,17 +1,20 @@
 package ru.stonlex.bungee;
 
+import lombok.Getter;
 import net.md_5.bungee.api.plugin.Plugin;
-import ru.stonlex.bungee.messaging.MessagingListener;
+import ru.stonlex.bungee.listener.PlayerListener;
 
 public final class BungeeAPI extends Plugin {
 
-    public static final String PLUGIN_MESSAGE_TAG = "StonlexChannel";
+    @Getter
+    private static BungeeAPI instance; {
+        instance = this;
+    }
 
 
     @Override
     public void onEnable() {
-        getProxy().registerChannel( PLUGIN_MESSAGE_TAG );
-        getProxy().getPluginManager().registerListener(this, new MessagingListener());
+        getProxy().getPluginManager().registerListener(this, new PlayerListener());
     }
 
 }

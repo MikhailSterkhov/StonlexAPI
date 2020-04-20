@@ -5,6 +5,7 @@ import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import ru.stonlex.bukkit.BukkitAPI;
 
@@ -20,6 +21,11 @@ public class VaultPlayer  {
     private final static Permission vaultPermission = BukkitAPI.getVaultManager().getPermissionManager().getVaultPermission();
 
 
+    /**
+     * Конструктор, который инициализирует Vault-игрока
+     *
+     * @param playerName - ник игрока, которого инициализируем
+     */
     public VaultPlayer(String playerName) {
         this.playerName = playerName;
         this.offlinePlayer = Bukkit.getOfflinePlayer(playerName);
@@ -34,31 +40,38 @@ public class VaultPlayer  {
     }
 
     /**
+     * Получить DisplayName игрока
+     */
+    public String getDisplayName() {
+        return getPrefix() + playerName + getSuffix();
+    }
+
+    /**
      * Получить префикс игрока
      */
     public String getPrefix() {
-        return vaultChat.getPlayerPrefix((String) null, playerName);
+        return ChatColor.translateAlternateColorCodes('&', vaultChat.getPlayerPrefix((String) null, playerName));
     }
 
     /**
      * Получить cуффикс игрока
      */
     public String getSuffix() {
-        return vaultChat.getPlayerSuffix((String) null, playerName);
+        return ChatColor.translateAlternateColorCodes('&', vaultChat.getPlayerSuffix((String) null, playerName));
     }
 
     /**
      * Получить префикс группы игрока
      */
     public String getGroupPrefix() {
-        return vaultChat.getGroupPrefix((String) null, getPrimaryGroup());
+        return ChatColor.translateAlternateColorCodes('&', vaultChat.getGroupPrefix((String) null, getPrimaryGroup()));
     }
 
     /**
      * Получить суффикс группы игрока
      */
     public String getGroupSuffix() {
-        return vaultChat.getGroupSuffix((String) null, getPrimaryGroup());
+        return ChatColor.translateAlternateColorCodes('&', vaultChat.getGroupSuffix((String) null, getPrimaryGroup()));
     }
 
     /**
@@ -86,6 +99,16 @@ public class VaultPlayer  {
         } else if (balance < getBalance()) {
             takeMoney(getBalance() - balance);
         }
+    }
+
+    /**
+     * Возвращает boolean, который говорит о том, есть ли
+     * у игрока указанное количество монет
+     *
+     * @param moneyCount - количество монет
+     */
+    public boolean hasMoney(int moneyCount) {
+        return getBalance() >= moneyCount;
     }
 
     /**

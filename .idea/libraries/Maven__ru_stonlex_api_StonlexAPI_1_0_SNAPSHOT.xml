@@ -1,0 +1,15 @@
+<component name="libraryTable">
+  <library name="Maven: ru.stonlex.api:StonlexAPI:1.0-SNAPSHOT">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/ru/stonlex/api/StonlexAPI/1.0-SNAPSHOT/StonlexAPI-1.0-SNAPSHOT.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$PROJECT_DIR$/global/StonlexAPI-1.0-SNAPSHOT-javadoc.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/ru/stonlex/api/StonlexAPI/1.0-SNAPSHOT/StonlexAPI-1.0-SNAPSHOT-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/global/StonlexAPI-1.0-SNAPSHOT-sources.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/ru/stonlex/api/StonlexAPI/1.0-SNAPSHOT/StonlexAPI-1.0-SNAPSHOT-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

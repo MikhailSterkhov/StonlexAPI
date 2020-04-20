@@ -15,6 +15,10 @@ public class LocationUtil {
      *  - 'world_name, x, y, z, yaw, pitch'
      */
     public String locationToString(Location location) {
+        if (location == null) {
+            return null;
+        }
+
         return String.format("%s, %s, %s, %s, %s, %s", location.getWorld().getName(),
                 location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch());
     }
@@ -23,8 +27,11 @@ public class LocationUtil {
      * Преобразование строки с координатами в саму локацию
      */
     public Location stringToLocation(String locString) {
-        String[] locData = locString.split(", ");
+        if (locString == null) {
+            return null;
+        }
 
+        String[] locData = locString.split(", ");
         World world = Bukkit.getWorld(locData[0]);
 
         Objects.requireNonNull(world, "world is null");

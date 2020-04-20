@@ -17,7 +17,6 @@ import ru.stonlex.global.utility.NumberUtil;
 
 import java.util.Collections;
 import java.util.UUID;
-import java.util.concurrent.ThreadLocalRandom;
 
 @Getter
 public class FakePlayer extends StonlexFakeEntity {

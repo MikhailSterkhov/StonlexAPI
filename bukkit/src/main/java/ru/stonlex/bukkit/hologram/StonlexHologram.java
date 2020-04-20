@@ -1,7 +1,7 @@
 package ru.stonlex.bukkit.hologram;
 
 import lombok.Getter;
-import ru.stonlex.bukkit.protocol.entity.impl.FakeArmorStand;
+import ru.stonlex.bukkit.module.protocol.entity.impl.FakeArmorStand;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;

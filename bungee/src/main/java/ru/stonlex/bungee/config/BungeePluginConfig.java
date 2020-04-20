@@ -59,7 +59,7 @@ public class BungeePluginConfig {
      *
      * @param plugin - плагин
      */
-    public void saveResource(Plugin plugin) {
+    public void saveDefaultConfig(Plugin plugin) {
         String dataFolder = plugin.getDataFolder().getName();
         String resourceName = configPath.startsWith(dataFolder) ? configPath.substring(dataFolder.length()) : configPath;
 

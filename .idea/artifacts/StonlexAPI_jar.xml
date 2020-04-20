@@ -3,12 +3,13 @@
     <output-path>$USER_HOME$/Desktop/Minecraft projects</output-path>
     <root id="archive" name="StonlexAPI.jar">
       <element id="module-output" name="StonlexAPI" />
+      <element id="module-output" name="bungee" />
       <element id="module-output" name="example" />
       <element id="module-output" name="bukkit" />
-      <element id="module-output" name="bungee" />
+      <element id="module-output" name="global" />
       <element id="extracted-dir" path="$MAVEN_REPOSITORY$/javax/mail/mail/1.5.0-b01/mail-1.5.0-b01.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/mysql/mysql-connector-java/5.1.47/mysql-connector-java-5.1.47.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/google/code/gson/gson/2.8.0/gson-2.8.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/apache/commons/commons-lang3/3.10/commons-lang3-3.10.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/javax/activation/activation/1.1/activation-1.1.jar" path-in-jar="/" />
     </root>
   </artifact>
 </component>

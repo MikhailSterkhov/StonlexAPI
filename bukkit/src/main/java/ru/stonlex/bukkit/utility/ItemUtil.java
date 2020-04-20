@@ -184,8 +184,11 @@ public class ItemUtil {
         }
 
         public ItemBuilder setName(String name) {
-            ItemMeta meta = itemStack.getItemMeta();
+            if (name == null) {
+                return this;
+            }
 
+            ItemMeta meta = itemStack.getItemMeta();
             meta.setDisplayName(name);
 
             this.itemStack.setItemMeta(meta);
@@ -194,8 +197,11 @@ public class ItemUtil {
         }
 
         public ItemBuilder setLore(String... lore) {
-            ItemMeta meta = itemStack.getItemMeta();
+            if (lore == null) {
+                return this;
+            }
 
+            ItemMeta meta = itemStack.getItemMeta();
             meta.setLore(Arrays.asList(lore));
 
             this.itemStack.setItemMeta(meta);
@@ -204,8 +210,11 @@ public class ItemUtil {
         }
 
         public ItemBuilder setLore(List<String> lore) {
-            ItemMeta meta = itemStack.getItemMeta();
+            if (lore == null) {
+                return this;
+            }
 
+            ItemMeta meta = itemStack.getItemMeta();
             meta.setLore(lore);
 
             this.itemStack.setItemMeta(meta);
@@ -273,6 +282,10 @@ public class ItemUtil {
         }
 
         public ItemBuilder setPlayerSkull(String playerSkull) {
+            if (playerSkull == null) {
+                return this;
+            }
+
             SkullMeta skullMeta = (SkullMeta) itemStack.getItemMeta();
 
             skullMeta.setOwner(playerSkull);
@@ -283,6 +296,10 @@ public class ItemUtil {
         }
 
         public ItemBuilder setTextureValue(String texture) {
+            if (texture == null) {
+                return this;
+            }
+
             SkullMeta skullMeta = (SkullMeta) itemStack.getItemMeta();
 
             try {

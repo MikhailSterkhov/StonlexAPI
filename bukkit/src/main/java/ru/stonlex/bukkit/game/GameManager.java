@@ -6,6 +6,7 @@ import org.bukkit.entity.Player;
 import ru.stonlex.bukkit.game.factory.AbstractGameFactory;
 import ru.stonlex.bukkit.game.factory.AbstractGameTimer;
 import ru.stonlex.bukkit.game.player.GamePlayer;
+import ru.stonlex.bukkit.game.setup.SetupManager;
 import ru.stonlex.bukkit.game.type.GameSettingsType;
 
 import java.util.Collection;
@@ -19,6 +20,9 @@ public final class GameManager {
     private final GameSettings gameSettings = new GameSettings();
 
     @Getter
+    private final SetupManager setupManager = new SetupManager();
+
+    @Getter
     private final Map<String, GamePlayer> gamePlayerMap = new LinkedHashMap<>();
 
     @Getter
@@ -28,7 +32,6 @@ public final class GameManager {
     @Getter
     @Setter
     private AbstractGameTimer gameTimer;
-
 
 
     /**
@@ -50,14 +53,12 @@ public final class GameManager {
     }
 
 
-
     /**
      * Получить список выживших игроков
      */
     public Collection<GamePlayer> getAlivePlayers() {
         return gamePlayerMap.values().stream()
-                .filter(gamePlayer -> !gamePlayer.isSpectate())
-                .collect(Collectors.toList());
+                .filter(gamePlayer -> !gamePlayer.isSpectate()).collect(Collectors.toList());
     }
 
     /**
@@ -65,10 +66,8 @@ public final class GameManager {
      */
     public Collection<GamePlayer> getSpectatePlayers() {
         return gamePlayerMap.values().stream()
-                .filter(GamePlayer::isSpectate)
-                .collect(Collectors.toList());
+                .filter(GamePlayer::isSpectate).collect(Collectors.toList());
     }
-
 
 
     /**
@@ -82,23 +81,28 @@ public final class GameManager {
             // ======================== // DEFAULT // ======================== //
             case WAIT_LOBBY: {
                 gameSettings.PLAYER_MOVE = true;
+
                 gameSettings.BLOCK_BREAK = false;
                 gameSettings.BLOCK_PLACE = false;
                 gameSettings.LEAVES_DECAY = false;
+
                 gameSettings.PLAYER_DAMAGE = false;
                 gameSettings.ENTITY_DAMAGE = false;
                 gameSettings.PLAYER_DAMAGE_FALL = false;
                 gameSettings.PLAYER_DAMAGE_BY_PLAYER = false;
                 gameSettings.PLAYER_DAMAGE_BY_ENTITY = false;
                 gameSettings.ENTITY_DAMAGE_BY_PLAYER = false;
+
                 gameSettings.ENTITY_SPAWN = false;
+
                 gameSettings.PLAYER_FOOD_CHANGE = false;
+
                 gameSettings.PLAYER_PICKUP_ITEM = false;
                 gameSettings.PLAYER_DROP_ITEM = false;
+
                 gameSettings.WEATHER_CHANGE = false;
                 break;
             }
-
 
             // ======================== // ALLOW // ======================== //
             case ALLOW_BUILD: {
@@ -132,7 +136,6 @@ public final class GameManager {
                 gameSettings.PLAYER_DROP_ITEM = true;
                 break;
             }
-
 
             // ======================== // DENY // ======================== //
             case DENY_BUILD: {

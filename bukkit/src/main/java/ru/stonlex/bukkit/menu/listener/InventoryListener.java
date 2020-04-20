@@ -25,13 +25,12 @@ public class InventoryListener implements Listener {
         event.setCancelled(true);
 
         InventoryButton button = inventory.getButtonMap().get(slot + 1);
-
         button.getButtonApplicable().execute(player, event);
     }
 
     @EventHandler
-    public void onClose(InventoryCloseEvent e) {
-        Player player = (Player) e.getPlayer();
+    public void onClose(InventoryCloseEvent event) {
+        Player player = (Player) event.getPlayer();
         StonlexMenu inventory = StonlexMenu.getInventoryMap().get(player.getName().toLowerCase());
 
         if (inventory == null) {

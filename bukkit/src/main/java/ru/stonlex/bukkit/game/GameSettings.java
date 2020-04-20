@@ -30,7 +30,7 @@ public final class GameSettings {
             "§7Используйте данный предмет,",
             "§7чтобы открыть выбор игрового перка.");
 
-    public ItemStack KIT_SELECT_ITEM = ItemUtil.getItemStack(Material.CHEST, "§aВыбор набора",
+    public ItemStack KIT_SELECT_ITEM = ItemUtil.getItemStack(Material.APPLE, "§aВыбор набора",
             "",
             "§7Используйте данный предмет,",
             "§7чтобы открыть выбор игрового набора.");
@@ -48,15 +48,12 @@ public final class GameSettings {
     public GameType GAME_TYPE = GameType.SOLO;
     public GameStatus GAME_STATUS = GameStatus.WAITING_PLAYERS;
 
-    public String SUCCESSFULLY_PREFIX = "§6SkyWars §8| §f";
+    public String BROADCAST_PREFIX = "§3Объявление §8| §f";
+    public String DEFAULT_PREFIX = "§6SkyWars §8| §f";
     public String ERROR_PREFIX = "§c";
     public String LOBBY_SERVER_NAME = "swlobby-1";
     public String GAME_NAME = "SkyWars";
     public String ARENA_WORLD_NAME = "world";
-
-    public Location SPECTATOR_SPAWN_LOCATION;
-    public Location LOBBY_SPAWN_LOCATION;
-    public Location END_SPAWN_LOCATION;
 
     public boolean BLOCK_BREAK = false;
     public boolean BLOCK_PLACE = false;

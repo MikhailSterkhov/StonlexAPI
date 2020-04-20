@@ -20,7 +20,7 @@ public class ExamplePageMenu extends PageStonlexMenu {
 
         addRowToPageSize(2, 1, true);
         addRowToPageSize(3, 0, false);
-        addRowToPageSize(4, 1,  true);
+        addRowToPageSize(4, 1, true);
 
         addItemToPage(new ItemStack(Material.STONE), (player1, event) -> player.closeInventory());
         addItemToPage(new ItemStack(Material.DIAMOND), (player1, event) -> player.closeInventory());

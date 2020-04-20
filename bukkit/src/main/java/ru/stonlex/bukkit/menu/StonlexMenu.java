@@ -15,17 +15,26 @@ import java.util.Map;
 @Getter
 public abstract class StonlexMenu {
 
-    private Inventory inventory;
-    private final InventoryInfo info;
-    private final Map<Integer, InventoryButton> buttonMap;
-
     @Getter
     private static final Map<String, StonlexMenu> inventoryMap = new HashMap<>();
 
+
+    private Inventory bukkitInventory;
+
+    private final InventoryInfo inventoryInfo;
+    private final Map<Integer, InventoryButton> buttonMap;
+
+    /**
+     * Инициализация инвентаря
+     *
+     * @param inventoryTitle - Заголовок инвентаря
+     * @param inventoryRows  - Количество строк в инвентаре
+     */
     public StonlexMenu(String inventoryTitle, int inventoryRows) {
-        this.info = new InventoryInfo(inventoryTitle, inventoryRows * 9, inventoryRows);
         this.buttonMap = new HashMap<>();
-        this.inventory = Bukkit.createInventory(null, info.getSize(), info.getTitle());
+        this.inventoryInfo = new InventoryInfo(inventoryTitle, inventoryRows * 9, inventoryRows);
+
+        this.bukkitInventory = Bukkit.createInventory(null, inventoryInfo.getSize(), inventoryInfo.getTitle());
     }
 
     /**
@@ -46,7 +55,7 @@ public abstract class StonlexMenu {
      * Установка названия инвенетарю
      */
     protected void setTitle(String title) {
-        this.inventory = Bukkit.createInventory(null, inventory.getSize(), title);
+        this.bukkitInventory = Bukkit.createInventory(null, bukkitInventory.getSize(), title);
     }
 
     /**
@@ -60,7 +69,7 @@ public abstract class StonlexMenu {
      * Установка размера инвентаря (rows * 9)
      */
     protected void setSize(int size) {
-        this.inventory = Bukkit.createInventory(null, size, inventory.getTitle());
+        this.bukkitInventory = Bukkit.createInventory(null, size, bukkitInventory.getTitle());
     }
 
     /**
@@ -96,54 +105,37 @@ public abstract class StonlexMenu {
     /**
      * Очистка предметов в инвентаре
      */
-    public void clear() {
+    public void clearInventory() {
         buttonMap.clear();
-        inventory.clear();
-    }
-
-    /**
-     * Открытие инвентаря игроку
-     */
-    public void openInventory(Player player) {
-        openInventory(player, true);
+        bukkitInventory.clear();
     }
 
     /**
      * Приватное открытие инвентаря игроку
      */
-    private void openInventory(Player player, boolean isOpen) {
+    public void openInventory(Player player) {
+        inventoryMap.put(player.getName().toLowerCase(), this);
+
         drawInventory(player);
-
-        if ( isOpen ) {
-            player.openInventory(inventory);
-
-            onOpen(player);
-            inventoryMap.put(player.getName().toLowerCase(), this);
-        }
-
         setupItems();
-    }
 
-    private void setupItems() {
-        for (Map.Entry<Integer, InventoryButton> buttonEntry : buttonMap.entrySet()) {
-            inventory.setItem(buttonEntry.getKey() - 1, buttonEntry.getValue().getItemStack());
-        }
+        player.openInventory(bukkitInventory);
     }
 
     /**
      * Обновлени инвентаря игроку
      */
     public void updateInventory(Player player) {
-        clear();
+        clearInventory();
+        drawInventory(player);
 
-        openInventory(player, false);
+        setupItems();
     }
 
-    protected void updateInventory(Player player, Runnable command) {
-        clear();
-
-        command.run();
-        openInventory(player, false);
+    private void setupItems() {
+        for (Map.Entry<Integer, InventoryButton> buttonEntry : buttonMap.entrySet()) {
+            getBukkitInventory().setItem(buttonEntry.getKey() - 1, buttonEntry.getValue().getItemStack());
+        }
     }
 
 }
