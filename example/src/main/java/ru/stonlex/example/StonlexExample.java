@@ -42,7 +42,7 @@ public final class StonlexExample {
         stonlexHologram.addLine(ChatColor.GREEN + "https://vk.com/itzstonlex");
 
         //добавить действие при клике на нее
-        stonlexHologram.setClickAction( player -> { //player = игрок, который кликнул
+        stonlexHologram.setClickAction(player -> { //player = игрок, который кликнул
             player.sendMessage(ChatColor.GOLD + "Клик по голограмме прошел успешно");
             player.sendMessage(ChatColor.GOLD + "Локация: " + LocationUtil.locationToString(stonlexHologram.getLocation()));
         });

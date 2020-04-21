@@ -6,14 +6,14 @@ import org.bukkit.scheduler.BukkitRunnable;
 import ru.stonlex.bukkit.BukkitAPI;
 import ru.stonlex.bukkit.game.GameManager;
 import ru.stonlex.bukkit.game.GameSettings;
+import ru.stonlex.bukkit.game.enums.GameEvent;
 
-@Getter
-public abstract class AbstractGameTimer {
+public abstract class AbstractTimerFactory {
 
-    //цикличный runnable, блягодаря которому тикает таймер
+    @Getter //цикличный runnable, благодаря которому тикает таймер
     protected BukkitRunnable updateTimerRunnable;
 
-    protected final GameManager gameManager = BukkitAPI.getGameManager();
+    protected final GameManager gameManager = BukkitAPI.getInstance().getGameManager();
     protected final GameSettings gameSettings = gameManager.getGameSettings();
 
 
@@ -27,9 +27,10 @@ public abstract class AbstractGameTimer {
             @Override
             public void run() {
                 if (secondsLeft <= 0) {
-                    AbstractGameTimer.this.cancel();
+                    AbstractTimerFactory.this.cancel();
 
                     gameManager.getGameFactory().onStartGame();
+                    gameManager.getEventManager().callGameEvent(GameEvent.START_GAME);
                     return;
                 }
 

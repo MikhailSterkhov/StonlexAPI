@@ -12,12 +12,15 @@ import ru.stonlex.global.utility.NumberUtil;
 
 import java.util.*;
 
-@Getter
 public abstract class PageStonlexMenu extends StonlexMenu {
 
+    @Getter
     private int page, pagesCount;
 
+    @Getter
     private final String inventoryTitle;
+
+    @Getter
     private final PageItemMap itemMap = new PageItemMap();
 
 
@@ -39,10 +42,10 @@ public abstract class PageStonlexMenu extends StonlexMenu {
      * @param inventoryRows  - Количество строк в инвентаре
      */
     private PageStonlexMenu(int page, String inventoryTitle, int inventoryRows) {
-        super(inventoryTitle.concat(" | " + (page + 1)), inventoryRows);
+        super(inventoryTitle, inventoryRows);
 
-        this.page = page;
         this.inventoryTitle = inventoryTitle;
+        this.page = page;
     }
 
 
@@ -77,7 +80,7 @@ public abstract class PageStonlexMenu extends StonlexMenu {
     /**
      * Построение страничного инвентаря
      */
-    private void buildPage(Player player) {
+    private void buildPageMenu(Player player) {
         itemMap.clear();
 
         clearInventory();
@@ -94,7 +97,6 @@ public abstract class PageStonlexMenu extends StonlexMenu {
             setItem(getBukkitInventory().getSize() - 5, ItemUtil.getItemStack(Material.ARROW,
                     "§eНазад"), (player1, event) -> backward(player));
         }
-
 
         for (int i = 0; i < itemMap.slotsList.size(); i++) {
             int index = page * itemMap.slotsList.size() + i;
@@ -137,7 +139,7 @@ public abstract class PageStonlexMenu extends StonlexMenu {
      * @param slotArray - слоты
      */
     public void setPageSize(Integer... slotArray) {
-        itemMap.setSlotsList( Arrays.asList(slotArray) );
+        itemMap.setSlotsList(Arrays.asList(slotArray));
     }
 
     /**
@@ -146,7 +148,7 @@ public abstract class PageStonlexMenu extends StonlexMenu {
      * @param slotList - слоты
      */
     public void setPageSize(List<Integer> slotList) {
-        itemMap.setSlotsList( slotList );
+        itemMap.setSlotsList(slotList);
     }
 
     /**
@@ -188,7 +190,7 @@ public abstract class PageStonlexMenu extends StonlexMenu {
 
     @Override
     public void drawInventory(Player player) {
-        buildPage(player);
+        buildPageMenu(player);
     }
 
     /**

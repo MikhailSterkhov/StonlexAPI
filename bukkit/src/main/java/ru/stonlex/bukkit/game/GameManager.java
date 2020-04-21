@@ -3,11 +3,14 @@ package ru.stonlex.bukkit.game;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.entity.Player;
+import ru.stonlex.bukkit.game.builder.GameBuilder;
+import ru.stonlex.bukkit.game.enums.GameSettingsType;
+import ru.stonlex.bukkit.game.event.manager.GameEventManager;
 import ru.stonlex.bukkit.game.factory.AbstractGameFactory;
-import ru.stonlex.bukkit.game.factory.AbstractGameTimer;
+import ru.stonlex.bukkit.game.factory.AbstractTimerFactory;
 import ru.stonlex.bukkit.game.player.GamePlayer;
 import ru.stonlex.bukkit.game.setup.SetupManager;
-import ru.stonlex.bukkit.game.type.GameSettingsType;
+import ru.stonlex.bukkit.game.team.manager.GameTeamManager;
 
 import java.util.Collection;
 import java.util.LinkedHashMap;
@@ -23,7 +26,15 @@ public final class GameManager {
     private final SetupManager setupManager = new SetupManager();
 
     @Getter
+    private final GameEventManager eventManager = new GameEventManager();
+
+    @Getter
+    private final GameTeamManager teamManager = new GameTeamManager();
+
+
+    @Getter
     private final Map<String, GamePlayer> gamePlayerMap = new LinkedHashMap<>();
+
 
     @Getter
     @Setter
@@ -31,7 +42,7 @@ public final class GameManager {
 
     @Getter
     @Setter
-    private AbstractGameTimer gameTimer;
+    private AbstractTimerFactory timerFactory;
 
 
     /**
@@ -52,7 +63,6 @@ public final class GameManager {
         return getGamePlayer(player.getName());
     }
 
-
     /**
      * Получить список выживших игроков
      */
@@ -69,6 +79,13 @@ public final class GameManager {
                 .filter(GamePlayer::isSpectate).collect(Collectors.toList());
     }
 
+    /**
+     * Создать игровой строитель для полной
+     * настройки игры
+     */
+    public GameBuilder newBuilder() {
+        return new GameBuilder(this);
+    }
 
     /**
      * Установить шаблон для настройки игры

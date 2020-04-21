@@ -1,11 +1,10 @@
 package ru.stonlex.bukkit.game;
 
 import org.bukkit.GameMode;
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
-import ru.stonlex.bukkit.game.type.GameStatus;
-import ru.stonlex.bukkit.game.type.GameType;
+import ru.stonlex.bukkit.game.enums.GameStatus;
+import ru.stonlex.bukkit.game.enums.GameType;
 import ru.stonlex.bukkit.utility.ItemUtil;
 
 public final class GameSettings {

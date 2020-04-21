@@ -32,9 +32,9 @@ public abstract class StonlexMenu {
      */
     public StonlexMenu(String inventoryTitle, int inventoryRows) {
         this.buttonMap = new HashMap<>();
-        this.inventoryInfo = new InventoryInfo(inventoryTitle, inventoryRows * 9, inventoryRows);
+        this.inventoryInfo = new InventoryInfo(inventoryRows * 9, inventoryRows, inventoryTitle);
 
-        this.bukkitInventory = Bukkit.createInventory(null, inventoryInfo.getSize(), inventoryInfo.getTitle());
+        this.bukkitInventory = Bukkit.createInventory(null, inventoryInfo.getInventorySize(), inventoryTitle);
     }
 
     /**
@@ -52,17 +52,15 @@ public abstract class StonlexMenu {
     public void onClose(Player player) { }
 
     /**
+     * Процесс генерации инвентаря, выставление предметов в сам инвентарь
+     */
+    public abstract void drawInventory(Player player);
+
+    /**
      * Установка названия инвенетарю
      */
     protected void setTitle(String title) {
         this.bukkitInventory = Bukkit.createInventory(null, bukkitInventory.getSize(), title);
-    }
-
-    /**
-     * Установка количества строк в инвентаре
-     */
-    protected void setRows(int rows) {
-        setSize(rows * 9);
     }
 
     /**
@@ -73,9 +71,11 @@ public abstract class StonlexMenu {
     }
 
     /**
-     * Процесс генерации инвентаря, выставление предметов в сам инвентарь
+     * Установка количества строк в инвентаре
      */
-    public abstract void drawInventory(Player player);
+    protected void setRows(int rows) {
+        setSize(rows * 9);
+    }
 
     /**
      * Установка предмета в инвентарь
@@ -123,7 +123,7 @@ public abstract class StonlexMenu {
     }
 
     /**
-     * Обновлени инвентаря игроку
+     * Обновление инвентаря игроку
      */
     public void updateInventory(Player player) {
         clearInventory();
@@ -132,6 +132,9 @@ public abstract class StonlexMenu {
         setupItems();
     }
 
+    /**
+     * Установка предметов
+     */
     private void setupItems() {
         for (Map.Entry<Integer, InventoryButton> buttonEntry : buttonMap.entrySet()) {
             getBukkitInventory().setItem(buttonEntry.getKey() - 1, buttonEntry.getValue().getItemStack());

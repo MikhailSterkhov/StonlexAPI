@@ -7,7 +7,8 @@ import lombok.RequiredArgsConstructor;
 @Getter
 public class InventoryInfo {
 
-    private final String title;
-    private final int size;
-    private final int rows;
+    private final int inventorySize;
+    private final int inventoryRows;
+
+    private final String inventoryTitle;
 }

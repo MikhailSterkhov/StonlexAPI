@@ -8,11 +8,11 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import ru.stonlex.bukkit.BukkitAPI;
-import ru.stonlex.bukkit.game.GameManager;
 import ru.stonlex.bukkit.game.GameSettings;
-import ru.stonlex.bukkit.game.listener.GameListener;
+import ru.stonlex.bukkit.game.enums.GameEvent;
+import ru.stonlex.bukkit.game.enums.GameType;
+import ru.stonlex.bukkit.game.event.GameListener;
 import ru.stonlex.bukkit.game.player.GamePlayer;
-import ru.stonlex.bukkit.game.type.GameType;
 
 import java.util.Collection;
 
@@ -20,15 +20,12 @@ public abstract class AbstractGameFactory extends GameListener {
 
     private final Plugin plugin;
 
-//=======================================================================================//
+// ======================================================================================= //
 
     @Getter
-    protected final GameManager gameManager = BukkitAPI.getGameManager();
+    protected final GameSettings gameSettings = BukkitAPI.getInstance().getGameManager().getGameSettings();
 
-    @Getter
-    protected final GameSettings gameSettings = gameManager.getGameSettings();
-
-//=======================================================================================//
+// ======================================================================================= //
 
     /**
      * Инициализация некоторых настроек игры
@@ -37,12 +34,11 @@ public abstract class AbstractGameFactory extends GameListener {
                                @NonNull Plugin plugin,
                                int startSecondsTimer) {
 
-        super(true);
         this.plugin = plugin;
 
         gameSettings.GAME_TYPE = gameType;
-        gameSettings.LOBBY_TIMER_START_SECONDS = startSecondsTimer;
         gameSettings.PLAYERS_IN_TEAM_COUNT = gameType.getPlayersInTeamCount();
+        gameSettings.LOBBY_TIMER_START_SECONDS = startSecondsTimer;
     }
 
     /**
@@ -100,7 +96,7 @@ public abstract class AbstractGameFactory extends GameListener {
      * @param text - Текст оповещения
      */
     protected void broadcastToSpectators(String text) {
-        broadcast(gameManager.getSpectatePlayers(), text);
+        broadcast(BukkitAPI.getInstance().getGameManager().getSpectatePlayers(), text);
     }
 
     /**
@@ -110,13 +106,15 @@ public abstract class AbstractGameFactory extends GameListener {
      * @param text - Текст оповещения
      */
     protected void broadcastToPlayers(String text) {
-        broadcast(gameManager.getAlivePlayers(), text);
+        broadcast(BukkitAPI.getInstance().getGameManager().getAlivePlayers(), text);
     }
 
     /**
      * Принудительно остановить игру
      */
     protected void stop() {
+        getGameManager().getEventManager().callGameEvent(GameEvent.RESTART_GAME);
+
         for (Player player : Bukkit.getOnlinePlayers()) {
 
             //broadcast
@@ -133,7 +131,11 @@ public abstract class AbstractGameFactory extends GameListener {
             Bukkit.getServer().sendPluginMessage(BukkitAPI.getInstance(), "BungeeCord", dataOutput.toByteArray());
         }
 
+        BukkitAPI.getInstance().getGameManager().getGamePlayerMap().clear();
+
         plugin.onEnable();
+
+        getGameManager().getEventManager().callGameEvent(GameEvent.STOP_GAME);
 
         Bukkit.unloadWorld(gameSettings.ARENA_WORLD_NAME, false);
         Bukkit.shutdown();

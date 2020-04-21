@@ -1,4 +1,4 @@
-package ru.stonlex.bukkit.game.type;
+package ru.stonlex.bukkit.game.enums;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

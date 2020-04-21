@@ -3,6 +3,8 @@ package ru.stonlex.bukkit.game.player;
 import gnu.trove.map.TIntObjectMap;
 import gnu.trove.map.hash.TIntObjectHashMap;
 import lombok.Getter;
+import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
@@ -11,9 +13,7 @@ import ru.stonlex.bukkit.BukkitAPI;
 import ru.stonlex.bukkit.game.item.GameItem;
 import ru.stonlex.bukkit.module.vault.player.VaultPlayer;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class GamePlayer {
 
@@ -26,6 +26,8 @@ public class GamePlayer {
 
     @Getter
     private TIntObjectMap<List<GameItem>> boughtItemMap = new TIntObjectHashMap<>();
+
+
 
 
     @Getter
@@ -62,7 +64,7 @@ public class GamePlayer {
      * данных Vault для этого игрока
      */
     public VaultPlayer getVaultPlayer() {
-        return BukkitAPI.getVaultManager().getVaultPlayer(name);
+        return BukkitAPI.getInstance().getVaultManager().getVaultPlayer(name);
     }
 
     /**
@@ -71,7 +73,31 @@ public class GamePlayer {
      * @param gameItem - предмет
      */
     public boolean isItemBought(GameItem gameItem) {
-        return boughtItemMap.containsKey(gameItem.getItemId());
+        return boughtItemMap.valueCollection().stream().anyMatch(itemList -> itemList.contains(gameItem));
     }
+
+    /**
+     * Отправить сообщение игроку
+     *
+     * @param chatMessageType - куда отправить
+     * @param messageText - сообщение
+     */
+    public void sendMessage(ChatMessageType chatMessageType, String messageText) {
+        if (player == null) {
+            return;
+        }
+
+        player.spigot().sendMessage(chatMessageType, new TextComponent(messageText).duplicate());
+    }
+
+    /**
+     * Отправить сообщение игроку в ActionBar
+     *
+     * @param messageText - сообщение
+     */
+    public void sendMessage(String messageText) {
+        sendMessage(ChatMessageType.ACTION_BAR, messageText);
+    }
+
 
 }
