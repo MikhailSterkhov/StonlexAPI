@@ -51,7 +51,7 @@ public class PlayerListener implements Listener {
         event.setCancelServer(null);
         event.setCancelled(true);
 
-        proxiedPlayer.connect(BungeeCord.getInstance().getServerInfo("limbo"));
+        proxiedPlayer.connect(BungeeCord.getInstance().getServerInfo("Limbo-1"));
 
         proxiedPlayer.sendMessage("§r ");
         proxiedPlayer.sendMessage("§r ");

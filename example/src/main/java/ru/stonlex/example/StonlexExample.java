@@ -4,13 +4,16 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import ru.stonlex.bukkit.BukkitAPI;
-import ru.stonlex.bukkit.hologram.StonlexHologram;
-import ru.stonlex.bukkit.protocol.entity.impl.FakePlayer;
+import ru.stonlex.bukkit.holographic.IProtocolHolographic;
+import ru.stonlex.bukkit.holographic.impl.QuickStonlexHolographic;
+import ru.stonlex.bukkit.module.protocol.entity.impl.FakePlayer;
 import ru.stonlex.bukkit.utility.location.LocationUtil;
 import ru.stonlex.example.command.ConsoleCommand;
 import ru.stonlex.example.command.PlayerCommand;
 import ru.stonlex.global.mail.MailSender;
 import ru.stonlex.global.utility.MailUtil;
+
+import java.util.function.Consumer;
 
 public final class StonlexExample {
 
@@ -25,30 +28,30 @@ public final class StonlexExample {
 
         //Если же подобных технологий не знаем и не делаем,
         //то регистрируем сами при помощи CommandFactory
-        BukkitAPI.getCommandFactory().registerCommand(new ConsoleCommand(), "console", "console-alias");
+        BukkitAPI.getInstance().getCommandManager().registerCommand(new ConsoleCommand(), "console", "console-alias");
     }
 
     /**
-     * Пример создания голограммы
+     * Пример создания временной голограмы
      *
-     * @param receiver - (Пример) игрок, которому отправлять голограмму
-     * @param location - (Пример) локация, на которой спавнить голограмму
+     * @param receiver - (Пример) игрок, которому отправлять голограму
+     * @param location - (Пример) локация, на которой спавнить голограму
      */
-    public void exampleHologram(Player receiver, Location location) {
-        StonlexHologram stonlexHologram = BukkitAPI.getHologramManager().createHologram(location);
+    public void exampleHolographic(Player receiver, Location location) {
+        IProtocolHolographic protocolHolographic = new QuickStonlexHolographic(location);
+
+        //создать кликабельный консумер
+        Consumer<Player> playerConsumer = player -> { //player = игрок, который кликнул
+
+            player.sendMessage(ChatColor.GOLD + "Клик по голограмме прошел успешно");
+            player.sendMessage(ChatColor.GOLD + "Локация: " + LocationUtil.locationToString(protocolHolographic.getLocation()));
+        };
 
         //добавить строки в голограмму
-        stonlexHologram.addLine(ChatColor.YELLOW + "Разработчик данной API");
-        stonlexHologram.addLine(ChatColor.GREEN + "https://vk.com/itzstonlex");
+        protocolHolographic.addClickHolographicLine(ChatColor.YELLOW + "Разработчик данной API", playerConsumer);
+        protocolHolographic.addClickHolographicLine(ChatColor.GREEN + "https://vk.com/itzstonlex", playerConsumer);
 
-        //добавить действие при клике на нее
-        stonlexHologram.setClickAction(player -> { //player = игрок, который кликнул
-            player.sendMessage(ChatColor.GOLD + "Клик по голограмме прошел успешно");
-            player.sendMessage(ChatColor.GOLD + "Локация: " + LocationUtil.locationToString(stonlexHologram.getLocation()));
-        });
-
-        stonlexHologram.spawn(); //заспавнить для всех игроков онлайн
-        stonlexHologram.spawnToPlayer(receiver); //заспавнить только для одного игрока
+        protocolHolographic.showToPlayer(receiver); //заспавнить только для одного игрока
     }
 
     /**

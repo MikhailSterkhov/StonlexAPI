@@ -2,10 +2,10 @@ package ru.stonlex.example.menu;
 
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import ru.stonlex.bukkit.menu.StonlexMenu;
+import ru.stonlex.bukkit.inventory.impl.StonlexInventory;
 import ru.stonlex.bukkit.utility.ItemUtil;
 
-public class ExampleMenu extends StonlexMenu {
+public class ExampleMenu extends StonlexInventory {
 
     public ExampleMenu() {
         super("Example", 3);
@@ -13,7 +13,7 @@ public class ExampleMenu extends StonlexMenu {
 
     @Override
     public void drawInventory(Player player) {
-        setItem(5, ItemUtil.newBuilder(Material.STONE)
+        setClickItem(5, ItemUtil.newBuilder(Material.STONE)
                 .setName("§eБаклажан")
                 .build(), (player1, event) -> {
 
@@ -21,7 +21,7 @@ public class ExampleMenu extends StonlexMenu {
             player.closeInventory();
         });
 
-        setItem(6, ItemUtil.newBuilder(Material.CHEST)
+        setClickItem(6, ItemUtil.newBuilder(Material.CHEST)
                 .setName("§aОбновить инвентарь").build(), (player1, event) -> updateInventory(player));
     }
 

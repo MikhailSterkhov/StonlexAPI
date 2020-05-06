@@ -21,7 +21,7 @@ public class EventRegister<E extends Event> implements Listener {
 
     @EventHandler
     public void onCallEvent(E event) {
-        eventApplicable.apply(event);
+        eventApplicable.accept(event);
     }
 
 }

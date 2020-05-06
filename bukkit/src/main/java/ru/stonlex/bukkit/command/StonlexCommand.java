@@ -6,6 +6,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import ru.stonlex.bukkit.BukkitAPI;
 
+import java.lang.reflect.ParameterizedType;
+
 public abstract class StonlexCommand<S extends CommandSender>
         extends Command
         implements CommandExecutor {
@@ -28,7 +30,7 @@ public abstract class StonlexCommand<S extends CommandSender>
     public StonlexCommand(String command) {
         this();
 
-        BukkitAPI.getCommandFactory().registerCommand(this, command);
+        BukkitAPI.getInstance().getCommandManager().registerCommand(this, command);
     }
 
     /**
@@ -41,30 +43,30 @@ public abstract class StonlexCommand<S extends CommandSender>
     public StonlexCommand(String command, String aliases) {
         this();
 
-        BukkitAPI.getCommandFactory().registerCommand(this, command, aliases);
+        BukkitAPI.getInstance().getCommandManager().registerCommand(this, command, aliases);
     }
 
     @Override
     public boolean execute(CommandSender commandSender, String label, String[] args) {
-        S castedSender = ((S) commandSender);
+        Class<S> senderClass = (Class<S>) ((ParameterizedType) getClass()
+                .getGenericSuperclass())
+                .getActualTypeArguments()[0];
 
         // пишем ебаный ИИ
-        if (!castedSender.getClass().isAssignableFrom(CommandSender.class)) {
-            boolean isPlayer = commandSender.getClass().isAssignableFrom(Player.class);
+        if (!senderClass.isAssignableFrom(CommandSender.class)) {
+            boolean senderIsPlayer = senderClass.isAssignableFrom(Player.class);
 
-            if (!(commandSender instanceof Player) && isPlayer) {
+            if (!(commandSender instanceof Player) && senderIsPlayer) {
                 return true;
             }
 
-            if (commandSender instanceof Player && !isPlayer) {
+            if (commandSender instanceof Player && !senderIsPlayer) {
                 return true;
             }
         }
 
         // ну все, щас он поработит галактику
-        CommandInfo commandInfo = new CommandInfo(this, label, args);
-        execute( castedSender, commandInfo );
-
+        execute((S) commandSender, args);
         return false;
     }
 
@@ -77,7 +79,7 @@ public abstract class StonlexCommand<S extends CommandSender>
      * execute команды
      *
      * @param commandSender - отправитель
-     * @param commandInfo - информация о команде
+     * @param args - аргументы команды
      */
-    public abstract void execute(S commandSender, CommandInfo commandInfo);
+    public abstract void execute(S commandSender, String[] args);
 }

@@ -16,7 +16,6 @@ import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import ru.stonlex.global.Builder;
 import ru.stonlex.global.utility.ReflectionUtil;
 
 import java.util.ArrayList;
@@ -150,7 +149,7 @@ public class ItemUtil {
 
 
     @RequiredArgsConstructor
-    public class ItemBuilder implements Builder<ItemStack> {
+    public class ItemBuilder {
 
         private final ItemStack itemStack;
 
@@ -322,7 +321,6 @@ public class ItemUtil {
             return this;
         }
 
-        @Override
         public ItemStack build() {
             return itemStack;
         }

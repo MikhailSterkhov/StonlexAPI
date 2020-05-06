@@ -4,43 +4,46 @@ import com.comphenix.protocol.ProtocolLibrary;
 import lombok.Getter;
 import org.bukkit.plugin.java.JavaPlugin;
 import ru.stonlex.bukkit.board.manager.SidebarManager;
-import ru.stonlex.bukkit.command.factory.CommandFactory;
+import ru.stonlex.bukkit.holographic.manager.ProtocolHolographicManager;
+import ru.stonlex.bukkit.test.TestCommand;
+import ru.stonlex.bukkit.command.manager.CommandManager;
 import ru.stonlex.bukkit.event.EventRegisterManager;
 import ru.stonlex.bukkit.game.GameManager;
-import ru.stonlex.bukkit.game.factory.AbstractGameFactory;
-import ru.stonlex.bukkit.game.factory.AbstractGameTimer;
-import ru.stonlex.bukkit.game.listener.GameFactoryListener;
-import ru.stonlex.bukkit.game.setup.SetupManager;
-import ru.stonlex.bukkit.game.setup.builder.SetupBuilder;
-import ru.stonlex.bukkit.hologram.manager.HologramManager;
-import ru.stonlex.bukkit.menu.listener.InventoryListener;
+import ru.stonlex.bukkit.inventory.listener.StonlexInventoryListener;
+import ru.stonlex.bukkit.inventory.manager.BukkitInventoryManager;
 import ru.stonlex.bukkit.module.protocol.entity.listener.FakeEntityClickListener;
 import ru.stonlex.bukkit.module.vault.manager.VaultManager;
 import ru.stonlex.bukkit.tab.listener.TagListener;
 import ru.stonlex.bukkit.tab.manager.TagManager;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public final class BukkitAPI extends JavaPlugin {
 
     @Getter
-    private static final CommandFactory commandFactory = new CommandFactory();
+    private final CommandManager commandManager = new CommandManager();
 
     @Getter
-    private static final SidebarManager sidebarManager = new SidebarManager();
+    private final SidebarManager sidebarManager = new SidebarManager();
 
     @Getter
-    private static final HologramManager hologramManager = new HologramManager();
+    private final ProtocolHolographicManager holographicManager = new ProtocolHolographicManager();
 
     @Getter
-    private static final EventRegisterManager eventRegisterManager = new EventRegisterManager();
+    private final EventRegisterManager eventRegisterManager = new EventRegisterManager();
 
     @Getter
-    private static final GameManager gameManager = new GameManager();
+    private final BukkitInventoryManager inventoryManager = new BukkitInventoryManager();
 
     @Getter
-    private static final TagManager tagManager = new TagManager();
+    private final GameManager gameManager = new GameManager();
 
     @Getter
-    private static VaultManager vaultManager = null;
+    private final TagManager tagManager = new TagManager();
+
+    @Getter
+    private VaultManager vaultManager = null;
 
 
     @Getter
@@ -49,15 +52,21 @@ public final class BukkitAPI extends JavaPlugin {
     }
 
 
+    @Getter
+    private final Map<String, Integer> serverOnlineMap = new HashMap<>();
+
+
     @Override
     public void onEnable() {
         registerFakeEntityClicker();
-        registerGameApi();
 
-        getServer().getPluginManager().registerEvents(new InventoryListener(), this);
+        getServer().getPluginManager().registerEvents(new StonlexInventoryListener(), this);
         getServer().getPluginManager().registerEvents(new TagListener(), this);
 
         vaultManager = new VaultManager();
+
+        //test
+        commandManager.registerCommand(this, new TestCommand(), "test");
     }
 
 
@@ -71,17 +80,13 @@ public final class BukkitAPI extends JavaPlugin {
         ProtocolLibrary.getProtocolManager().addPacketListener(entityClickListener);
     }
 
-    /**
-     * Инициализация и регистрация фабрик игрового АПИ
-     */
-    private void registerGameApi() {
-        SetupBuilder setupBuilder = gameManager.getSetupManager().getSetupBuilder();
 
-        if (setupBuilder != null && setupBuilder.isSetupMode()) {
-            return;
-        }
+    public int getServerOnline(String serverName) {
+        return serverOnlineMap.get(serverName.toLowerCase());
+    }
 
-        new GameFactoryListener();
+    public int getGlobalOnline() {
+        return serverOnlineMap.get("GLOBAL");
     }
 
 }

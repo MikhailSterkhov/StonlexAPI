@@ -2,7 +2,7 @@ package ru.stonlex.global.mysql;
 
 import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
 import lombok.Getter;
-import ru.stonlex.global.Builder;
+import ru.stonlex.global.mysql.execution.MysqlExecutor;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -36,11 +36,11 @@ public class MysqlConnection {
      * @param username - Имя пользователя.
      * @param password - Пароль.
      * @param database - База данных, схема.
-     * @param tables - Таблицы с их аргументами, которые нужно создать
+     * @param tableMap - Таблицы с их аргументами, которые нужно создать
      *               при условии, что их не существует.
      */
     private MysqlConnection(String host, int port, String username, String password, String database,
-                            Map<String, String> tables) {
+                            Map<String, String> tableMap) {
 
         dataSource.setServerName(host);
         dataSource.setPort(port);
@@ -51,21 +51,20 @@ public class MysqlConnection {
         dataSource.setEncoding("UTF-8");
 
         try {
-            dataSource.setAutoReconnect(true);
-
+            this.dataSource.setAutoReconnect(true);
             this.connection = dataSource.getConnection();
-        } catch (SQLException e) {
+        }
+        catch (SQLException e) {
             e.printStackTrace();
         }
 
         getExecutor().execute(true, String.format("CREATE DATABASE IF NOT EXISTS `%s`", database));
 
-        for (String table : tables.keySet()) {
-            String value = tables.get(table);
+        tableMap.forEach((table, value) -> {
             String query = String.format("CREATE TABLE IF NOT EXISTS `%s` (%s)", table, value);
 
             getExecutor().execute(true, query);
-        }
+        });
     }
 
     /**
@@ -91,8 +90,9 @@ public class MysqlConnection {
         return new SQLBuilder();
     }
 
-    public static class SQLBuilder implements Builder<MysqlConnection> {
 
+    @Getter
+    public static class SQLBuilder {
 
         private String host = "localhost",
                 password = "",
@@ -101,11 +101,8 @@ public class MysqlConnection {
 
         private int port = 3306;
 
-        private Map<String, String> tables = new HashMap<>();
 
-
-        @Getter
-        private static final Map<String, MysqlConnection> databaseMap = new HashMap<>();
+        private final Map<String, String> tableMap = new HashMap<>();
 
 
         /**
@@ -170,24 +167,18 @@ public class MysqlConnection {
          * @param value - Аргументы табллицы
          */
         public SQLBuilder createTable(String table, String value) {
-            this.tables.put(table, value);
+            this.tableMap.put(table, value);
 
             return this;
         }
 
-
-        @Override
+        /**
+         * Построить SQL соединение
+         */
         public MysqlConnection build() {
-            MysqlConnection connection = databaseMap.getOrDefault(database, null);
-
-            if (connection == null) {
-                connection = new MysqlConnection(this.host, this.port, this.username,
-                        this.password, this.database, this.tables);
-                databaseMap.put(database, connection);
-
-            }
-            return connection;
+            return new MysqlConnection(host, port, username, password, database, tableMap);
         }
+
     }
 
 }

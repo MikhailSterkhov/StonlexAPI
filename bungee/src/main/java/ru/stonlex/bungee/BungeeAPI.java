@@ -3,6 +3,7 @@ package ru.stonlex.bungee;
 import lombok.Getter;
 import net.md_5.bungee.api.plugin.Plugin;
 import ru.stonlex.bungee.listener.PlayerListener;
+import ru.stonlex.global.utility.NumberUtil;
 
 public final class BungeeAPI extends Plugin {
 
@@ -15,6 +16,7 @@ public final class BungeeAPI extends Plugin {
     @Override
     public void onEnable() {
         getProxy().getPluginManager().registerListener(this, new PlayerListener());
+
     }
 
 }

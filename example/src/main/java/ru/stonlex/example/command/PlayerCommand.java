@@ -1,7 +1,6 @@
 package ru.stonlex.example.command;
 
 import org.bukkit.entity.Player;
-import ru.stonlex.bukkit.command.CommandInfo;
 import ru.stonlex.bukkit.command.StonlexCommand;
 
 public class PlayerCommand extends StonlexCommand<Player> {
@@ -11,7 +10,7 @@ public class PlayerCommand extends StonlexCommand<Player> {
     }
 
     @Override
-    public void execute(Player player, CommandInfo commandInfo) {
+    public void execute(Player player, String[] args) {
         // command logic...
     }
 

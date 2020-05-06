@@ -43,7 +43,7 @@ public class PlayerTag {
             scoreboardTeamPacket.setPackOptionData(0);
             scoreboardTeamPacket.setColor(0);
         } else {
-            scoreboardTeamPacket.setPlayers( BukkitAPI.getTagManager().getTeamCacheMap().get(teamName) );
+            scoreboardTeamPacket.setPlayers( BukkitAPI.getInstance().getTagManager().getTeamCacheMap().get(teamName) );
         }
 
         scoreboardTeamPacket.sendPacket(receiver);
@@ -64,7 +64,7 @@ public class PlayerTag {
      * @param mode - тип пакета
      */
     private int checkTeam(int mode) {
-        Map<String, List<String>> teamCacheMap = BukkitAPI.getTagManager().getTeamCacheMap();
+        Map<String, List<String>> teamCacheMap = BukkitAPI.getInstance().getTagManager().getTeamCacheMap();
 
         if (teamCacheMap.containsKey(teamName) && mode == 0) {
             mode = WrapperPlayServerScoreboardTeam.Mode.TEAM_UPDATED;

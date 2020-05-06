@@ -16,14 +16,14 @@ public class TagListener implements Listener {
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
 
-        AsyncUtil.runAsync(() -> BukkitAPI.getTagManager().getPlayerTagMap().values().forEach(
+        AsyncUtil.runAsync(() -> BukkitAPI.getInstance().getTagManager().getPlayerTagMap().values().forEach(
                 playerTag -> playerTag.sendPacket(player, WrapperPlayServerScoreboardTeam.Mode.TEAM_UPDATED)));
     }
 
     @EventHandler
     public void onPlayerLeave(PlayerQuitEvent event) {
         Player player = event.getPlayer();
-        PlayerTag playerTag = BukkitAPI.getTagManager().getPlayerTag(player);
+        PlayerTag playerTag = BukkitAPI.getInstance().getTagManager().getPlayerTag(player);
 
         if (playerTag == null) {
             return;
@@ -32,8 +32,8 @@ public class TagListener implements Listener {
         playerTag.broadcastPacket(WrapperPlayServerScoreboardTeam.Mode.PLAYERS_REMOVED);
         playerTag.broadcastPacket(WrapperPlayServerScoreboardTeam.Mode.TEAM_REMOVED);
 
-        BukkitAPI.getTagManager().getTeamCacheMap().remove(playerTag.getTeamName());
-        BukkitAPI.getTagManager().getPlayerTagMap().remove(player.getName().toLowerCase());
+        BukkitAPI.getInstance().getTagManager().getTeamCacheMap().remove(playerTag.getTeamName());
+        BukkitAPI.getInstance().getTagManager().getPlayerTagMap().remove(player.getName().toLowerCase());
     }
 
 }

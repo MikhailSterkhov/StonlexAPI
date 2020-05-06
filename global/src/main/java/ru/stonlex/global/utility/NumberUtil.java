@@ -28,9 +28,9 @@ public class NumberUtil {
         StringBuilder builder = new StringBuilder();
 
         for (int a = 0; a < integer.length(); a++) {
-            builder.append( integer.split("")[a] );
+            builder.append(integer.split("")[a]);
 
-            if ( (integer.length() - a + 2) % 3 != 0 ) {
+            if ((integer.length() - a + 2) % 3 != 0) {
                 continue;
             }
             builder.append(symbol);
@@ -46,6 +46,16 @@ public class NumberUtil {
      */
     public String spaced(int number) {
         return spaced(number, ",");
+    }
+
+    /**
+     * Сгенерировать и получить процент от числа
+     *
+     * @param max     - макисмальное значение
+     * @param current -
+     */
+    public int getPercent(int max, int current) {
+        return Math.round((current / max) * 100);
     }
 
     /**
@@ -73,7 +83,7 @@ public class NumberUtil {
         int[] resultArray = new int[maxIndex - minIndex];
 
         int counter = 0;
-        for (int i = minIndex ; i < maxIndex ; i++) {
+        for (int i = minIndex; i < maxIndex; i++) {
             resultArray[counter] = i;
 
             counter++;
@@ -97,9 +107,9 @@ public class NumberUtil {
      * словосочетание
      *
      * @param number - число
-     * @param one - словосочетание, если число закаончивается на 1
-     * @param two - словосочетание, если число закаончивается на 2
-     * @param three - словосочетание, если число закаончивается на 5
+     * @param one    - словосочетание, если число закаончивается на 1
+     * @param two    - словосочетание, если число закаончивается на 2
+     * @param three  - словосочетание, если число закаончивается на 5
      */
     public String formatting(int number, String one, String two, String three) {
         if (number % 100 > 10 && number % 100 < 15) {
@@ -125,7 +135,7 @@ public class NumberUtil {
      * словосочетание
      *
      * @param number - число
-     * @param unit - словосочетание
+     * @param unit   - словосочетание
      */
     public String formatting(int number, TimeUnit unit) {
         return formatting(number, unit.getOne(), unit.getTwo(), unit.getThree());
@@ -178,31 +188,31 @@ public class NumberUtil {
 
         StringBuilder builder = new StringBuilder();
 
-        if ( years != 0 ) {
+        if (years != 0) {
             builder.append(formatting(years, TimeUnit.YEARS)).append(" ");
         }
 
-        if ( months != 0 ) {
+        if (months != 0) {
             builder.append(formatting(months, TimeUnit.MONTHS)).append(" ");
         }
 
-        if ( weeks != 0 ) {
+        if (weeks != 0) {
             builder.append(formatting(weeks, TimeUnit.WEEKS)).append(" ");
         }
 
-        if ( days != 0 ) {
+        if (days != 0) {
             builder.append(formatting(days, TimeUnit.DAYS)).append(" ");
         }
 
-        if ( hours != 0 ) {
+        if (hours != 0) {
             builder.append(formatting(hours, TimeUnit.HOURS)).append(" ");
         }
 
-        if ( minutes != 0 ) {
+        if (minutes != 0) {
             builder.append(formatting(minutes, TimeUnit.MINUTES)).append(" ");
         }
 
-        if ( seconds != 0 ) {
+        if (seconds != 0) {
             builder.append(formatting(seconds, TimeUnit.SECONDS));
         }
 
@@ -210,16 +220,26 @@ public class NumberUtil {
     }
 
     /**
+     * Получить грамотно составленное время из
+     * количества миллисекунд, переведенные в секунды
+     *
+     * @param millis - кол-во миллисекунд
+     */
+    public String getTime(long millis) {
+        return getTime((int)millis / 1000);
+    }
+
+    /**
      * Парсит такие значения, как 5d, 3m, 50s и т.д. в миллисекунды
      *
-     * @author DonDays
      * @param time - значения, которое нужно парсить
+     * @author DonDays
      */
     public long parseTimeToMills(String time) {
         Pattern timePattern = Pattern.compile(
                 "(?:([0-9]+)\\s*y[a-z]*[,\\s]*)?(?:([0-9]+)\\s*mo[a-z]*[,\\s]*)?" +
-                "(?:([0-9]+)\\s*w[a-z]*[,\\s]*)?(?:([0-9]+)\\s*d[a-z]*[,\\s]*)?(?:([0-9]+)\\s*h[a-z]*[,\\s]*)?(?:([0-9]+)" +
-                "\\s*m[a-z]*[,\\s]*)?(?:([0-9]+)\\s*(?:s[a-z]*)?)?", Pattern.CASE_INSENSITIVE
+                        "(?:([0-9]+)\\s*w[a-z]*[,\\s]*)?(?:([0-9]+)\\s*d[a-z]*[,\\s]*)?(?:([0-9]+)\\s*h[a-z]*[,\\s]*)?(?:([0-9]+)" +
+                        "\\s*m[a-z]*[,\\s]*)?(?:([0-9]+)\\s*(?:s[a-z]*)?)?", Pattern.CASE_INSENSITIVE
         );
 
         Matcher m = timePattern.matcher(time);
@@ -228,41 +248,41 @@ public class NumberUtil {
 
         boolean found = false;
 
-        while(m.find()) {
-            if(m.group() != null && !m.group().isEmpty()) {
-                for(int c = 0; c < m.groupCount(); ++c) {
-                    if(m.group(c) != null && !m.group(c).isEmpty()) {
+        while (m.find()) {
+            if (m.group() != null && !m.group().isEmpty()) {
+                for (int c = 0; c < m.groupCount(); ++c) {
+                    if (m.group(c) != null && !m.group(c).isEmpty()) {
                         found = true;
                         break;
                     }
                 }
 
-                if(found) {
-                    if(m.group(1) != null && !m.group(1).isEmpty()) {
+                if (found) {
+                    if (m.group(1) != null && !m.group(1).isEmpty()) {
                         years = Integer.parseInt(m.group(1));
                     }
 
-                    if(m.group(2) != null && !m.group(2).isEmpty()) {
+                    if (m.group(2) != null && !m.group(2).isEmpty()) {
                         months = Integer.parseInt(m.group(2));
                     }
 
-                    if(m.group(3) != null && !m.group(3).isEmpty()) {
+                    if (m.group(3) != null && !m.group(3).isEmpty()) {
                         weeks = Integer.parseInt(m.group(3));
                     }
 
-                    if(m.group(4) != null && !m.group(4).isEmpty()) {
+                    if (m.group(4) != null && !m.group(4).isEmpty()) {
                         days = Integer.parseInt(m.group(4));
                     }
 
-                    if(m.group(5) != null && !m.group(5).isEmpty()) {
+                    if (m.group(5) != null && !m.group(5).isEmpty()) {
                         hours = Integer.parseInt(m.group(5));
                     }
 
-                    if(m.group(6) != null && !m.group(6).isEmpty()) {
+                    if (m.group(6) != null && !m.group(6).isEmpty()) {
                         minutes = Integer.parseInt(m.group(6));
                     }
 
-                    if(m.group(7) != null && !m.group(7).isEmpty()) {
+                    if (m.group(7) != null && !m.group(7).isEmpty()) {
                         seconds = Integer.parseInt(m.group(7));
                     }
                     break;
@@ -270,37 +290,37 @@ public class NumberUtil {
             }
         }
 
-        if(!found) {
+        if (!found) {
             throw new RuntimeException("Illegal Date");
-        } else if(years > 20) {
+        } else if (years > 20) {
             throw new RuntimeException("Illegal Date");
         } else {
             GregorianCalendar gregorianCalendar = new GregorianCalendar();
-            if(years > 0) {
+            if (years > 0) {
                 gregorianCalendar.add(Calendar.YEAR, years);
             }
 
-            if(months > 0) {
+            if (months > 0) {
                 gregorianCalendar.add(Calendar.MONTH, months);
             }
 
-            if(weeks > 0) {
+            if (weeks > 0) {
                 gregorianCalendar.add(Calendar.WEEK_OF_YEAR, weeks);
             }
 
-            if(days > 0) {
+            if (days > 0) {
                 gregorianCalendar.add(Calendar.DATE, days);
             }
 
-            if(hours > 0) {
+            if (hours > 0) {
                 gregorianCalendar.add(Calendar.HOUR_OF_DAY, hours);
             }
 
-            if(minutes > 0) {
+            if (minutes > 0) {
                 gregorianCalendar.add(Calendar.MINUTE, minutes);
             }
 
-            if(seconds > 0) {
+            if (seconds > 0) {
                 gregorianCalendar.add(Calendar.SECOND, seconds);
             }
 

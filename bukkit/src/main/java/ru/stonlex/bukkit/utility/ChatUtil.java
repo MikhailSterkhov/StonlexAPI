@@ -6,7 +6,6 @@ import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
-import ru.stonlex.global.Builder;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -76,7 +75,7 @@ public class ChatUtil {
 
 
 
-    public class MessageBuilder implements Builder<BaseComponent[]> {
+    public class MessageBuilder{
 
         private final TextComponent component;
 
@@ -124,7 +123,6 @@ public class ChatUtil {
             return this;
         }
 
-        @Override
         public BaseComponent[] build() {
             return new BaseComponent[]{component};
         }

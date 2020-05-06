@@ -5,10 +5,9 @@ import ru.stonlex.bukkit.BukkitAPI;
 import org.bukkit.event.Event;
 import org.bukkit.plugin.Plugin;
 import ru.stonlex.global.Applicable;
-import ru.stonlex.global.Builder;
 
 @RequiredArgsConstructor
-public final class EventRegisterBuilder<E extends Event> implements Builder<EventRegister<E>> {
+public final class EventRegisterBuilder<E extends Event> {
 
     private Plugin plugin;
 
@@ -38,12 +37,10 @@ public final class EventRegisterBuilder<E extends Event> implements Builder<Even
     /**
      * Построение и регистрация ивента
      */
-    @Override
     public EventRegister<E> build() {
         EventRegister<E> eventRegister = new EventRegister<>(plugin, eventClass, eventApplicable);
 
-        BukkitAPI.getEventRegisterManager().register(eventRegister);
-
+        BukkitAPI.getInstance().getEventRegisterManager().register(eventRegister);
         return eventRegister;
     }
 

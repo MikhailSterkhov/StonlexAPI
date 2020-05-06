@@ -19,7 +19,7 @@ public final class EventRegisterManager {
     public <E extends Event> void register(EventRegister<E> eventRegister) {
 
         Bukkit.getServer().getPluginManager().registerEvent(eventRegister.getEventClass(), eventRegister, EventPriority.MONITOR,
-                (listener, event) -> eventRegister.getEventApplicable().apply((E) event), eventRegister.getPlugin());
+                (listener, event) -> eventRegister.getEventApplicable().accept((E) event), eventRegister.getPlugin());
     }
 
 }

@@ -1,6 +1,6 @@
 package ru.stonlex.global;
 
-public interface ResponseHandler<R, O, T extends Throwable> {
+public interface ResponseHandler<R, O> {
 
-    R handleResponse(O o) throws T;
+    R handleResponse(O o);
 }
