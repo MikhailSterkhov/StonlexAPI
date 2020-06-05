@@ -1,5 +1,7 @@
 package ru.stonlex.bukkit.inventory.addon;
 
+import org.bukkit.entity.Player;
+
 public interface IBukkitInventoryUpdater {
 
     /**
@@ -36,4 +38,12 @@ public interface IBukkitInventoryUpdater {
      * автообновление для данного инвентаря, или выключен
      */
     boolean isCancelled();
+
+
+    /**
+     * Применить для игрока
+     *
+     * @param targetPlayer - игрок
+     */
+    void applyRunnable(Player targetPlayer);
 }

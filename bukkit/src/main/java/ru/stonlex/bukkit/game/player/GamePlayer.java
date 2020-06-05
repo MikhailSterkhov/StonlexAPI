@@ -10,8 +10,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import ru.stonlex.bukkit.BukkitAPI;
+import ru.stonlex.bukkit.depend.vault.IVaultPlayer;
 import ru.stonlex.bukkit.game.item.GameItem;
-import ru.stonlex.bukkit.module.vault.player.VaultPlayer;
 
 import java.util.List;
 
@@ -63,7 +63,7 @@ public class GamePlayer {
      * Создать из данного игрока объект получения
      * данных Vault для этого игрока
      */
-    public VaultPlayer getVaultPlayer() {
+    public IVaultPlayer getVaultPlayer() {
         return BukkitAPI.getInstance().getVaultManager().getVaultPlayer(name);
     }
 

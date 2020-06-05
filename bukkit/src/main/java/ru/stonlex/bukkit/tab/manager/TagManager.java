@@ -3,7 +3,7 @@ package ru.stonlex.bukkit.tab.manager;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import ru.stonlex.bukkit.module.protocol.packet.scoreboard.WrapperPlayServerScoreboardTeam;
+import ru.stonlex.bukkit.depend.protocol.packet.scoreboard.WrapperPlayServerScoreboardTeam;
 import ru.stonlex.bukkit.tab.PlayerTag;
 
 import java.util.HashMap;

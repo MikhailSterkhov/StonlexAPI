@@ -8,8 +8,8 @@ import org.bukkit.entity.Player;
 import ru.stonlex.bukkit.board.line.SidebarLine;
 import ru.stonlex.bukkit.board.objective.SidebarObjective;
 import ru.stonlex.bukkit.board.updater.SidebarUpdater;
-import ru.stonlex.bukkit.module.protocol.packet.AbstractPacket;
-import ru.stonlex.bukkit.module.protocol.packet.scoreboard.WrapperPlayServerScoreboardTeam;
+import ru.stonlex.bukkit.depend.protocol.packet.AbstractPacket;
+import ru.stonlex.bukkit.depend.protocol.packet.scoreboard.WrapperPlayServerScoreboardTeam;
 
 import java.util.*;
 

@@ -6,9 +6,8 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import ru.stonlex.bukkit.holographic.IProtocolHolographic;
 import ru.stonlex.bukkit.holographic.line.IProtocolHolographicLine;
-import ru.stonlex.bukkit.module.protocol.entity.impl.FakeArmorStand;
-import ru.stonlex.bukkit.module.protocol.entity.impl.FakeBat;
-import ru.stonlex.bukkit.module.protocol.entity.impl.FakeSilverfish;
+import ru.stonlex.bukkit.depend.protocol.entity.impl.FakeArmorStand;
+import ru.stonlex.bukkit.depend.protocol.entity.impl.FakeSilverfish;
 
 import java.util.function.Consumer;
 

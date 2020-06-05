@@ -177,6 +177,11 @@ public abstract class PaginatedStonlexInventory implements IPaginatedBukkitInven
 
     @Override
     public void setInventoryUpdater(long updateTicks, @NonNull IBukkitInventoryUpdater inventoryUpdater) {
+        //check old updater
+        if (inventoryUpdater != null) {
+            inventoryUpdater.cancelUpdater();
+        }
+
         this.inventoryUpdater = inventoryUpdater;
 
         getInventoryUpdater().setEnable(true);

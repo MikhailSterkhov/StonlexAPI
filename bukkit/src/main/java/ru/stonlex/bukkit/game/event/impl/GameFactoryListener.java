@@ -8,13 +8,13 @@ import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import ru.stonlex.bukkit.BukkitAPI;
+import ru.stonlex.bukkit.depend.vault.IVaultPlayer;
 import ru.stonlex.bukkit.game.enums.GameEvent;
 import ru.stonlex.bukkit.game.enums.GameStatus;
 import ru.stonlex.bukkit.game.event.GameListener;
 import ru.stonlex.bukkit.game.event.annotation.GEventHandler;
 import ru.stonlex.bukkit.game.factory.AbstractTimerFactory;
 import ru.stonlex.bukkit.game.player.GamePlayer;
-import ru.stonlex.bukkit.module.vault.player.VaultPlayer;
 
 import java.util.Collection;
 
@@ -67,7 +67,7 @@ public class GameFactoryListener extends GameListener {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
-        VaultPlayer vaultPlayer = BukkitAPI.getInstance().getVaultManager().getVaultPlayer(player);
+        IVaultPlayer vaultPlayer = BukkitAPI.getInstance().getVaultManager().getVaultPlayer(player);
 
         int maxArenaOnline = getGameManager().getGameSettings().MAX_ARENA_SLOTS;
         int serverOnline = Bukkit.getOnlinePlayers().size();
@@ -81,7 +81,7 @@ public class GameFactoryListener extends GameListener {
     @EventHandler
     public void onPlayerLeave(PlayerQuitEvent event) {
         Player player = event.getPlayer();
-        VaultPlayer vaultPlayer = BukkitAPI.getInstance().getVaultManager().getVaultPlayer(player);
+        IVaultPlayer vaultPlayer = BukkitAPI.getInstance().getVaultManager().getVaultPlayer(player);
 
         int maxArenaOnline = getGameManager().getGameSettings().MAX_ARENA_SLOTS;
         int serverOnline = Bukkit.getOnlinePlayers().size() - 1;

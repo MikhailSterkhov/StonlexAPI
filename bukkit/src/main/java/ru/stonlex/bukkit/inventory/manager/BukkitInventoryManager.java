@@ -1,8 +1,12 @@
 package ru.stonlex.bukkit.inventory.manager;
 
 import lombok.Getter;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
+import ru.stonlex.bukkit.BukkitAPI;
 import ru.stonlex.bukkit.inventory.IBukkitInventory;
+import ru.stonlex.bukkit.inventory.addon.IBukkitInventoryUpdater;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -11,6 +15,9 @@ public final class BukkitInventoryManager {
 
     @Getter
     private final Map<String, IBukkitInventory> playerInventoryMap = new HashMap<>();
+
+    @Getter
+    private final Map<IBukkitInventoryUpdater, Long> inventoryUpdaterMap = new HashMap<>();
 
 
     /**
@@ -48,4 +55,41 @@ public final class BukkitInventoryManager {
     public void removeOpenInventoryToPlayer(Player player) {
         removeOpenInventoryToPlayer(player.getName());
     }
+
+
+    public void addInventoryUpdater(IBukkitInventoryUpdater inventoryUpdater, long periodTicks) {
+        inventoryUpdaterMap.put(inventoryUpdater, periodTicks);
+    }
+
+    public void removeInventoryUpdater(IBukkitInventoryUpdater inventoryUpdater) {
+        inventoryUpdaterMap.remove(inventoryUpdater);
+    }
+
+    public void startInventoryUpdaters() {
+        new BukkitRunnable() {
+
+            private long currentTicks = 1;
+
+            @Override
+            public void run() {
+                inventoryUpdaterMap.forEach((inventoryUpdater, periodTicks) -> {
+                    if (currentTicks % periodTicks != 0) {
+                        return;
+                    }
+
+                    for (Player player : Bukkit.getOnlinePlayers()) {
+                        IBukkitInventory playerInventory = getOpenInventory(player);
+
+                        if (playerInventory != null && playerInventory.getInventoryUpdater().equals(inventoryUpdater)) {
+                            inventoryUpdater.applyRunnable(player);
+                        }
+                    }
+                });
+
+                currentTicks++;
+            }
+
+        }.runTaskTimer(BukkitAPI.getInstance(), 0, 1);
+    }
+
 }

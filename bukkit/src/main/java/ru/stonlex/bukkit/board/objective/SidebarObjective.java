@@ -4,8 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.bukkit.entity.Player;
 import ru.stonlex.bukkit.board.StonlexSidebar;
-import ru.stonlex.bukkit.module.protocol.packet.scoreboard.WrapperPlayServerScoreboardDisplayObjective;
-import ru.stonlex.bukkit.module.protocol.packet.scoreboard.WrapperPlayServerScoreboardObjective;
+import ru.stonlex.bukkit.depend.protocol.packet.scoreboard.WrapperPlayServerScoreboardDisplayObjective;
+import ru.stonlex.bukkit.depend.protocol.packet.scoreboard.WrapperPlayServerScoreboardObjective;
 
 @Getter
 @AllArgsConstructor

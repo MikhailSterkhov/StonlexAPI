@@ -6,7 +6,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import ru.stonlex.bukkit.BukkitAPI;
-import ru.stonlex.bukkit.module.protocol.packet.scoreboard.WrapperPlayServerScoreboardTeam;
+import ru.stonlex.bukkit.depend.protocol.packet.scoreboard.WrapperPlayServerScoreboardTeam;
 import ru.stonlex.bukkit.tab.PlayerTag;
 import ru.stonlex.global.utility.AsyncUtil;
 

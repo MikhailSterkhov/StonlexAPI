@@ -6,7 +6,7 @@ import org.bukkit.entity.Player;
 import ru.stonlex.bukkit.BukkitAPI;
 import ru.stonlex.bukkit.holographic.IProtocolHolographic;
 import ru.stonlex.bukkit.holographic.impl.QuickStonlexHolographic;
-import ru.stonlex.bukkit.module.protocol.entity.impl.FakePlayer;
+import ru.stonlex.bukkit.depend.protocol.entity.impl.FakePlayer;
 import ru.stonlex.bukkit.utility.location.LocationUtil;
 import ru.stonlex.example.command.ConsoleCommand;
 import ru.stonlex.example.command.PlayerCommand;

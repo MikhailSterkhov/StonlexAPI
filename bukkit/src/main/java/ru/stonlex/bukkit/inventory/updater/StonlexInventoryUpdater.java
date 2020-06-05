@@ -6,6 +6,7 @@ import lombok.Setter;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import ru.stonlex.bukkit.BukkitAPI;
+import ru.stonlex.bukkit.inventory.IBukkitInventory;
 import ru.stonlex.bukkit.inventory.addon.IBukkitInventoryUpdater;
 
 import java.util.function.Consumer;
@@ -13,7 +14,9 @@ import java.util.function.Consumer;
 @Getter
 @Setter
 @RequiredArgsConstructor
-public abstract class StonlexInventoryUpdater extends BukkitRunnable implements IBukkitInventoryUpdater, Consumer<Player> {
+public abstract class StonlexInventoryUpdater implements IBukkitInventoryUpdater {
+
+    private IBukkitInventory inventory;
 
     private final Player player;
 
@@ -22,16 +25,11 @@ public abstract class StonlexInventoryUpdater extends BukkitRunnable implements 
 
 
     @Override
-    public void run() {
-        this.accept(player);
-    }
-
-    @Override
-    public void startUpdater(long periodTick) {
+    public void startUpdater(long periodTicks) {
         this.cancelled = !cancelled;
 
         if (isCancelled()) {
-            runTaskTimer(BukkitAPI.getInstance(), 0, periodTick);
+            BukkitAPI.getInstance().getInventoryManager().addInventoryUpdater(this, periodTicks);
         }
     }
 
@@ -40,7 +38,7 @@ public abstract class StonlexInventoryUpdater extends BukkitRunnable implements 
         this.cancelled = !cancelled;
 
         if (!isCancelled()) {
-            cancel();
+            BukkitAPI.getInstance().getInventoryManager().removeInventoryUpdater(this);
         }
     }
 

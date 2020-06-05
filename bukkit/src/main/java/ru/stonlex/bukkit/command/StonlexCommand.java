@@ -1,10 +1,15 @@
 package ru.stonlex.bukkit.command;
 
+import lombok.Getter;
+import org.apache.commons.lang.RandomStringUtils;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import ru.stonlex.bukkit.BukkitAPI;
+import ru.stonlex.bukkit.command.annotation.CommandCooldown;
+import ru.stonlex.bukkit.command.annotation.CommandPermission;
+import ru.stonlex.global.utility.CooldownUtil;
 
 import java.lang.reflect.ParameterizedType;
 
@@ -46,13 +51,39 @@ public abstract class StonlexCommand<S extends CommandSender>
         BukkitAPI.getInstance().getCommandManager().registerCommand(this, command, aliases);
     }
 
+
+    @Getter
+    private final String cooldownName = ("@StonlexCommand=").concat(RandomStringUtils.randomAlphanumeric(64));
+
+
     @Override
     public boolean execute(CommandSender commandSender, String label, String[] args) {
+        //инициализация аннотаций команды
+        CommandCooldown commandCooldown = getClass().getDeclaredAnnotation(CommandCooldown.class);
+        CommandPermission commandPermission = getClass().getDeclaredAnnotation(CommandPermission.class);
+
+        //задержка к выполнению команды
+        if (commandCooldown != null) {
+            if (CooldownUtil.hasCooldown(cooldownName)) {
+                return true;
+            }
+
+            CooldownUtil.putCooldown(cooldownName, commandCooldown.cooldownMillis());
+        }
+
+        //проверка на право для команды
+        if (commandPermission != null) {
+            if (!commandSender.hasPermission(commandPermission.permission())) {
+                commandSender.sendMessage(commandPermission.message());
+                return true;
+            }
+        }
+
+        //выполнение команды
         Class<S> senderClass = (Class<S>) ((ParameterizedType) getClass()
                 .getGenericSuperclass())
                 .getActualTypeArguments()[0];
 
-        // пишем ебаный ИИ
         if (!senderClass.isAssignableFrom(CommandSender.class)) {
             boolean senderIsPlayer = senderClass.isAssignableFrom(Player.class);
 
@@ -65,14 +96,13 @@ public abstract class StonlexCommand<S extends CommandSender>
             }
         }
 
-        // ну все, щас он поработит галактику
         execute((S) commandSender, args);
-        return false;
+        return true;
     }
 
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String label, String[] args) {
-        return false;
+        return true;
     }
 
     /**

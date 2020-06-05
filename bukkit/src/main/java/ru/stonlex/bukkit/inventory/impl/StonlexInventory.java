@@ -161,6 +161,11 @@ public abstract class StonlexInventory implements IBukkitInventory {
 
     @Override
     public void setInventoryUpdater(long updateTicks, @NonNull IBukkitInventoryUpdater inventoryUpdater) {
+        //check old updater
+        if (inventoryUpdater != null) {
+            inventoryUpdater.cancelUpdater();
+        }
+
         this.inventoryUpdater = inventoryUpdater;
 
         getInventoryUpdater().setEnable(true);

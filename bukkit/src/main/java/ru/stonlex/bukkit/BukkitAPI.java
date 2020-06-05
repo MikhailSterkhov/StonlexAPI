@@ -5,14 +5,15 @@ import lombok.Getter;
 import org.bukkit.plugin.java.JavaPlugin;
 import ru.stonlex.bukkit.board.manager.SidebarManager;
 import ru.stonlex.bukkit.holographic.manager.ProtocolHolographicManager;
+import ru.stonlex.bukkit.listener.PlayerListener;
 import ru.stonlex.bukkit.test.TestCommand;
 import ru.stonlex.bukkit.command.manager.CommandManager;
 import ru.stonlex.bukkit.event.EventRegisterManager;
 import ru.stonlex.bukkit.game.GameManager;
 import ru.stonlex.bukkit.inventory.listener.StonlexInventoryListener;
 import ru.stonlex.bukkit.inventory.manager.BukkitInventoryManager;
-import ru.stonlex.bukkit.module.protocol.entity.listener.FakeEntityClickListener;
-import ru.stonlex.bukkit.module.vault.manager.VaultManager;
+import ru.stonlex.bukkit.depend.protocol.entity.listener.FakeEntityClickListener;
+import ru.stonlex.bukkit.depend.vault.manager.VaultManager;
 import ru.stonlex.bukkit.tab.listener.TagListener;
 import ru.stonlex.bukkit.tab.manager.TagManager;
 
@@ -43,7 +44,7 @@ public final class BukkitAPI extends JavaPlugin {
     private final TagManager tagManager = new TagManager();
 
     @Getter
-    private VaultManager vaultManager = null;
+    private final VaultManager vaultManager = new VaultManager();
 
 
     @Getter
@@ -60,10 +61,19 @@ public final class BukkitAPI extends JavaPlugin {
     public void onEnable() {
         registerFakeEntityClicker();
 
+        //events
         getServer().getPluginManager().registerEvents(new StonlexInventoryListener(), this);
         getServer().getPluginManager().registerEvents(new TagListener(), this);
+        getServer().getPluginManager().registerEvents(new PlayerListener(), this);
 
-        vaultManager = new VaultManager();
+        //vault
+        vaultManager.getChatProvider().registerProvider();
+        vaultManager.getEconomyProvider().registerProvider();
+        vaultManager.getPermissionProvider().registerProvider();
+
+        //inventories
+        inventoryManager.startInventoryUpdaters();
+
 
         //test
         commandManager.registerCommand(this, new TestCommand(), "test");
