@@ -1,15 +1,11 @@
 package ru.stonlex.bukkit.holographic.impl;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import org.bukkit.Bukkit;
-import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
-import ru.stonlex.bukkit.BukkitAPI;
+import ru.stonlex.bukkit.StonlexBukkitApiPlugin;
 import ru.stonlex.bukkit.holographic.IProtocolHolographic;
 import ru.stonlex.bukkit.holographic.addon.IProtocolHolographicTracker;
 import ru.stonlex.bukkit.holographic.addon.IProtocolHolographicUpdater;
@@ -29,6 +25,7 @@ public class QuickStonlexHolographic implements IProtocolHolographic {
     private Location location;
 
     private IProtocolHolographicUpdater holographicUpdater;
+    private IProtocolHolographicTracker holographicTracker;
 
     private final List<IProtocolHolographicLine> holographicLines = new LinkedList<>();
     private final List<Player> receivers = new LinkedList<>();
@@ -130,6 +127,9 @@ public class QuickStonlexHolographic implements IProtocolHolographic {
             holographicLine.showToPlayer(player);
         }
 
+        StonlexBukkitApiPlugin.getInstance().getHolographicManager()
+                .addProtocolHolographic(player, this);
+
         //удаляем голограмму через указанное время
         new BukkitRunnable() {
 
@@ -138,7 +138,7 @@ public class QuickStonlexHolographic implements IProtocolHolographic {
                 hideToPlayer(player);
             }
 
-        }.runTaskLater(BukkitAPI.getInstance(), hideTicks);
+        }.runTaskLater(StonlexBukkitApiPlugin.getInstance(), hideTicks);
     }
 
     @Override
@@ -148,6 +148,9 @@ public class QuickStonlexHolographic implements IProtocolHolographic {
         for (IProtocolHolographicLine holographicLine : holographicLines) {
             holographicLine.hideToPlayer(player);
         }
+
+        StonlexBukkitApiPlugin.getInstance().getHolographicManager()
+                .getPlayerHolographics().remove(player);
     }
 
 
@@ -161,8 +164,11 @@ public class QuickStonlexHolographic implements IProtocolHolographic {
     }
 
     @Override
-    public void registerHolographicTracker(@NonNull IProtocolHolographicTracker holographicTracker) {
-        Bukkit.getPluginManager().registerEvents(holographicTracker, BukkitAPI.getInstance());
+    public void setHolographicTracker(@NonNull IProtocolHolographicTracker holographicTracker) {
+        this.holographicTracker = holographicTracker;
+
+        StonlexBukkitApiPlugin.getInstance().getHolographicManager()
+                .addHolographicToTracking(this);
     }
 
     @Override

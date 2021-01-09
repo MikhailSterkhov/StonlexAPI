@@ -18,15 +18,15 @@ public @interface CommandCooldown {
      * того, кто написал данную команду, либо
      * для всех игроков
      */
-    EnumReceiver receiverType() default EnumReceiver.ONLY_SENDER;
+    ReceiverModifier receiverModifier() default ReceiverModifier.ONLY_SENDER;
 
 
     /**
      * Типы объектов для задержек
      */
-    enum EnumReceiver {
+    enum ReceiverModifier {
 
         ONLY_SENDER,
-        ALL
+        PUBLIC;
     }
 }

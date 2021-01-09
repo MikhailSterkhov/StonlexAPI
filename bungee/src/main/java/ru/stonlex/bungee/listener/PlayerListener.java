@@ -39,26 +39,26 @@ public class PlayerListener implements Listener {
         joinedPlayerMap.remove(proxiedPlayer.getName().toLowerCase());
     }
 
-    @EventHandler
-    public void onServerFall(ServerKickEvent event) {
-        ProxiedPlayer proxiedPlayer = event.getPlayer();
-        ServerInfo cancelServer = event.getCancelServer();
-
-        if (cancelServer == null) {
-            return;
-        }
-
-        event.setCancelServer(null);
-        event.setCancelled(true);
-
-        proxiedPlayer.connect(BungeeCord.getInstance().getServerInfo("Limbo-1"));
-
-        proxiedPlayer.sendMessage("§r ");
-        proxiedPlayer.sendMessage("§r ");
-        proxiedPlayer.sendMessage("§cСервер, ан котором Вы находились упал");
-        proxiedPlayer.sendMessage("§cОтвет от сервера: §e" + event.getKickReason());
-        proxiedPlayer.sendMessage("§r ");
-        proxiedPlayer.sendMessage("§r ");
-    }
+    //@EventHandler
+    //public void onServerFall(ServerKickEvent event) {
+    //    ProxiedPlayer proxiedPlayer = event.getPlayer();
+    //    ServerInfo cancelServer = event.getCancelServer();
+    //
+    //    if (cancelServer == null) {
+    //        return;
+    //    }
+    //
+    //    event.setCancelServer(null);
+    //    event.setCancelled(true);
+    //
+    //    proxiedPlayer.connect(BungeeCord.getInstance().getServerInfo("Limbo-1"));
+    //
+    //    proxiedPlayer.sendMessage("§r ");
+    //    proxiedPlayer.sendMessage("§r ");
+    //    proxiedPlayer.sendMessage("§cСервер, ан котором Вы находились упал");
+    //    proxiedPlayer.sendMessage("§cОтвет от сервера: §e" + event.getKickReason());
+    //    proxiedPlayer.sendMessage("§r ");
+    //    proxiedPlayer.sendMessage("§r ");
+    //}
 
 }

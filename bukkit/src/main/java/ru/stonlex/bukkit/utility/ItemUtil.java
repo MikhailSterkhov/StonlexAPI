@@ -2,9 +2,9 @@ package ru.stonlex.bukkit.utility;
 
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.UtilityClass;
-import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -14,6 +14,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.inventory.meta.SkullMeta;
+import org.bukkit.material.MaterialData;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import ru.stonlex.global.utility.ReflectionUtil;
@@ -26,124 +27,114 @@ import java.util.UUID;
 @UtilityClass
 public class ItemUtil {
 
-    /**
-     * Опять же, этот код старый, и переписывать его мне было
-     * попросту лень, да и тем более, он прекрасно работает.
-     *
-     * Если кому-то он неудобен, то система как бы не особо сложная,
-     * поэтому можно и самому ее написать
-     */
+    public final Material EMPTY_ITEM_TYPE       = Material.AIR;
 
-    public final ItemStack EMPTY_ITEM = new ItemStack(Material.AIR);
+    public final MaterialData EMPTY_ITEM_DATA   = EMPTY_ITEM_TYPE.getNewData((byte) 0);
+    public final ItemStack EMPTY_ITEM           = EMPTY_ITEM_DATA.toItemStack(1);
 
-    public ItemStack getItemStack(Material material, byte durability, int amount, String name, String... lore) {
-        ItemStack itemStack = new ItemStack(material, amount, durability);
-        ItemMeta meta = itemStack.getItemMeta();
 
-        meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', name));
-        meta.setLore(Arrays.asList(lore));
-        meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+    public ItemStack getNamedItemStack(@NonNull Material material, int durability,
+                                       @NonNull String displayName) {
 
-        itemStack.setItemMeta(meta);
-        return itemStack;
+        return newBuilder(material)
+
+                .setDurability(durability)
+                .setName(displayName)
+                .build();
     }
 
-    public ItemStack getItemStack(Material material, String name, String... lore) {
-        return getItemStack(material, (byte)0, 1, name, lore);
+    public ItemStack getNamedItemStack(@NonNull ItemStack itemStack,
+                                       @NonNull String displayName) {
+
+        return newBuilder(itemStack)
+                .setName(displayName)
+
+                .build();
     }
 
-    public ItemStack getItemStack(Material material, byte durability, String name, String... lore) {
-        return getItemStack(material, durability, 1, name, lore);
+    public ItemStack getNamedItemStack(@NonNull MaterialData materialData,
+                                       @NonNull String displayName) {
+
+        return newBuilder(materialData.toItemStack(1))
+                .setName(displayName)
+
+                .build();
     }
 
-    public ItemStack getItemStack(Material material, byte durability) {
-        return getItemStack(material, durability, 1, "");
+
+    public ItemStack getSkull(@NonNull String playerName) {
+        return newBuilder(Material.SKULL_ITEM)
+
+                .setDurability(3)
+                .setPlayerSkull(playerName)
+
+                .build();
     }
 
-    public ItemStack getItemStack(Material material, int amount) {
-        return getItemStack(material, (byte) 0, amount, "");
+    public ItemStack getNamedSkull(@NonNull String playerName,
+                                   @NonNull String displayName) {
+
+        return newBuilder(Material.SKULL_ITEM)
+                .setDurability(3)
+
+                .setName(displayName)
+                .setPlayerSkull(playerName)
+
+                .build();
     }
 
-    public ItemStack getItemStack(Material material) {
-        return getItemStack(material, (byte) 0, 1, "");
+    public ItemStack getSkullByTexture(@NonNull String textureValue) {
+        return newBuilder(Material.SKULL_ITEM)
+
+                .setDurability(3)
+                .setTextureValue(textureValue)
+
+                .build();
     }
 
-    public ItemStack getItemStack(Material material, String title) {
-        return getItemStack(material, (byte) 0, 1, title);
+    public ItemStack getNamedSkullByTexture(@NonNull String textureValue,
+                                            @NonNull String displayName) {
+
+        return newBuilder(Material.SKULL_ITEM)
+                .setDurability(3)
+
+                .setName(displayName)
+                .setTextureValue(textureValue)
+
+                .build();
     }
 
-    public ItemStack getItemStack(Material material, byte durability, String name) {
-        return getItemStack(material, durability, 1, name);
+    public ItemStack getPotion(@NonNull PotionEffect... potionEffects) {
+        return getColouredPotion(Color.PURPLE, potionEffects);
     }
 
-    public ItemStack getItemStack(Material material, int amount, String name) {
-        return getItemStack(material, (byte) 0, amount, name);
-    }
+    public ItemStack getColouredPotion(@NonNull Color potionColor,
+                                       @NonNull PotionEffect... potionEffects) {
 
-    public ItemStack getTextureSkull(String texture, int amount, String name, String... lores) {
-        ItemStack item = new ItemStack(Material.SKULL_ITEM, amount, (byte) 3);
-        SkullMeta meta = (SkullMeta) item.getItemMeta();
+        ItemBuilder itemBuilder = newBuilder(Material.POTION);
+        itemBuilder.setPotionColor(potionColor);
 
-        meta.setDisplayName(name);
-        meta.setLore(Arrays.asList(lores));
-        meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-
-        try {
-            GameProfile profile = new GameProfile(UUID.randomUUID(), "ItzStonlex");
-            ReflectionUtil.setField(meta, "profile", ItemUtil.setGameProfileTexture(profile, texture));
-        } catch (Exception ignored) {}
-        
-        item.setItemMeta(meta);
-        return item;
-    }
-    
-    public ItemStack getTextureSkull(String texture, String name, String... lores) {
-        return getTextureSkull(texture, 1, name, lores);
-    }
-
-    public ItemStack getTextureSkull(String texture) {
-        return getTextureSkull(texture, 1, "");
-    }
-
-    public ItemStack getPlayerSkull(String nickname, int amount, String name, String... lores) {
-        ItemStack item = new ItemStack(Material.SKULL_ITEM, amount, (byte) 3);
-        SkullMeta meta = (SkullMeta) item.getItemMeta();
-
-        meta.setDisplayName(name);
-        meta.setLore(Arrays.asList(lores));
-
-        if (nickname == null) {
-            nickname = "ItzStonlex";
+        for (PotionEffect potionEffect : potionEffects) {
+            itemBuilder.addCustomPotionEffect(potionEffect, true);
         }
-        meta.setOwner(nickname);
-        meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
 
-        item.setItemMeta((ItemMeta) meta);
-        return item;
+        return itemBuilder.build();
     }
 
-    public ItemStack getPlayerSkull(String nickname, String name, String... lores) {
-        return getPlayerSkull(nickname, 1, name, lores);
-    }
-
-    public ItemStack getPlayerSkull(String nickname) {
-        return getPlayerSkull(nickname, 1, "");
-    }
-
-    private GameProfile setGameProfileTexture(GameProfile gameProfile, String texture) {
-        gameProfile.getProperties().put("textures", new Property("textures", texture));
-        return gameProfile;
-    }
 
     public ItemBuilder newBuilder() {
         return newBuilder(EMPTY_ITEM);
     }
 
-    public ItemBuilder newBuilder(Material material) {
+    public ItemBuilder newBuilder(@NonNull Material material) {
         return new ItemBuilder(new ItemStack(material));
     }
 
-    public ItemBuilder newBuilder(ItemStack itemStack) {
+    public ItemBuilder newBuilder(@NonNull MaterialData materialData) {
+        return newBuilder(materialData.toItemStack(1));
+    }
+
+    public ItemBuilder newBuilder(@NonNull ItemStack itemStack) {
         return new ItemBuilder(itemStack.clone());
     }
 
@@ -153,32 +144,29 @@ public class ItemUtil {
 
         private final ItemStack itemStack;
 
-        public ItemBuilder setDurability(int durability) {
-            this.itemStack.setDurability((byte) durability);
 
+        public ItemBuilder setDurability(int durability) {
+            itemStack.setDurability((byte) durability);
             return this;
         }
 
         public ItemBuilder setUnbreakable(boolean flag) {
-            ItemMeta meta = itemStack.getItemMeta();
+            ItemMeta itemMeta = itemStack.getItemMeta();
 
-            meta.spigot().setUnbreakable(flag);
-            meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
+            itemMeta.spigot().setUnbreakable(flag);
+            itemMeta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
 
-            this.itemStack.setItemMeta(meta);
-
+            itemStack.setItemMeta(itemMeta);
             return this;
         }
 
-        public ItemBuilder setMaterial(Material material) {
-            this.itemStack.setType(material);
-
+        public ItemBuilder setMaterial(@NonNull Material material) {
+            itemStack.setType(material);
             return this;
         }
 
         public ItemBuilder setAmount(int amount) {
-            this.itemStack.setAmount(amount);
-
+            itemStack.setAmount(amount);
             return this;
         }
 
@@ -187,96 +175,139 @@ public class ItemUtil {
                 return this;
             }
 
-            ItemMeta meta = itemStack.getItemMeta();
-            meta.setDisplayName(name);
+            ItemMeta itemMeta = itemStack.getItemMeta();
+            itemMeta.setDisplayName(name);
 
-            this.itemStack.setItemMeta(meta);
-
+            itemStack.setItemMeta(itemMeta);
             return this;
         }
 
-        public ItemBuilder setLore(String... lore) {
-            if (lore == null) {
+        public ItemBuilder setLore(String... loreArray) {
+            if (loreArray == null) {
                 return this;
             }
 
-            ItemMeta meta = itemStack.getItemMeta();
-            meta.setLore(Arrays.asList(lore));
+            ItemMeta itemMeta = itemStack.getItemMeta();
+            itemMeta.setLore(Arrays.asList(loreArray));
 
-            this.itemStack.setItemMeta(meta);
-
+            itemStack.setItemMeta(itemMeta);
             return this;
         }
 
-        public ItemBuilder setLore(List<String> lore) {
-            if (lore == null) {
+        public ItemBuilder setLore(List<String> loreList) {
+            if (loreList == null) {
                 return this;
             }
 
-            ItemMeta meta = itemStack.getItemMeta();
-            meta.setLore(lore);
+            ItemMeta itemMeta = itemStack.getItemMeta();
+            itemMeta.setLore(loreList);
 
-            this.itemStack.setItemMeta(meta);
-
+            itemStack.setItemMeta(itemMeta);
             return this;
         }
 
-        public ItemBuilder addLore(String lore) {
-            ItemMeta meta = itemStack.getItemMeta();
+        public ItemBuilder addLore(@NonNull String lore) {
+            ItemMeta itemMeta = itemStack.getItemMeta();
 
-            List<String> lores = meta.getLore();
+            List<String> loreList = itemMeta.getLore();
 
-            if (lores == null) {
-                lores = new ArrayList<>();
+            if (loreList == null) {
+                loreList = new ArrayList<>();
             }
 
-            lores.add(lore);
+            loreList.add(lore);
+            return setLore(loreList);
+        }
 
-            return this.setLore(lores);
+        public ItemBuilder addLoreArray(@NonNull String... loreArray) {
+            ItemMeta itemMeta = itemStack.getItemMeta();
+
+            List<String> loreList = itemMeta.getLore();
+
+            if (loreList == null) {
+                loreList = new ArrayList<>();
+            }
+
+            loreList.addAll(Arrays.asList(loreArray));
+            return setLore(loreList);
+        }
+
+        public ItemBuilder setGlowing(boolean glowing) {
+            Enchantment glowEnchantment = Enchantment.ARROW_DAMAGE;
+
+            if (glowing) {
+                addItemFlag(ItemFlag.HIDE_ENCHANTS);
+                addEnchantment(glowEnchantment, 1);
+            } else {
+                removeItemFlag(ItemFlag.HIDE_ENCHANTS);
+                removeEnchantment(glowEnchantment);
+            }
+
+            return this;
         }
 
         public ItemBuilder addEnchantment(Enchantment enchantment, int level) {
-            ItemMeta meta = itemStack.getItemMeta();
-
             if (enchantment == null) {
                 return this;
             }
 
-            meta.addEnchant(enchantment, level, true);
-            meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+            ItemMeta itemMeta = itemStack.getItemMeta();
+            itemMeta.addEnchant(enchantment, level, true);
 
-            this.itemStack.setItemMeta(meta);
+            itemStack.setItemMeta(itemMeta);
+            return this;
+        }
 
+        public ItemBuilder removeEnchantment(Enchantment enchantment) {
+            if (enchantment == null) {
+                return this;
+            }
+
+            ItemMeta itemMeta = itemStack.getItemMeta();
+
+            if (!itemMeta.hasEnchant(enchantment) || itemMeta.hasConflictingEnchant(enchantment)) {
+                return this;
+            }
+
+            itemMeta.removeEnchant(enchantment);
+
+            itemStack.setItemMeta(itemMeta);
             return this;
         }
 
         public ItemBuilder addCustomPotionEffect(PotionEffect potionEffect, boolean isAdd) {
-            PotionMeta potionMeta = (PotionMeta) itemStack.getItemMeta();
+            if (potionEffect == null) {
+                return this;
+            }
 
+            PotionMeta potionMeta = (PotionMeta) itemStack.getItemMeta();
             potionMeta.addCustomEffect(potionEffect, isAdd);
 
             itemStack.setItemMeta(potionMeta);
-
             return this;
         }
 
         public ItemBuilder setMainPotionEffect(PotionEffectType potionEffectType) {
-            PotionMeta potionMeta = (PotionMeta) itemStack.getItemMeta();
+            if (potionEffectType == null) {
+                return this;
+            }
 
+            PotionMeta potionMeta = (PotionMeta) itemStack.getItemMeta();
             potionMeta.setMainEffect(potionEffectType);
 
             itemStack.setItemMeta(potionMeta);
-
             return this;
         }
 
         public ItemBuilder setPotionColor(Color color) {
-            PotionMeta potionMeta = (PotionMeta) itemStack.getItemMeta();
+            if (color == null) {
+                return this;
+            }
 
+            PotionMeta potionMeta = (PotionMeta) itemStack.getItemMeta();
             potionMeta.setColor(color);
 
             itemStack.setItemMeta(potionMeta);
-
             return this;
         }
 
@@ -286,11 +317,9 @@ public class ItemUtil {
             }
 
             SkullMeta skullMeta = (SkullMeta) itemStack.getItemMeta();
-
             skullMeta.setOwner(playerSkull);
 
-            this.itemStack.setItemMeta(skullMeta);
-
+            itemStack.setItemMeta(skullMeta);
             return this;
         }
 
@@ -301,23 +330,53 @@ public class ItemUtil {
 
             SkullMeta skullMeta = (SkullMeta) itemStack.getItemMeta();
 
-            try {
-                GameProfile profile = new GameProfile(UUID.randomUUID(), "ItzStonlex");
-                ReflectionUtil.setField(skullMeta, "profile", ItemUtil.setGameProfileTexture(profile, texture));
-            } catch (Exception ignored) {}
+            GameProfile gameProfile = new GameProfile(UUID.randomUUID(), "ItzStonlex");
+            gameProfile.getProperties().put("textures", new Property("textures", texture));
 
-            this.itemStack.setItemMeta(skullMeta);
+            ReflectionUtil.setField(skullMeta, "profile", gameProfile);
 
+            itemStack.setItemMeta(skullMeta);
             return this;
         }
 
         public ItemBuilder setLeatherColor(Color color) {
-            LeatherArmorMeta armorMeta = (LeatherArmorMeta) itemStack.getItemMeta();
+            if (color == null) {
+                return this;
+            }
 
-            armorMeta.setColor(color);
+            LeatherArmorMeta leatherArmorMeta = (LeatherArmorMeta) itemStack.getItemMeta();
+            leatherArmorMeta.setColor(color);
 
-            this.itemStack.setItemMeta(armorMeta);
+            itemStack.setItemMeta(leatherArmorMeta);
+            return this;
+        }
 
+        public ItemBuilder addItemFlag(ItemFlag itemFlag) {
+            if (itemFlag == null) {
+                return this;
+            }
+
+            ItemMeta itemMeta = itemStack.getItemMeta();
+            itemMeta.addItemFlags(itemFlag);
+
+            itemStack.setItemMeta(itemMeta);
+            return this;
+        }
+
+        public ItemBuilder removeItemFlag(ItemFlag itemFlag) {
+            if (itemFlag == null) {
+                return this;
+            }
+
+            ItemMeta itemMeta = itemStack.getItemMeta();
+
+            if (!itemMeta.hasItemFlag(itemFlag)) {
+                return this;
+            }
+
+            itemMeta.removeItemFlags(itemFlag);
+
+            itemStack.setItemMeta(itemMeta);
             return this;
         }
 

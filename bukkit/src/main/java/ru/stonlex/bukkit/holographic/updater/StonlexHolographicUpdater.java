@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.bukkit.scheduler.BukkitRunnable;
-import ru.stonlex.bukkit.BukkitAPI;
+import ru.stonlex.bukkit.StonlexBukkitApiPlugin;
 import ru.stonlex.bukkit.holographic.IProtocolHolographic;
 import ru.stonlex.bukkit.holographic.addon.IProtocolHolographicUpdater;
 
@@ -31,7 +31,7 @@ public abstract class StonlexHolographicUpdater extends BukkitRunnable implement
         this.cancelled = !cancelled;
 
         if (isCancelled()) {
-            runTaskTimer(BukkitAPI.getInstance(), 0, periodTick);
+            runTaskTimer(StonlexBukkitApiPlugin.getInstance(), 0, periodTick);
         }
     }
 

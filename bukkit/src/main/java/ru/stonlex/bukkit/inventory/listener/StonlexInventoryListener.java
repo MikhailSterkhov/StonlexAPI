@@ -7,25 +7,25 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
-import ru.stonlex.bukkit.BukkitAPI;
-import ru.stonlex.bukkit.inventory.IBukkitInventory;
-import ru.stonlex.bukkit.inventory.button.IBukkitInventoryButton;
+import ru.stonlex.bukkit.inventory.BaseInventory;
+import ru.stonlex.bukkit.inventory.button.BaseInventoryButton;
 import ru.stonlex.bukkit.inventory.button.impl.ClickableStonlexInventoryButton;
 import ru.stonlex.bukkit.inventory.button.impl.DraggableStonlexInventoryButton;
+import ru.stonlex.bukkit.inventory.manager.BukkitInventoryManager;
 
 public class StonlexInventoryListener implements Listener {
 
     @EventHandler
     public void onInventoryDrag(InventoryDragEvent event) {
         Player player = ((Player) event.getWhoClicked());
-        IBukkitInventory bukkitInventory = BukkitAPI.getInstance().getInventoryManager().getOpenInventory(player);
+        BaseInventory bukkitInventory = BukkitInventoryManager.INSTANCE.getOpenInventory(player);
 
         if (bukkitInventory == null) {
             return;
         }
 
         for (int rawSlot : event.getRawSlots()) {
-            IBukkitInventoryButton inventoryButton = bukkitInventory.getButtons().get(rawSlot + 1);
+            BaseInventoryButton inventoryButton = bukkitInventory.getButtons().get(rawSlot + 1);
 
             if (!(inventoryButton instanceof DraggableStonlexInventoryButton)) {
                 return;
@@ -40,13 +40,13 @@ public class StonlexInventoryListener implements Listener {
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
         Player player = ((Player) event.getWhoClicked());
-        IBukkitInventory bukkitInventory = BukkitAPI.getInstance().getInventoryManager().getOpenInventory(player);
+        BaseInventory bukkitInventory = BukkitInventoryManager.INSTANCE.getOpenInventory(player);
 
         if (bukkitInventory == null) {
             return;
         }
 
-        IBukkitInventoryButton inventoryButton = bukkitInventory.getButtons().get(event.getSlot() + 1);
+        BaseInventoryButton inventoryButton = bukkitInventory.getButtons().get(event.getSlot() + 1);
 
         //вдруг это OriginalItem? лучше на всякий отменить клик уж)
         event.setCancelled(true);
@@ -62,7 +62,7 @@ public class StonlexInventoryListener implements Listener {
     @EventHandler
     public void onInventoryOpen(InventoryOpenEvent event) {
         Player player = ((Player) event.getPlayer());
-        IBukkitInventory bukkitInventory = BukkitAPI.getInstance().getInventoryManager().getOpenInventory(player);
+        BaseInventory bukkitInventory = BukkitInventoryManager.INSTANCE.getOpenInventory(player);
 
         if (bukkitInventory == null) {
             return;
@@ -75,7 +75,7 @@ public class StonlexInventoryListener implements Listener {
     @EventHandler
     public void onInventoryClose(InventoryCloseEvent event) {
         Player player = ((Player) event.getPlayer());
-        IBukkitInventory bukkitInventory = BukkitAPI.getInstance().getInventoryManager().getOpenInventory(player);
+        BaseInventory bukkitInventory = BukkitInventoryManager.INSTANCE.getOpenInventory(player);
 
         if (bukkitInventory == null) {
             return;
@@ -85,7 +85,7 @@ public class StonlexInventoryListener implements Listener {
             bukkitInventory.getInventoryUpdater().cancelUpdater();
         }
 
-        BukkitAPI.getInstance().getInventoryManager().removeOpenInventoryToPlayer(player);
+        BukkitInventoryManager.INSTANCE.removeOpenInventoryToPlayer(player);
 
         bukkitInventory.onClose(player);
     }

@@ -6,26 +6,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
 import ru.stonlex.bukkit.holographic.IProtocolHolographic;
 
-public interface IProtocolHolographicTracker extends Listener {
-
-    @EventHandler
-    default void onHolographicTrack(PlayerMoveEvent event) {
-        Player player = event.getPlayer();
-
-        //show hologram
-        if (getHolographic().getLocation().distance(player.getLocation()) <= getTrackDistance() && !getHolographic().isSpawnedToPlayer(player)) {
-            onHolographicShow(player);
-            getHolographic().showToPlayer(player);
-
-        }
-
-        //hide hologram
-        if (getHolographic().getLocation().distance(player.getLocation()) > getTrackDistance() && getHolographic().isSpawnedToPlayer(player)) {
-            onHolographicHide(player);
-            getHolographic().hideToPlayer(player);
-        }
-    }
-
+public interface IProtocolHolographicTracker {
 
     /**
      * Что будем делать при показе голограммы игроку

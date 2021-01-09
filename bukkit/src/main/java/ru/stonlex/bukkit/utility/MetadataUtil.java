@@ -2,14 +2,15 @@ package ru.stonlex.bukkit.utility;
 
 import lombok.experimental.UtilityClass;
 import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.metadata.MetadataValue;
 import org.bukkit.metadata.Metadatable;
 import org.bukkit.plugin.Plugin;
-import ru.stonlex.bukkit.BukkitAPI;
+import ru.stonlex.bukkit.StonlexBukkitApiPlugin;
 
 @UtilityClass
 public class MetadataUtil {
 
-    private final Plugin plugin = BukkitAPI.getInstance();
+    private final Plugin plugin = StonlexBukkitApiPlugin.getInstance();
 
 
     /**
@@ -51,11 +52,17 @@ public class MetadataUtil {
      * @param metadataName - наименование данных
      */
     public Object getMetadata(Metadatable metadatableObject, String metadataName) {
-        return metadatableObject.getMetadata(metadataName)
+        MetadataValue metadataValue =  metadatableObject.getMetadata(metadataName)
                 .stream()
-                .filter(metadataValue -> metadataValue.getOwningPlugin().equals(plugin))
+                .filter(metadataValue1 -> metadataValue1.getOwningPlugin().equals(plugin))
                 .findFirst()
-                .orElse(null).value();
+                .orElse(null);
+
+        if (metadataValue == null) {
+            return null;
+        }
+
+        return metadataValue.value();
     }
 
     /**

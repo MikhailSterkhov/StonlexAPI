@@ -1,20 +1,25 @@
 package ru.stonlex.global.utility;
 
+import gnu.trove.map.TObjectIntMap;
+import gnu.trove.map.hash.TObjectIntHashMap;
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.UtilityClass;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @UtilityClass
 public class NumberUtil {
 
-    @Getter
-    private final ThreadLocalRandom random = ThreadLocalRandom.current();
+    public final ThreadLocalRandom LOCAL_RANDOM = ThreadLocalRandom.current();
+    public final Pattern TIME_TO_MILLIS_PATTERN = Pattern.compile("(?i)" + "(\\d{1,3}(?=ns))?" + "(\\d{1,3}(?=mc))?" + "(\\d{1,3}(?=ms))?" + "(\\d{1,3}(?=s))?" + "(\\d{1,3}(?=m))?" + "(\\d{1,3}(?=h))?" + "(\\d{1,3}(?=d))?" + "(\\d{1,3}(?=w))?");
 
 
     /**
@@ -49,13 +54,23 @@ public class NumberUtil {
     }
 
     /**
-     * Сгенерировать и получить процент от числа
+     * Получить процент текущего числа от максимального
      *
-     * @param max     - макисмальное значение
-     * @param current -
+     * @param currentNumber - текущее число
+     * @param maxNumber     - максимальное число
      */
-    public int getPercent(int max, int current) {
-        return Math.round((current / max) * 100);
+    public int getIntPercent(int currentNumber, int maxNumber) {
+        return (int) Math.round(PercentUtil.getPercent(currentNumber, maxNumber));
+    }
+
+    /**
+     * Получить число от процента максимального числа
+     *
+     * @param currentPercent - текущий процент, который надо найти
+     * @param maxNumber      - максимальное число, от которого ищем процент
+     */
+    public int getIntNumberByPercent(int currentPercent, int maxNumber) {
+        return (int) Math.round(PercentUtil.getNumberByPercent(currentPercent, maxNumber));
     }
 
     /**
@@ -65,9 +80,10 @@ public class NumberUtil {
      * @param radian - степень
      */
     public int toRadians(int number, int radian) {
-        for (int count = 0; number < radian; number++) {
+        for (int count = 0; count < radian; count++) {
             number *= number;
         }
+
         return number;
     }
 
@@ -98,8 +114,18 @@ public class NumberUtil {
      * @param min - минимальное значение
      * @param max - максимальное значение
      */
-    public int random(int min, int max) {
-        return min + random.nextInt(max - min);
+    public int randomInt(int min, int max) {
+        return min + LOCAL_RANDOM.nextInt(max - min);
+    }
+
+    /**
+     * Получить рандомное число
+     *
+     * @param min - минимальное значение
+     * @param max - максимальное значение
+     */
+    public double randomDouble(double min, double max) {
+        return min + LOCAL_RANDOM.nextDouble(max - min);
     }
 
     /**
@@ -137,8 +163,8 @@ public class NumberUtil {
      * @param number - число
      * @param unit   - словосочетание
      */
-    public String formatting(int number, TimeUnit unit) {
-        return formatting(number, unit.getOne(), unit.getTwo(), unit.getThree());
+    public String formatting(int number, NumberTimeUnit unit) {
+        return formatting(number, unit.getOne(), unit.getTwo(), unit.getOther());
     }
 
     /**
@@ -189,31 +215,31 @@ public class NumberUtil {
         StringBuilder builder = new StringBuilder();
 
         if (years != 0) {
-            builder.append(formatting(years, TimeUnit.YEARS)).append(" ");
+            builder.append(formatting(years, NumberTimeUnit.YEARS)).append(" ");
         }
 
         if (months != 0) {
-            builder.append(formatting(months, TimeUnit.MONTHS)).append(" ");
+            builder.append(formatting(months, NumberTimeUnit.MONTHS)).append(" ");
         }
 
         if (weeks != 0) {
-            builder.append(formatting(weeks, TimeUnit.WEEKS)).append(" ");
+            builder.append(formatting(weeks, NumberTimeUnit.WEEKS)).append(" ");
         }
 
         if (days != 0) {
-            builder.append(formatting(days, TimeUnit.DAYS)).append(" ");
+            builder.append(formatting(days, NumberTimeUnit.DAYS)).append(" ");
         }
 
         if (hours != 0) {
-            builder.append(formatting(hours, TimeUnit.HOURS)).append(" ");
+            builder.append(formatting(hours, NumberTimeUnit.HOURS)).append(" ");
         }
 
         if (minutes != 0) {
-            builder.append(formatting(minutes, TimeUnit.MINUTES)).append(" ");
+            builder.append(formatting(minutes, NumberTimeUnit.MINUTES)).append(" ");
         }
 
         if (seconds != 0) {
-            builder.append(formatting(seconds, TimeUnit.SECONDS));
+            builder.append(formatting(seconds, NumberTimeUnit.SECONDS));
         }
 
         return builder.toString();
@@ -226,112 +252,63 @@ public class NumberUtil {
      * @param millis - кол-во миллисекунд
      */
     public String getTime(long millis) {
-        return getTime((int)millis / 1000);
+        return getTime((int) millis / 1000);
     }
 
     /**
-     * Парсит такие значения, как 5d, 3m, 50s и т.д. в миллисекунды
+     * Парсит такие значения, как 5d, 3m, 50s и т.д.
      *
-     * @param time - значения, которое нужно парсить
-     * @author DonDays
+     * @param time   - значения, которое нужно парсить
+     * @param unitTo - в какую единицу измерения времени парсить
+     * @author GitCoder
      */
-    public long parseTimeToMills(String time) {
-        Pattern timePattern = Pattern.compile(
-                "(?:([0-9]+)\\s*y[a-z]*[,\\s]*)?(?:([0-9]+)\\s*mo[a-z]*[,\\s]*)?" +
-                        "(?:([0-9]+)\\s*w[a-z]*[,\\s]*)?(?:([0-9]+)\\s*d[a-z]*[,\\s]*)?(?:([0-9]+)\\s*h[a-z]*[,\\s]*)?(?:([0-9]+)" +
-                        "\\s*m[a-z]*[,\\s]*)?(?:([0-9]+)\\s*(?:s[a-z]*)?)?", Pattern.CASE_INSENSITIVE
-        );
+    public long parseTimeToMillis(@NonNull String time, @NonNull java.util.concurrent.TimeUnit unitTo) {
+        if (time.startsWith("-a")) {
+            return -1;
+        }
 
-        Matcher m = timePattern.matcher(time);
+        Matcher matcher = TIME_TO_MILLIS_PATTERN.matcher(time);
+        TObjectIntMap<TimeUnit> values = new TObjectIntHashMap<>();
 
-        int years = 0, months = 0, weeks = 0, days = 0, hours = 0, minutes = 0, seconds = 0;
+        while (matcher.find()) {
+            for (int i = 1; i <= 7; i++) {
+                String value = matcher.group(i);
 
-        boolean found = false;
-
-        while (m.find()) {
-            if (m.group() != null && !m.group().isEmpty()) {
-                for (int c = 0; c < m.groupCount(); ++c) {
-                    if (m.group(c) != null && !m.group(c).isEmpty()) {
-                        found = true;
-                        break;
-                    }
+                if (value == null || value.isEmpty()) {
+                    continue;
                 }
 
-                if (found) {
-                    if (m.group(1) != null && !m.group(1).isEmpty()) {
-                        years = Integer.parseInt(m.group(1));
-                    }
+                TimeUnit unit = TimeUnit.values()[i - 1];
+                int intValue = Integer.parseInt(value);
 
-                    if (m.group(2) != null && !m.group(2).isEmpty()) {
-                        months = Integer.parseInt(m.group(2));
-                    }
-
-                    if (m.group(3) != null && !m.group(3).isEmpty()) {
-                        weeks = Integer.parseInt(m.group(3));
-                    }
-
-                    if (m.group(4) != null && !m.group(4).isEmpty()) {
-                        days = Integer.parseInt(m.group(4));
-                    }
-
-                    if (m.group(5) != null && !m.group(5).isEmpty()) {
-                        hours = Integer.parseInt(m.group(5));
-                    }
-
-                    if (m.group(6) != null && !m.group(6).isEmpty()) {
-                        minutes = Integer.parseInt(m.group(6));
-                    }
-
-                    if (m.group(7) != null && !m.group(7).isEmpty()) {
-                        seconds = Integer.parseInt(m.group(7));
-                    }
-                    break;
-                }
+                values.adjustOrPutValue(unit, intValue, intValue);
+                break;
             }
         }
 
-        if (!found) {
-            throw new RuntimeException("Illegal Date");
-        } else if (years > 20) {
-            throw new RuntimeException("Illegal Date");
-        } else {
-            GregorianCalendar gregorianCalendar = new GregorianCalendar();
-            if (years > 0) {
-                gregorianCalendar.add(Calendar.YEAR, years);
-            }
-
-            if (months > 0) {
-                gregorianCalendar.add(Calendar.MONTH, months);
-            }
-
-            if (weeks > 0) {
-                gregorianCalendar.add(Calendar.WEEK_OF_YEAR, weeks);
-            }
-
-            if (days > 0) {
-                gregorianCalendar.add(Calendar.DATE, days);
-            }
-
-            if (hours > 0) {
-                gregorianCalendar.add(Calendar.HOUR_OF_DAY, hours);
-            }
-
-            if (minutes > 0) {
-                gregorianCalendar.add(Calendar.MINUTE, minutes);
-            }
-
-            if (seconds > 0) {
-                gregorianCalendar.add(Calendar.SECOND, seconds);
-            }
-
-            return gregorianCalendar.getTimeInMillis();
+        if (values.isEmpty()) {
+            throw new IllegalArgumentException("Illegal Date");
         }
+
+        AtomicLong total = new AtomicLong();
+
+        values.forEachEntry((timeUnit, value) -> {
+            total.addAndGet(unitTo.convert(value, timeUnit));
+
+            return true;
+        });
+
+        if (total.get() <= 0) {
+            throw new IllegalArgumentException("Illegal Date");
+        }
+
+        return total.get();
     }
 
 
     @RequiredArgsConstructor
     @Getter
-    public enum TimeUnit {
+    public enum NumberTimeUnit {
         SECONDS("секунда", "секунды", "секунд"),
         MINUTES("минута", "минуты", "минут"),
         HOURS("час", "часа", "часов"),
@@ -340,9 +317,7 @@ public class NumberUtil {
         MONTHS("месяц", "месяца", "месяцев"),
         YEARS("год", "года", "лет");
 
-        private final String one;
-        private final String two;
-        private final String three;
+        private final String one, two, other;
     }
 
 }

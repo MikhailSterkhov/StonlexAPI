@@ -3,10 +3,10 @@ package ru.stonlex.bukkit.inventory.button.action.impl;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryInteractEvent;
-import ru.stonlex.bukkit.inventory.button.IBukkitInventoryButton;
+import ru.stonlex.bukkit.inventory.button.BaseInventoryButton;
 import ru.stonlex.bukkit.inventory.button.action.EnumButtonAction;
 
-public interface ClickableButtonAction extends IBukkitInventoryButton.IInventoryButtonAction {
+public interface ClickableButtonAction extends BaseInventoryButton.IInventoryButtonAction {
 
     /**
      * Произвести действие кнопки на предмет

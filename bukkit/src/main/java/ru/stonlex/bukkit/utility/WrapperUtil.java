@@ -1,11 +1,16 @@
 package ru.stonlex.bukkit.utility;
 
+import com.comphenix.protocol.utility.MinecraftProtocolVersion;
+import lombok.NonNull;
 import lombok.experimental.UtilityClass;
 import org.bukkit.Bukkit;
 
+import java.util.UUID;
+
 @UtilityClass
 public class WrapperUtil {
-    
+
+    public static final int CURRENT_VERSION_ID = MinecraftProtocolVersion.getCurrentVersion();
     public final String VERSION = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
 
     /**

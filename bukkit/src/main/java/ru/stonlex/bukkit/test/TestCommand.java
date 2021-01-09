@@ -2,18 +2,20 @@ package ru.stonlex.bukkit.test;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
-import ru.stonlex.bukkit.BukkitAPI;
-import ru.stonlex.bukkit.command.StonlexCommand;
+import ru.stonlex.bukkit.command.BaseCommand;
 import ru.stonlex.bukkit.command.annotation.CommandCooldown;
 import ru.stonlex.bukkit.command.annotation.CommandPermission;
-import ru.stonlex.bukkit.depend.protocol.entity.impl.FakePlayer;
+import ru.stonlex.bukkit.holographic.impl.OriginalStonlexHolographic;
 
-import java.util.concurrent.ThreadLocalRandom;
-
-@CommandCooldown(cooldownMillis = 1000, receiverType = CommandCooldown.EnumReceiver.ALL)
-@CommandPermission(permission = "stonlexapi.test", message = "§eнет прав.")
-public class TestCommand extends StonlexCommand<Player> {
+@CommandCooldown(
+        cooldownMillis = 1000,
+        receiverModifier = CommandCooldown.ReceiverModifier.ONLY_SENDER
+)
+@CommandPermission(
+        permission = "stonlexapi.test",
+        message = "§eнет прав."
+)
+public class TestCommand extends BaseCommand<Player> {
 
     /**
      * дженерик <Player> означает, что команда будет выполняться только для игроков
@@ -22,24 +24,27 @@ public class TestCommand extends StonlexCommand<Player> {
      *  ее можно только спустя одну секунду, так как выставлена задержка в 1000 миллисекунд
      */
 
+    public TestCommand() {
+        super("test");
+    }
+
     @Override
-    public void execute(Player player, String[] args) {
-        //player.sendMessage("Вы выполнили тестовую команду!");
+    protected void executeCommand(Player player, String[] args) {
+        OriginalStonlexHolographic stonlexHolographic = new OriginalStonlexHolographic(player.getLocation());
 
-        FakePlayer fakePlayer = new FakePlayer(player.getName(), player.getLocation());
-        fakePlayer.setGlowingColor(ChatColor.RED);
+        stonlexHolographic.addOriginalHolographicLine("---------");
+        stonlexHolographic.addEmptyHolographicLine();
 
-        fakePlayer.spawn();
+        stonlexHolographic.addClickHolographicLine(ChatColor.AQUA + "Clickable line",
+                clickedPlayer -> player.sendMessage("Ты кликнул на кликабельную строку"));
 
-        new BukkitRunnable() {
+        stonlexHolographic.addHeadHolographicLine(player.getName(), false);
 
-            @Override
-            public void run() {
-                fakePlayer.setGlowingColor(ChatColor.YELLOW);
-                fakePlayer.setSneaking(!fakePlayer.isSneaking());
-            }
+        stonlexHolographic.addOriginalHolographicLine("123");
+        stonlexHolographic.addOriginalHolographicLine(ChatColor.GRAY + "321");
 
-        }.runTaskTimer(BukkitAPI.getInstance(), 20, 20);
+
+        stonlexHolographic.showToPlayer(player);
     }
 
 }

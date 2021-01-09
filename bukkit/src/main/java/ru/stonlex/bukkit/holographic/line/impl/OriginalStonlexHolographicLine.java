@@ -6,7 +6,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import ru.stonlex.bukkit.holographic.IProtocolHolographic;
 import ru.stonlex.bukkit.holographic.line.IProtocolHolographicLine;
-import ru.stonlex.bukkit.depend.protocol.entity.impl.FakeArmorStand;
+import ru.stonlex.bukkit.protocollib.entity.impl.FakeArmorStand;
 
 @Getter
 public class OriginalStonlexHolographicLine implements IProtocolHolographicLine {
@@ -60,22 +60,22 @@ public class OriginalStonlexHolographicLine implements IProtocolHolographicLine 
     public void teleport(Location location) {
         this.location = location.clone().add(0, -(0.25 * lineIndex), 0);
 
-        fakeArmorStand.teleport(location);
+        fakeArmorStand.teleport(this.location);
     }
 
     @Override
     public boolean isSpawnedToPlayer(Player player) {
-        return fakeArmorStand.hasSpawnedToPlayer(player);
+        return fakeArmorStand.hasViewer(player);
     }
 
     @Override
     public void showToPlayer(Player player) {
-        fakeArmorStand.spawnToPlayer(player);
+        fakeArmorStand.addViewers(player);
     }
 
     @Override
     public void hideToPlayer(Player player) {
-        fakeArmorStand.removeToPlayer(player);
+        fakeArmorStand.removeViewers(player);
     }
 
 }

@@ -3,7 +3,6 @@ package ru.stonlex.bungee.utility;
 import lombok.Getter;
 import lombok.experimental.UtilityClass;
 import net.md_5.bungee.api.plugin.Plugin;
-import ru.stonlex.bungee.config.BungeePluginConfig;
 
 import java.io.File;
 import java.util.HashMap;

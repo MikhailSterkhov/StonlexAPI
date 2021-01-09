@@ -1,6 +1,6 @@
 package ru.stonlex.global.mail;
 
-import ru.stonlex.global.utility.AsyncUtil;
+import ru.stonlex.global.utility.query.AsyncUtil;
 
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
@@ -51,7 +51,7 @@ public class MailSender {
             }
         };
 
-        AsyncUtil.runAsync(messageSender);
+        AsyncUtil.submitAsync(messageSender);
     }
 
     /**

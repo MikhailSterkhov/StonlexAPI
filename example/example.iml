@@ -13,7 +13,8 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: net.milkbowl:Vault:1.7.1-b91" level="project" />
     <orderEntry type="module" module-name="bukkit" scope="PROVIDED" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.spigotmc:spigot:1.12.2-R0.1-SNAPSHOT" level="project" />
+    <orderEntry type="module" module-name="bungee" scope="PROVIDED" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.apache.commons:commons-lang3:3.10" level="project" />
     <orderEntry type="module" module-name="global" scope="PROVIDED" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: com.google.guava:guava:28.2-jre" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: com.google.guava:failureaccess:1.0.1" level="project" />
@@ -22,9 +23,10 @@
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.checkerframework:checker-qual:2.10.0" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: com.google.errorprone:error_prone_annotations:2.3.4" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: com.google.j2objc:j2objc-annotations:1.3" level="project" />
-    <orderEntry type="module" module-name="bungee" scope="PROVIDED" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: net.md-5:bungeecord:1.12" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.apache.commons:commons-lang3:3.10" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: net.sf.trove4j:trove4j:3.0.3" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: trove:trove:1.0.2" level="project" />
+    <orderEntry type="library" name="Maven: org.spigotmc:spigot:1.12.2-R0.1-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Maven: net.md-5:bungeecord:1.12" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.projectlombok:lombok:1.18.10" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: mysql:mysql-connector-java:5.1.47" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: com.google.code.gson:gson:2.8.0" level="project" />

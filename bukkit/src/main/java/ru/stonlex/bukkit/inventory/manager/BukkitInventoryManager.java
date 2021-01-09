@@ -1,23 +1,29 @@
 package ru.stonlex.bukkit.inventory.manager;
 
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
-import ru.stonlex.bukkit.BukkitAPI;
-import ru.stonlex.bukkit.inventory.IBukkitInventory;
-import ru.stonlex.bukkit.inventory.addon.IBukkitInventoryUpdater;
+import ru.stonlex.bukkit.StonlexBukkitApiPlugin;
+import ru.stonlex.bukkit.inventory.BaseInventory;
+import ru.stonlex.bukkit.inventory.addon.BaseInventoryUpdater;
 
 import java.util.HashMap;
 import java.util.Map;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class BukkitInventoryManager {
 
-    @Getter
-    private final Map<String, IBukkitInventory> playerInventoryMap = new HashMap<>();
+    public static final BukkitInventoryManager INSTANCE = new BukkitInventoryManager();
+
 
     @Getter
-    private final Map<IBukkitInventoryUpdater, Long> inventoryUpdaterMap = new HashMap<>();
+    private final Map<String, BaseInventory> playerInventoryMap = new HashMap<>();
+
+    @Getter
+    private final Map<BaseInventoryUpdater, Long> inventoryUpdaterMap = new HashMap<>();
 
 
     /**
@@ -25,7 +31,7 @@ public final class BukkitInventoryManager {
      *
      * @param playerName - ник игрока
      */
-    public IBukkitInventory getOpenInventory(String playerName) {
+    public BaseInventory getOpenInventory(String playerName) {
         return playerInventoryMap.get(playerName.toLowerCase());
     }
 
@@ -34,16 +40,16 @@ public final class BukkitInventoryManager {
      *
      * @param player - игрок
      */
-    public IBukkitInventory getOpenInventory(Player player) {
+    public BaseInventory getOpenInventory(Player player) {
         return getOpenInventory(player.getName());
     }
 
 
-    public void addOpenInventoryToPlayer(String playerName, IBukkitInventory bukkitInventory) {
+    public void addOpenInventoryToPlayer(String playerName, BaseInventory bukkitInventory) {
         playerInventoryMap.put(playerName.toLowerCase(), bukkitInventory);
     }
 
-    public void addOpenInventoryToPlayer(Player player, IBukkitInventory bukkitInventory) {
+    public void addOpenInventoryToPlayer(Player player, BaseInventory bukkitInventory) {
         addOpenInventoryToPlayer(player.getName(), bukkitInventory);
     }
 
@@ -57,11 +63,11 @@ public final class BukkitInventoryManager {
     }
 
 
-    public void addInventoryUpdater(IBukkitInventoryUpdater inventoryUpdater, long periodTicks) {
+    public void addInventoryUpdater(BaseInventoryUpdater inventoryUpdater, long periodTicks) {
         inventoryUpdaterMap.put(inventoryUpdater, periodTicks);
     }
 
-    public void removeInventoryUpdater(IBukkitInventoryUpdater inventoryUpdater) {
+    public void removeInventoryUpdater(BaseInventoryUpdater inventoryUpdater) {
         inventoryUpdaterMap.remove(inventoryUpdater);
     }
 
@@ -78,7 +84,7 @@ public final class BukkitInventoryManager {
                     }
 
                     for (Player player : Bukkit.getOnlinePlayers()) {
-                        IBukkitInventory playerInventory = getOpenInventory(player);
+                        BaseInventory playerInventory = getOpenInventory(player);
 
                         if (playerInventory != null && playerInventory.getInventoryUpdater().equals(inventoryUpdater)) {
                             inventoryUpdater.applyRunnable(player);
@@ -89,7 +95,7 @@ public final class BukkitInventoryManager {
                 currentTicks++;
             }
 
-        }.runTaskTimer(BukkitAPI.getInstance(), 0, 1);
+        }.runTaskTimer(StonlexBukkitApiPlugin.getInstance(), 0, 1);
     }
 
 }

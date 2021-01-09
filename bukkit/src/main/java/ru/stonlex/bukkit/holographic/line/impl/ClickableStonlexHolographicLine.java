@@ -6,8 +6,8 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import ru.stonlex.bukkit.holographic.IProtocolHolographic;
 import ru.stonlex.bukkit.holographic.line.IProtocolHolographicLine;
-import ru.stonlex.bukkit.depend.protocol.entity.impl.FakeArmorStand;
-import ru.stonlex.bukkit.depend.protocol.entity.impl.FakeSilverfish;
+import ru.stonlex.bukkit.protocollib.entity.impl.FakeArmorStand;
+import ru.stonlex.bukkit.protocollib.entity.impl.FakeSilverfish;
 
 import java.util.function.Consumer;
 
@@ -77,24 +77,24 @@ public class ClickableStonlexHolographicLine implements IProtocolHolographicLine
     public void teleport(Location location) {
         this.location = location.clone().add(0, -(0.25 * lineIndex), 0);
 
-        fakeArmorStand.teleport(location);
+        fakeArmorStand.teleport(this.location);
     }
 
     @Override
     public boolean isSpawnedToPlayer(Player player) {
-        return clickableSilverfish.hasSpawnedToPlayer(player) && fakeArmorStand.hasSpawnedToPlayer(player);
+        return clickableSilverfish.hasViewer(player) && fakeArmorStand.hasViewer(player);
     }
 
     @Override
     public void showToPlayer(Player player) {
-        fakeArmorStand.spawnToPlayer(player);
-        clickableSilverfish.spawnToPlayer(player);
+        fakeArmorStand.addViewers(player);
+        clickableSilverfish.addViewers(player);
     }
 
     @Override
     public void hideToPlayer(Player player) {
-        fakeArmorStand.removeToPlayer(player);
-        clickableSilverfish.removeToPlayer(player);
+        fakeArmorStand.removeViewers(player);
+        clickableSilverfish.removeViewers(player);
     }
 
 }

@@ -4,19 +4,17 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
-import ru.stonlex.bukkit.BukkitAPI;
-import ru.stonlex.bukkit.inventory.IBukkitInventory;
-import ru.stonlex.bukkit.inventory.addon.IBukkitInventoryUpdater;
-
-import java.util.function.Consumer;
+import ru.stonlex.bukkit.StonlexBukkitApiPlugin;
+import ru.stonlex.bukkit.inventory.BaseInventory;
+import ru.stonlex.bukkit.inventory.addon.BaseInventoryUpdater;
+import ru.stonlex.bukkit.inventory.manager.BukkitInventoryManager;
 
 @Getter
 @Setter
 @RequiredArgsConstructor
-public abstract class StonlexInventoryUpdater implements IBukkitInventoryUpdater {
+public abstract class StonlexInventoryUpdater implements BaseInventoryUpdater {
 
-    private IBukkitInventory inventory;
+    private BaseInventory inventory;
 
     private final Player player;
 
@@ -29,7 +27,7 @@ public abstract class StonlexInventoryUpdater implements IBukkitInventoryUpdater
         this.cancelled = !cancelled;
 
         if (isCancelled()) {
-            BukkitAPI.getInstance().getInventoryManager().addInventoryUpdater(this, periodTicks);
+            BukkitInventoryManager.INSTANCE.addInventoryUpdater(this, periodTicks);
         }
     }
 
@@ -38,7 +36,7 @@ public abstract class StonlexInventoryUpdater implements IBukkitInventoryUpdater
         this.cancelled = !cancelled;
 
         if (!isCancelled()) {
-            BukkitAPI.getInstance().getInventoryManager().removeInventoryUpdater(this);
+            BukkitInventoryManager.INSTANCE.removeInventoryUpdater(this);
         }
     }
 

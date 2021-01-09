@@ -1,5 +1,8 @@
 package ru.stonlex.global.utility;
 
+import lombok.experimental.UtilityClass;
+
+@UtilityClass
 public final class ValidateUtil {
 
     /**

@@ -11,6 +11,8 @@ import java.util.function.Consumer;
 
 public interface IProtocolHolographic extends IProtocolHolographicSpawnable {
 
+    IProtocolHolographicTracker getHolographicTracker();
+
     Location getLocation();
 
 
@@ -46,7 +48,7 @@ public interface IProtocolHolographic extends IProtocolHolographicSpawnable {
 
     void teleport(Location location);
 
-    void registerHolographicTracker(IProtocolHolographicTracker holographicTracker);
+    void setHolographicTracker(IProtocolHolographicTracker holographicTracker);
 
 
     void setHolographicUpdater(long updateTicks, IProtocolHolographicUpdater holographicUpdater);
