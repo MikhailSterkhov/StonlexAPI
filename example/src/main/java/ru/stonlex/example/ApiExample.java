@@ -8,6 +8,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.material.MaterialData;
+import org.bukkit.plugin.java.JavaPlugin;
 import ru.stonlex.bukkit.command.manager.CommandManager;
 import ru.stonlex.bukkit.gaming.GamingMode;
 import ru.stonlex.bukkit.gaming.GamingProcessBuilder;
@@ -21,6 +22,7 @@ import ru.stonlex.bukkit.scoreboard.animation.ScoreboardDisplayFlickAnimation;
 import ru.stonlex.bukkit.utility.location.LocationUtil;
 import ru.stonlex.example.command.ExampleConsoleCommand;
 import ru.stonlex.example.command.ExamplePlayerCommand;
+import ru.stonlex.example.configuration.TestConfiguration;
 import ru.stonlex.example.game.ExampleGameCountdown;
 import ru.stonlex.example.game.ExampleGameItem;
 import ru.stonlex.example.game.ExampleGameProcess;
@@ -59,6 +61,11 @@ public final class ApiExample {
                 .register()
 
                 .create(null);
+    }
+
+    @TestAccessible
+    protected void exampleConfiguration(@NonNull JavaPlugin javaPlugin) {
+        new TestConfiguration(javaPlugin).createIfNotExists();
     }
 
     @TestAccessible
