@@ -104,7 +104,7 @@ public class GamingSquare extends GamingItem {
 
 
     @Override
-    public void accept(@NonNull GamingPlayer gamingPlayer) {
+    protected void onAccept(@NonNull GamingPlayer gamingPlayer) {
         Player player = gamingPlayer.toBukkit();
         Location location = player.getLocation().clone().subtract(0, 1, 0);
 
@@ -114,7 +114,7 @@ public class GamingSquare extends GamingItem {
     }
 
     @Override
-    public void cancel(@NonNull GamingPlayer gamingPlayer) {
+    protected void onCancel(@NonNull GamingPlayer gamingPlayer) {
         destroy(gamingPlayer.toBukkit());
     }
 

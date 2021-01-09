@@ -18,12 +18,12 @@ public class ExampleGameItem extends GamingItem {
     }
 
     @Override
-    public void accept(@NonNull GamingPlayer gamingPlayer) {
+    protected void onAccept(@NonNull GamingPlayer gamingPlayer) {
         gamingPlayer.toBukkit().sendMessage("§aВы воспользователись " + getItemName());
     }
 
     @Override
-    public void cancel(@NonNull GamingPlayer gamingPlayer) {
+    protected void onCancel(@NonNull GamingPlayer gamingPlayer) {
         gamingPlayer.toBukkit().sendMessage("§cИгровой предмет " + getItemName() + " был отклонен");
     }
 

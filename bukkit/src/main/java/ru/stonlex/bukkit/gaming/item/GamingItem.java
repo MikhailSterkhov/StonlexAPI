@@ -2,9 +2,12 @@ package ru.stonlex.bukkit.gaming.item;
 
 import lombok.Getter;
 import lombok.NonNull;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.MaterialData;
+import ru.stonlex.bukkit.gaming.event.GameItemAcceptEvent;
+import ru.stonlex.bukkit.gaming.event.GameItemCancelEvent;
 import ru.stonlex.bukkit.gaming.player.GamingPlayer;
 import ru.stonlex.bukkit.utility.ItemUtil;
 
@@ -37,8 +40,26 @@ public abstract class GamingItem {
     }
 
 
-    public abstract void accept(@NonNull GamingPlayer gamingPlayer);
-    public abstract void cancel(@NonNull GamingPlayer gamingPlayer);
+    protected abstract void onAccept(@NonNull GamingPlayer gamingPlayer);
+    protected abstract void onCancel(@NonNull GamingPlayer gamingPlayer);
+
+    public void accept(@NonNull GamingPlayer gamingPlayer) {
+        GameItemAcceptEvent gameItemAcceptEvent = new GameItemAcceptEvent(gamingPlayer, this);
+        Bukkit.getPluginManager().callEvent(gameItemAcceptEvent);
+
+        if (!gameItemAcceptEvent.isCancelled()) {
+            onAccept(gamingPlayer);
+        }
+    }
+
+    public void cancel(@NonNull GamingPlayer gamingPlayer) {
+        GameItemCancelEvent gameItemCancelEvent = new GameItemCancelEvent(gamingPlayer, this);
+        Bukkit.getPluginManager().callEvent(gameItemCancelEvent);
+
+        if (!gameItemCancelEvent.isCancelled()) {
+            onCancel(gamingPlayer);
+        }
+    }
 
 
     public ItemStack toBukkitItem(@NonNull GamingPlayer gamingPlayer) {
