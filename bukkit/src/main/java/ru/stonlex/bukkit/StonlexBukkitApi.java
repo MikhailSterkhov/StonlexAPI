@@ -31,10 +31,10 @@ public interface StonlexBukkitApi {
 
     Map<String, Integer> SERVERS_ONLINE_MAP = new HashMap<>();
 
-    ProtocolHolographicManager HOLOGRAPHIC_MANAGER = (ProtocolHolographicManager.INSTANCE);
-    BukkitInventoryManager INVENTORY_MANAGER = (BukkitInventoryManager.INSTANCE);
-    CommandManager COMMAND_MANAGER = (CommandManager.INSTANCE);
-    VaultManager VAULT_MANAGER = (VaultManager.INSTANCE);
+    ProtocolHolographicManager HOLOGRAPHIC_MANAGER  = (ProtocolHolographicManager.INSTANCE);
+    BukkitInventoryManager INVENTORY_MANAGER        = (BukkitInventoryManager.INSTANCE);
+    CommandManager COMMAND_MANAGER                  = (CommandManager.INSTANCE);
+    VaultManager VAULT_MANAGER                      = (VaultManager.INSTANCE);
 
 
     /**
