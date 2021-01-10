@@ -8,6 +8,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.material.MaterialData;
 import org.bukkit.plugin.java.JavaPlugin;
+import ru.stonlex.bukkit.StonlexBukkitApi;
 import ru.stonlex.bukkit.command.manager.CommandManager;
 import ru.stonlex.bukkit.gaming.GamingMode;
 import ru.stonlex.bukkit.gaming.GamingProcessBuilder;
@@ -26,6 +27,7 @@ import ru.stonlex.example.game.ExampleGameCountdown;
 import ru.stonlex.example.game.ExampleGameItem;
 import ru.stonlex.example.game.ExampleGameProcess;
 import ru.stonlex.global.mail.MailSender;
+import ru.stonlex.global.mysql.MysqlConnection;
 import ru.stonlex.global.utility.MailUtil;
 
 import java.util.function.Consumer;
@@ -33,10 +35,10 @@ import java.util.function.Consumer;
 public final class ApiExample {
 
     @TestAccessible
-    protected void exampleSkyWars() {
-        ExampleGameProcess exampleGameProcess = new ExampleGameProcess(GamingMode.SOLO);
+    protected void exampleSkyWars(@NonNull MysqlConnection mysqlConnection) {
+        ExampleGameProcess exampleGameProcess = new ExampleGameProcess(GamingMode.SOLO, mysqlConnection);
 
-        GamingProcessBuilder.newBuilder()
+        StonlexBukkitApi.newGamingBuilder()
                 .name("SkyWars")
                 .lobby("SWLobby-1")
 
@@ -79,7 +81,7 @@ public final class ApiExample {
         displayFlickAnimation.addTextToAnimation("§lANIMATION");
 
         // Создание своего скорборда
-        BaseScoreboardBuilder scoreboardBuilder = BaseScoreboardBuilder.newScoreboardBuilder();
+        BaseScoreboardBuilder scoreboardBuilder = StonlexBukkitApi.newScoreboardBuilder();
 
         scoreboardBuilder.scoreboardDisplay(ChatColor.YELLOW + "TEST TITLE"); //Статический Title скорборда
         scoreboardBuilder.scoreboardDisplay(displayFlickAnimation); // Простейшая анимация Title скорборда
@@ -108,12 +110,12 @@ public final class ApiExample {
 
         // Если же подобных технологий не знаем и не делаем,
         //  то регистрируем сами при помощи CommandFactory
-        CommandManager.INSTANCE.registerCommand(new ExampleConsoleCommand(false), "console", "console-alias");
+        StonlexBukkitApi.registerCommand(new ExampleConsoleCommand(false), "console", "console-alias");
     }
 
     @TestAccessible
     protected void exampleHolographic(Player receiver, Location location) {
-        ProtocolHolographic protocolHolographic = new QuickHolographic(location);
+        ProtocolHolographic protocolHolographic = StonlexBukkitApi.createQuickHolographic(location);
 
         // Создание кликабельных голограмм
         Consumer<Player> playerConsumer = player -> { //player = игрок, который кликнул

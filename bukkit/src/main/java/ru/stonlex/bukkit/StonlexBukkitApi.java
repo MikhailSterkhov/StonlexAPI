@@ -9,6 +9,7 @@ import org.bukkit.material.MaterialData;
 import org.bukkit.plugin.Plugin;
 import ru.stonlex.bukkit.command.BaseCommand;
 import ru.stonlex.bukkit.command.manager.CommandManager;
+import ru.stonlex.bukkit.gaming.GamingProcessBuilder;
 import ru.stonlex.bukkit.gaming.player.GamingPlayer;
 import ru.stonlex.bukkit.holographic.ProtocolHolographic;
 import ru.stonlex.bukkit.holographic.impl.QuickHolographic;
@@ -18,6 +19,7 @@ import ru.stonlex.bukkit.inventory.BaseInventory;
 import ru.stonlex.bukkit.inventory.impl.BasePaginatedInventory;
 import ru.stonlex.bukkit.inventory.impl.BaseSimpleInventory;
 import ru.stonlex.bukkit.inventory.manager.BukkitInventoryManager;
+import ru.stonlex.bukkit.scoreboard.BaseScoreboardBuilder;
 import ru.stonlex.bukkit.utility.ItemUtil;
 import ru.stonlex.bukkit.utility.location.CuboidRegion;
 import ru.stonlex.bukkit.vault.VaultManager;
@@ -238,5 +240,33 @@ public interface StonlexBukkitApi {
      */
     static void registerCommand(@NonNull Plugin plugin, @NonNull BaseCommand<?> baseCommand, @NonNull String commandName, @NonNull String... commandAliases) {
         COMMAND_MANAGER.registerCommand(plugin, baseCommand, commandName, commandAliases);
+    }
+
+
+    /**
+     * Создание {@link ru.stonlex.bukkit.scoreboard.BaseScoreboard} по Builder паттерну
+     * с рандомным названием objective
+     */
+    static BaseScoreboardBuilder newScoreboardBuilder() {
+        return BaseScoreboardBuilder.newScoreboardBuilder();
+    }
+
+    /**
+     * Создание {@link ru.stonlex.bukkit.scoreboard.BaseScoreboard} по Builder паттерну
+     *
+     * @param objectiveName - название scoreboard objective
+     */
+    static BaseScoreboardBuilder newScoreboardBuilder(@NonNull String objectiveName) {
+        return BaseScoreboardBuilder.newScoreboardBuilder(objectiveName);
+    }
+
+    /**
+     * Инициализация игрового процесса по Builder паттерну,
+     * Регистрация листенеров,
+     * Создание всех обработчиков действий, команд, кешей и предметов,
+     * Подключение к базам данным и т. д.
+     */
+    static GamingProcessBuilder newGamingBuilder() {
+        return GamingProcessBuilder.newBuilder();
     }
 }
