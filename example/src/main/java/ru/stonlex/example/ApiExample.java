@@ -2,7 +2,6 @@ package ru.stonlex.example;
 
 import jline.internal.TestAccessible;
 import lombok.NonNull;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -13,8 +12,8 @@ import ru.stonlex.bukkit.command.manager.CommandManager;
 import ru.stonlex.bukkit.gaming.GamingMode;
 import ru.stonlex.bukkit.gaming.GamingProcessBuilder;
 import ru.stonlex.bukkit.gaming.team.GamingTeam;
-import ru.stonlex.bukkit.holographic.IProtocolHolographic;
-import ru.stonlex.bukkit.holographic.impl.QuickStonlexHolographic;
+import ru.stonlex.bukkit.holographic.ProtocolHolographic;
+import ru.stonlex.bukkit.holographic.impl.QuickHolographic;
 import ru.stonlex.bukkit.protocollib.entity.impl.FakePlayer;
 import ru.stonlex.bukkit.scoreboard.BaseScoreboardBuilder;
 import ru.stonlex.bukkit.scoreboard.BaseScoreboardScope;
@@ -114,7 +113,7 @@ public final class ApiExample {
 
     @TestAccessible
     protected void exampleHolographic(Player receiver, Location location) {
-        IProtocolHolographic protocolHolographic = new QuickStonlexHolographic(location);
+        ProtocolHolographic protocolHolographic = new QuickHolographic(location);
 
         // Создание кликабельных голограмм
         Consumer<Player> playerConsumer = player -> { //player = игрок, который кликнул

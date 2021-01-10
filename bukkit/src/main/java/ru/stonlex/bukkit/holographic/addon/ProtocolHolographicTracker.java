@@ -1,12 +1,9 @@
 package ru.stonlex.bukkit.holographic.addon;
 
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerMoveEvent;
-import ru.stonlex.bukkit.holographic.IProtocolHolographic;
+import ru.stonlex.bukkit.holographic.ProtocolHolographic;
 
-public interface IProtocolHolographicTracker {
+public interface ProtocolHolographicTracker {
 
     /**
      * Что будем делать при показе голограммы игроку
@@ -33,5 +30,5 @@ public interface IProtocolHolographicTracker {
     /**
      * Получить голограмму, с которой работаем
      */
-    IProtocolHolographic getHolographic();
+    ProtocolHolographic getHolographic();
 }

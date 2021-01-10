@@ -3,8 +3,8 @@ package ru.stonlex.bukkit.inventory.sort;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.inventory.ItemStack;
-import ru.stonlex.bukkit.inventory.PaginatedBaseInventory;
-import ru.stonlex.bukkit.inventory.addon.PaginatedBaseInventorySorting;
+import ru.stonlex.bukkit.inventory.BasePaginatedInventory;
+import ru.stonlex.bukkit.inventory.addon.BasePaginatedInventorySorting;
 import ru.stonlex.bukkit.inventory.button.BaseInventoryButton;
 import ru.stonlex.global.utility.query.ResponseHandler;
 
@@ -12,10 +12,10 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
-public class StonlexInventorySorting implements PaginatedBaseInventorySorting {
+public class SimplePaginatedInventorySorting implements BasePaginatedInventorySorting {
 
     @Getter
-    private final PaginatedBaseInventory inventory;
+    private final BasePaginatedInventory inventory;
 
     @Getter
     private final List<BaseInventoryButton> sortedButtons = new LinkedList<>();
@@ -25,7 +25,7 @@ public class StonlexInventorySorting implements PaginatedBaseInventorySorting {
 
 
     @Override
-    public PaginatedBaseInventorySorting sortItem(ResponseHandler<Integer, ItemStack> responseHandler) {
+    public BasePaginatedInventorySorting sortItem(ResponseHandler<Integer, ItemStack> responseHandler) {
         sortedButtons.clear();
 
         sortedButtons.addAll(inventory.getPageButtons().stream()
@@ -36,7 +36,7 @@ public class StonlexInventorySorting implements PaginatedBaseInventorySorting {
     }
 
     @Override
-    public PaginatedBaseInventorySorting reversed() {
+    public BasePaginatedInventorySorting reversed() {
         this.reversed = !reversed;
 
         return this;

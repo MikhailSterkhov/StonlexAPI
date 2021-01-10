@@ -12,7 +12,7 @@ import ru.stonlex.bukkit.inventory.manager.BukkitInventoryManager;
 @Getter
 @Setter
 @RequiredArgsConstructor
-public abstract class StonlexInventoryUpdater implements BaseInventoryUpdater {
+public abstract class SimpleInventoryUpdater implements BaseInventoryUpdater {
 
     private BaseInventory inventory;
 

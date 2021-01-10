@@ -21,7 +21,7 @@ public final class CommandManager {
     public static final CommandManager INSTANCE = new CommandManager();
 
     @Getter
-    private final Collection<BaseCommand<?>> commandCollection= new ArrayList<>();
+    private final Collection<BaseCommand<?>> commandCollection = new ArrayList<>();
     private static CommandMap COMMAND_MAP;
 
 
@@ -38,7 +38,7 @@ public final class CommandManager {
     public void registerCommand(BaseCommand<?> baseCommand,
                                 String command, String... aliases) {
 
-        registerCommand(StonlexBukkitApiPlugin.getInstance(), baseCommand, command, aliases);
+        registerCommand(StonlexBukkitApiPlugin.getPlugin(StonlexBukkitApiPlugin.class), baseCommand, command, aliases);
     }
 
     /**

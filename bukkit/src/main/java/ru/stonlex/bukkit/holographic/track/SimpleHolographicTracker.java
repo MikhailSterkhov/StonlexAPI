@@ -3,14 +3,14 @@ package ru.stonlex.bukkit.holographic.track;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.entity.Player;
-import ru.stonlex.bukkit.holographic.IProtocolHolographic;
-import ru.stonlex.bukkit.holographic.addon.IProtocolHolographicTracker;
+import ru.stonlex.bukkit.holographic.ProtocolHolographic;
+import ru.stonlex.bukkit.holographic.addon.ProtocolHolographicTracker;
 
 @RequiredArgsConstructor
-public class StonlexHolographicTracker implements IProtocolHolographicTracker {
+public class SimpleHolographicTracker implements ProtocolHolographicTracker {
 
     @Getter
-    private final IProtocolHolographic holographic;
+    private final ProtocolHolographic holographic;
 
     @Getter
     private final int trackDistance;

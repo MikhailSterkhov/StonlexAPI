@@ -8,7 +8,7 @@ import ru.stonlex.bukkit.inventory.button.action.impl.DraggableButtonAction;
 
 @Getter
 @RequiredArgsConstructor
-public class DraggableStonlexInventoryButton implements BaseInventoryButton {
+public class DraggableInventoryButton implements BaseInventoryButton {
 
     private final ItemStack itemStack;
 

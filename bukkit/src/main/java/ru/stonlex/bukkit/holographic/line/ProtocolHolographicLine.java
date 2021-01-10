@@ -1,17 +1,16 @@
 package ru.stonlex.bukkit.holographic.line;
 
 import org.bukkit.Location;
-import org.bukkit.entity.Player;
-import ru.stonlex.bukkit.holographic.IProtocolHolographic;
-import ru.stonlex.bukkit.holographic.IProtocolHolographicSpawnable;
+import ru.stonlex.bukkit.holographic.ProtocolHolographic;
+import ru.stonlex.bukkit.holographic.ProtocolHolographicSpawnable;
 
-public interface IProtocolHolographicLine extends IProtocolHolographicSpawnable {
+public interface ProtocolHolographicLine extends ProtocolHolographicSpawnable {
 
     int getLineIndex();
 
     Location getLocation();
 
-    IProtocolHolographic getHolographic();
+    ProtocolHolographic getHolographic();
 
 
     String getLineText();

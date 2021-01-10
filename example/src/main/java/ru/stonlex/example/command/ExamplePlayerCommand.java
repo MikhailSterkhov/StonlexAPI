@@ -10,7 +10,7 @@ public class ExamplePlayerCommand extends BaseCommand<Player> {
     }
 
     @Override
-    protected void executeCommand(Player player, String[] args) {
+    protected void onExecute(Player player, String[] args) {
         // command logic...
     }
 

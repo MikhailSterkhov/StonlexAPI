@@ -1,6 +1,6 @@
 package ru.stonlex.bukkit.holographic.addon;
 
-public interface IProtocolHolographicUpdater {
+public interface ProtocolHolographicUpdater {
 
 
     /**

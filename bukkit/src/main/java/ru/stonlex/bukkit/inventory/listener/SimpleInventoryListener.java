@@ -9,11 +9,11 @@ import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import ru.stonlex.bukkit.inventory.BaseInventory;
 import ru.stonlex.bukkit.inventory.button.BaseInventoryButton;
-import ru.stonlex.bukkit.inventory.button.impl.ClickableStonlexInventoryButton;
-import ru.stonlex.bukkit.inventory.button.impl.DraggableStonlexInventoryButton;
+import ru.stonlex.bukkit.inventory.button.impl.ActionInventoryButton;
+import ru.stonlex.bukkit.inventory.button.impl.DraggableInventoryButton;
 import ru.stonlex.bukkit.inventory.manager.BukkitInventoryManager;
 
-public class StonlexInventoryListener implements Listener {
+public class SimpleInventoryListener implements Listener {
 
     @EventHandler
     public void onInventoryDrag(InventoryDragEvent event) {
@@ -27,13 +27,13 @@ public class StonlexInventoryListener implements Listener {
         for (int rawSlot : event.getRawSlots()) {
             BaseInventoryButton inventoryButton = bukkitInventory.getButtons().get(rawSlot + 1);
 
-            if (!(inventoryButton instanceof DraggableStonlexInventoryButton)) {
+            if (!(inventoryButton instanceof DraggableInventoryButton)) {
                 return;
             }
 
             event.setCancelled(true);
 
-            ((DraggableStonlexInventoryButton) inventoryButton).getButtonAction().buttonDrag(player, event);
+            ((DraggableInventoryButton) inventoryButton).getButtonAction().buttonDrag(player, event);
         }
     }
 
@@ -51,11 +51,11 @@ public class StonlexInventoryListener implements Listener {
         //вдруг это OriginalItem? лучше на всякий отменить клик уж)
         event.setCancelled(true);
 
-        if (!(inventoryButton instanceof ClickableStonlexInventoryButton)) {
+        if (!(inventoryButton instanceof ActionInventoryButton)) {
             return;
         }
 
-        ((ClickableStonlexInventoryButton) inventoryButton).getButtonAction().buttonClick(player, event);
+        ((ActionInventoryButton) inventoryButton).getButtonAction().buttonClick(player, event);
     }
 
 

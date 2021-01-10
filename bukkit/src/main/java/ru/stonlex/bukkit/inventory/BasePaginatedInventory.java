@@ -2,21 +2,21 @@ package ru.stonlex.bukkit.inventory;
 
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import ru.stonlex.bukkit.inventory.addon.PaginatedBaseInventorySorting;
+import ru.stonlex.bukkit.inventory.addon.BasePaginatedInventorySorting;
 import ru.stonlex.bukkit.inventory.button.BaseInventoryButton;
 import ru.stonlex.bukkit.inventory.button.action.impl.ClickableButtonAction;
 import ru.stonlex.bukkit.inventory.button.action.impl.DraggableButtonAction;
 
 import java.util.List;
 
-public interface PaginatedBaseInventory extends BaseInventory {
+public interface BasePaginatedInventory extends BaseInventory {
 
     List<BaseInventoryButton> getPageButtons();
 
 
-    PaginatedBaseInventorySorting getInventorySort();
+    BasePaginatedInventorySorting getInventorySort();
 
-    void setInventorySort(PaginatedBaseInventorySorting inventorySort);
+    void setInventorySort(BasePaginatedInventorySorting inventorySort);
 
 
     /**

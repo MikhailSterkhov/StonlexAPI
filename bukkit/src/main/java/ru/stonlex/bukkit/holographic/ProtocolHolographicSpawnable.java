@@ -2,7 +2,7 @@ package ru.stonlex.bukkit.holographic;
 
 import org.bukkit.entity.Player;
 
-public interface IProtocolHolographicSpawnable {
+public interface ProtocolHolographicSpawnable {
 
     /**
      * Проверить, видит ли игрок голограмму

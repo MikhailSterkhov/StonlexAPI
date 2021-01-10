@@ -5,7 +5,7 @@ import org.bukkit.entity.Player;
 import ru.stonlex.bukkit.command.BaseCommand;
 import ru.stonlex.bukkit.command.annotation.CommandCooldown;
 import ru.stonlex.bukkit.command.annotation.CommandPermission;
-import ru.stonlex.bukkit.holographic.impl.OriginalStonlexHolographic;
+import ru.stonlex.bukkit.holographic.impl.SimpleHolographic;
 
 @CommandCooldown(
         cooldownMillis = 1000,
@@ -29,8 +29,8 @@ public class TestCommand extends BaseCommand<Player> {
     }
 
     @Override
-    protected void executeCommand(Player player, String[] args) {
-        OriginalStonlexHolographic stonlexHolographic = new OriginalStonlexHolographic(player.getLocation());
+    protected void onExecute(Player player, String[] args) {
+        SimpleHolographic stonlexHolographic = new SimpleHolographic(player.getLocation());
 
         stonlexHolographic.addOriginalHolographicLine("---------");
         stonlexHolographic.addEmptyHolographicLine();

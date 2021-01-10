@@ -1,6 +1,8 @@
 package ru.stonlex.bukkit.vault;
 
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.economy.Economy;
@@ -11,6 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Getter
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class VaultManager {
 
     public static final VaultManager INSTANCE = new VaultManager();

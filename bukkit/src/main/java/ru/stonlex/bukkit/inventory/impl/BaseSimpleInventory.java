@@ -14,9 +14,9 @@ import ru.stonlex.bukkit.inventory.button.BaseInventoryButton;
 import ru.stonlex.bukkit.inventory.addon.BaseInventoryUpdater;
 import ru.stonlex.bukkit.inventory.button.action.impl.ClickableButtonAction;
 import ru.stonlex.bukkit.inventory.button.action.impl.DraggableButtonAction;
-import ru.stonlex.bukkit.inventory.button.impl.ClickableStonlexInventoryButton;
-import ru.stonlex.bukkit.inventory.button.impl.DraggableStonlexInventoryButton;
-import ru.stonlex.bukkit.inventory.button.impl.OriginalStonlexInventoryButton;
+import ru.stonlex.bukkit.inventory.button.impl.ActionInventoryButton;
+import ru.stonlex.bukkit.inventory.button.impl.DraggableInventoryButton;
+import ru.stonlex.bukkit.inventory.button.impl.SimpleInventoryButton;
 import ru.stonlex.bukkit.inventory.manager.BukkitInventoryManager;
 
 @Getter
@@ -130,7 +130,7 @@ public abstract class BaseSimpleInventory implements BaseInventory {
     public void setOriginalItem(int buttonSlot,
                              ItemStack itemStack) {
 
-        BaseInventoryButton inventoryButton = new OriginalStonlexInventoryButton(itemStack);
+        BaseInventoryButton inventoryButton = new SimpleInventoryButton(itemStack);
 
         setItem(buttonSlot, inventoryButton);
     }
@@ -140,7 +140,7 @@ public abstract class BaseSimpleInventory implements BaseInventory {
                         ItemStack itemStack,
                         ClickableButtonAction buttonAction) {
 
-        BaseInventoryButton inventoryButton = new ClickableStonlexInventoryButton(
+        BaseInventoryButton inventoryButton = new ActionInventoryButton(
                 itemStack, buttonAction
         );
 
@@ -152,7 +152,7 @@ public abstract class BaseSimpleInventory implements BaseInventory {
                             ItemStack itemStack,
                             DraggableButtonAction buttonAction) {
 
-        BaseInventoryButton inventoryButton = new DraggableStonlexInventoryButton(
+        BaseInventoryButton inventoryButton = new DraggableInventoryButton(
                 itemStack, buttonAction
         );
 

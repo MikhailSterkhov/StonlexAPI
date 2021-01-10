@@ -5,19 +5,19 @@ import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
-import ru.stonlex.bukkit.holographic.IProtocolHolographic;
-import ru.stonlex.bukkit.holographic.line.IProtocolHolographicLine;
+import ru.stonlex.bukkit.holographic.ProtocolHolographic;
+import ru.stonlex.bukkit.holographic.line.ProtocolHolographicLine;
 import ru.stonlex.bukkit.protocollib.entity.impl.FakeArmorStand;
 import ru.stonlex.bukkit.utility.ItemUtil;
 
 @Getter
-public class HeadStonlexHolographicLine implements IProtocolHolographicLine {
+public class HeadHolographicLine implements ProtocolHolographicLine {
 
     protected final int lineIndex;
 
     protected final boolean small;
 
-    protected final IProtocolHolographic holographic;
+    protected final ProtocolHolographic holographic;
 
     protected Location location;
 
@@ -30,7 +30,7 @@ public class HeadStonlexHolographicLine implements IProtocolHolographicLine {
     private FakeArmorStand fakeArmorStand;
 
 
-    public HeadStonlexHolographicLine(int lineIndex, String skullTexture, boolean small, IProtocolHolographic holographic) {
+    public HeadHolographicLine(int lineIndex, String skullTexture, boolean small, ProtocolHolographic holographic) {
         this.lineIndex = lineIndex;
         this.holographic = holographic;
         this.small = small;

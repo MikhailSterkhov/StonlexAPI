@@ -1,33 +1,37 @@
 package ru.stonlex.bukkit.holographic.manager;
 
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
-import ru.stonlex.bukkit.holographic.IProtocolHolographic;
-import ru.stonlex.bukkit.holographic.addon.IProtocolHolographicTracker;
+import ru.stonlex.bukkit.holographic.ProtocolHolographic;
+import ru.stonlex.bukkit.holographic.addon.ProtocolHolographicTracker;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Getter
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class ProtocolHolographicManager implements Listener {
 
-    @Getter
-    private final Map<Player, List<IProtocolHolographic>> playerHolographics = new HashMap<>();
+    public static final ProtocolHolographicManager INSTANCE = new ProtocolHolographicManager();
 
-    @Getter
-    private final List<IProtocolHolographic> holographicTrackingList = new ArrayList<>();
+
+    protected final Map<Player, List<ProtocolHolographic>> playerHolographics = new HashMap<>();
+    protected final List<ProtocolHolographic> holographicTrackingList = new ArrayList<>();
 
 
     @EventHandler
     public void onHolographicTrack(PlayerMoveEvent event) {
         Player player = event.getPlayer();
 
-        for (IProtocolHolographic protocolHolographic : holographicTrackingList) {
-            IProtocolHolographicTracker holographicTracker = protocolHolographic.getHolographicTracker();
+        for (ProtocolHolographic protocolHolographic : holographicTrackingList) {
+            ProtocolHolographicTracker holographicTracker = protocolHolographic.getHolographicTracker();
 
             int trackDistance = holographicTracker.getTrackDistance();
 
@@ -53,7 +57,7 @@ public final class ProtocolHolographicManager implements Listener {
      *
      * @param player - игрок
      */
-    public List<IProtocolHolographic> getProtocolHolographics(Player player) {
+    public List<ProtocolHolographic> getProtocolHolographics(Player player) {
         return playerHolographics.get(player);
     }
 
@@ -63,7 +67,7 @@ public final class ProtocolHolographicManager implements Listener {
      * @param player - игрок
      * @param protocolHolographic - голограмма
      */
-    public void addProtocolHolographic(Player player, IProtocolHolographic protocolHolographic) {
+    public void addProtocolHolographic(Player player, ProtocolHolographic protocolHolographic) {
         playerHolographics.getOrDefault(player, new ArrayList<>()).add(protocolHolographic);
     }
 
@@ -72,7 +76,7 @@ public final class ProtocolHolographicManager implements Listener {
      *
      * @param protocolHolographic - голограмма
      */
-    public void addHolographicToTracking(IProtocolHolographic protocolHolographic) {
+    public void addHolographicToTracking(ProtocolHolographic protocolHolographic) {
         holographicTrackingList.add(protocolHolographic);
     }
 

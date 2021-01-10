@@ -11,14 +11,13 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import ru.stonlex.bukkit.inventory.button.BaseInventoryButton;
-import ru.stonlex.bukkit.inventory.PaginatedBaseInventory;
-import ru.stonlex.bukkit.inventory.addon.PaginatedBaseInventorySorting;
+import ru.stonlex.bukkit.inventory.addon.BasePaginatedInventorySorting;
 import ru.stonlex.bukkit.inventory.addon.BaseInventoryUpdater;
 import ru.stonlex.bukkit.inventory.button.action.impl.ClickableButtonAction;
 import ru.stonlex.bukkit.inventory.button.action.impl.DraggableButtonAction;
-import ru.stonlex.bukkit.inventory.button.impl.ClickableStonlexInventoryButton;
-import ru.stonlex.bukkit.inventory.button.impl.DraggableStonlexInventoryButton;
-import ru.stonlex.bukkit.inventory.button.impl.OriginalStonlexInventoryButton;
+import ru.stonlex.bukkit.inventory.button.impl.ActionInventoryButton;
+import ru.stonlex.bukkit.inventory.button.impl.DraggableInventoryButton;
+import ru.stonlex.bukkit.inventory.button.impl.SimpleInventoryButton;
 import ru.stonlex.bukkit.inventory.manager.BukkitInventoryManager;
 import ru.stonlex.bukkit.utility.ItemUtil;
 import ru.stonlex.global.utility.NumberUtil;
@@ -28,7 +27,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 @Getter
-public abstract class BasePaginatedInventory implements PaginatedBaseInventory {
+public abstract class BasePaginatedInventory implements ru.stonlex.bukkit.inventory.BasePaginatedInventory {
 
     protected String inventoryTitle;
 
@@ -45,7 +44,7 @@ public abstract class BasePaginatedInventory implements PaginatedBaseInventory {
 
 
     protected BaseInventoryUpdater inventoryUpdater;
-    protected PaginatedBaseInventorySorting inventorySort;
+    protected BasePaginatedInventorySorting inventorySort;
 
 
     protected Inventory bukkitInventory;
@@ -146,7 +145,7 @@ public abstract class BasePaginatedInventory implements PaginatedBaseInventory {
     public void setOriginalItem(int buttonSlot,
                                 ItemStack itemStack) {
 
-        BaseInventoryButton inventoryButton = new OriginalStonlexInventoryButton(itemStack);
+        BaseInventoryButton inventoryButton = new SimpleInventoryButton(itemStack);
 
         setItem(buttonSlot, inventoryButton);
     }
@@ -156,7 +155,7 @@ public abstract class BasePaginatedInventory implements PaginatedBaseInventory {
                              ItemStack itemStack,
                              ClickableButtonAction buttonAction) {
 
-        BaseInventoryButton inventoryButton = new ClickableStonlexInventoryButton(
+        BaseInventoryButton inventoryButton = new ActionInventoryButton(
                 itemStack, buttonAction
         );
 
@@ -168,7 +167,7 @@ public abstract class BasePaginatedInventory implements PaginatedBaseInventory {
                             ItemStack itemStack,
                             DraggableButtonAction buttonAction) {
 
-        BaseInventoryButton inventoryButton = new DraggableStonlexInventoryButton(
+        BaseInventoryButton inventoryButton = new DraggableInventoryButton(
                 itemStack, buttonAction
         );
 
@@ -189,7 +188,7 @@ public abstract class BasePaginatedInventory implements PaginatedBaseInventory {
     }
 
     @Override
-    public void setInventorySort(@NonNull PaginatedBaseInventorySorting inventorySort) {
+    public void setInventorySort(@NonNull BasePaginatedInventorySorting inventorySort) {
         this.inventorySort = inventorySort;
 
         inventorySort.rebuildInventory();
@@ -202,14 +201,14 @@ public abstract class BasePaginatedInventory implements PaginatedBaseInventory {
 
     @Override
     public void addOriginalItemToMarkup(ItemStack itemStack) {
-        BaseInventoryButton inventoryButton = new OriginalStonlexInventoryButton(itemStack);
+        BaseInventoryButton inventoryButton = new SimpleInventoryButton(itemStack);
 
         pageButtons.add(inventoryButton);
     }
 
     @Override
     public void addClickItemToMarkup(ItemStack itemStack, ClickableButtonAction buttonAction) {
-        BaseInventoryButton inventoryButton = new ClickableStonlexInventoryButton(
+        BaseInventoryButton inventoryButton = new ActionInventoryButton(
                 itemStack, buttonAction
         );
 
@@ -218,7 +217,7 @@ public abstract class BasePaginatedInventory implements PaginatedBaseInventory {
 
     @Override
     public void addDragItemToMarkup(ItemStack itemStack, DraggableButtonAction buttonAction) {
-        BaseInventoryButton inventoryButton = new DraggableStonlexInventoryButton(
+        BaseInventoryButton inventoryButton = new DraggableInventoryButton(
                 itemStack, buttonAction
         );
 

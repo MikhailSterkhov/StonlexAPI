@@ -4,46 +4,48 @@ import lombok.Getter;
 import lombok.NonNull;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
+import ru.stonlex.bukkit.StonlexBukkitApi;
 import ru.stonlex.bukkit.StonlexBukkitApiPlugin;
-import ru.stonlex.bukkit.holographic.IProtocolHolographic;
-import ru.stonlex.bukkit.holographic.addon.IProtocolHolographicTracker;
-import ru.stonlex.bukkit.holographic.addon.IProtocolHolographicUpdater;
-import ru.stonlex.bukkit.holographic.line.IProtocolHolographicLine;
-import ru.stonlex.bukkit.holographic.line.impl.ClickableStonlexHolographicLine;
-import ru.stonlex.bukkit.holographic.line.impl.EmptyStonlexHolographicLine;
-import ru.stonlex.bukkit.holographic.line.impl.HeadStonlexHolographicLine;
-import ru.stonlex.bukkit.holographic.line.impl.OriginalStonlexHolographicLine;
+import ru.stonlex.bukkit.holographic.ProtocolHolographic;
+import ru.stonlex.bukkit.holographic.addon.ProtocolHolographicTracker;
+import ru.stonlex.bukkit.holographic.addon.ProtocolHolographicUpdater;
+import ru.stonlex.bukkit.holographic.line.ProtocolHolographicLine;
+import ru.stonlex.bukkit.holographic.line.impl.ActionHolographicLine;
+import ru.stonlex.bukkit.holographic.line.impl.EmptyHolographicLine;
+import ru.stonlex.bukkit.holographic.line.impl.HeadHolographicLine;
+import ru.stonlex.bukkit.holographic.line.impl.SimpleHolographicLine;
 
 import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Consumer;
 
 @Getter
-public class QuickStonlexHolographic implements IProtocolHolographic {
+public class QuickHolographic implements ProtocolHolographic {
 
     private Location location;
 
-    private IProtocolHolographicUpdater holographicUpdater;
-    private IProtocolHolographicTracker holographicTracker;
+    private ProtocolHolographicUpdater holographicUpdater;
+    private ProtocolHolographicTracker holographicTracker;
 
-    private final List<IProtocolHolographicLine> holographicLines = new LinkedList<>();
+    private final List<ProtocolHolographicLine> holographicLines = new LinkedList<>();
     private final List<Player> receivers = new LinkedList<>();
 
 
-    public QuickStonlexHolographic(Location location) {
+    public QuickHolographic(Location location) {
         this.location = location;
     }
 
 
     @Override
-    public IProtocolHolographicLine getHolographicLine(int lineIndex) {
+    public ProtocolHolographicLine getHolographicLine(int lineIndex) {
         return holographicLines.get(lineIndex);
     }
 
 
     @Override
-    public void setHolographicLine(int lineIndex, @NonNull IProtocolHolographicLine holographicLine) {
+    public void setHolographicLine(int lineIndex, @NonNull ProtocolHolographicLine holographicLine) {
         holographicLines.get(lineIndex).remove();
         holographicLines.set(lineIndex, holographicLine);
 
@@ -59,48 +61,48 @@ public class QuickStonlexHolographic implements IProtocolHolographic {
 
     @Override
     public void setOriginalHolographicLine(int lineIndex, String holographicLine) {
-        setHolographicLine(lineIndex, new OriginalStonlexHolographicLine(lineIndex, holographicLine, this));
+        setHolographicLine(lineIndex, new SimpleHolographicLine(lineIndex, holographicLine, this));
     }
 
     @Override
     public void setClickHolographicLine(int lineIndex, String holographicLine, Consumer<Player> clickAction) {
-        setHolographicLine(lineIndex, new ClickableStonlexHolographicLine(lineIndex, holographicLine, this, clickAction));
+        setHolographicLine(lineIndex, new ActionHolographicLine(lineIndex, holographicLine, this, clickAction));
     }
 
     @Override
     public void setHeadHolographicLine(int lineIndex, String headTexture, boolean small) {
-        setHolographicLine(lineIndex, new HeadStonlexHolographicLine(lineIndex, headTexture, small,this));
+        setHolographicLine(lineIndex, new HeadHolographicLine(lineIndex, headTexture, small,this));
     }
 
     @Override
     public void setEmptyHolographicLine(int lineIndex) {
-        setHolographicLine(lineIndex, new EmptyStonlexHolographicLine(lineIndex, this));
+        setHolographicLine(lineIndex, new EmptyHolographicLine(lineIndex, this));
     }
 
 
     @Override
-    public void addHolographicLine(@NonNull IProtocolHolographicLine holographicLine) {
+    public void addHolographicLine(@NonNull ProtocolHolographicLine holographicLine) {
         holographicLines.add(holographicLine);
     }
 
     @Override
     public void addOriginalHolographicLine(String holographicLine) {
-        addHolographicLine(new OriginalStonlexHolographicLine(holographicLines.size(), holographicLine, this));
+        addHolographicLine(new SimpleHolographicLine(holographicLines.size(), holographicLine, this));
     }
 
     @Override
     public void addClickHolographicLine(String holographicLine, Consumer<Player> clickAction) {
-        addHolographicLine(new ClickableStonlexHolographicLine(holographicLines.size(), holographicLine, this, clickAction));
+        addHolographicLine(new ActionHolographicLine(holographicLines.size(), holographicLine, this, clickAction));
     }
 
     @Override
     public void addHeadHolographicLine(String headTexture, boolean small) {
-        addHolographicLine(new HeadStonlexHolographicLine(holographicLines.size(), headTexture, small, this));
+        addHolographicLine(new HeadHolographicLine(holographicLines.size(), headTexture, small, this));
     }
 
     @Override
     public void addEmptyHolographicLine() {
-        addHolographicLine(new EmptyStonlexHolographicLine(holographicLines.size(), this));
+        addHolographicLine(new EmptyHolographicLine(holographicLines.size(), this));
     }
 
 
@@ -111,7 +113,7 @@ public class QuickStonlexHolographic implements IProtocolHolographic {
 
     @Override
     public void showToPlayer(@NonNull Player player) {
-        showToPlayer(player, 20 * 3);
+        showToPlayer(StonlexBukkitApiPlugin.getPlugin(StonlexBukkitApiPlugin.class), player, 20 * 3);
     }
 
     /**
@@ -120,15 +122,14 @@ public class QuickStonlexHolographic implements IProtocolHolographic {
      * @param player - игрок
      * @param hideTicks - время в тиках
      */
-    public void showToPlayer(@NonNull Player player, long hideTicks) {
+    public void showToPlayer(@NonNull Plugin plugin, @NonNull Player player, long hideTicks) {
         receivers.add(player);
 
-        for (IProtocolHolographicLine holographicLine : holographicLines) {
+        for (ProtocolHolographicLine holographicLine : holographicLines) {
             holographicLine.showToPlayer(player);
         }
 
-        StonlexBukkitApiPlugin.getInstance().getHolographicManager()
-                .addProtocolHolographic(player, this);
+        StonlexBukkitApi.HOLOGRAPHIC_MANAGER.addProtocolHolographic(player, this);
 
         //удаляем голограмму через указанное время
         new BukkitRunnable() {
@@ -138,19 +139,18 @@ public class QuickStonlexHolographic implements IProtocolHolographic {
                 hideToPlayer(player);
             }
 
-        }.runTaskLater(StonlexBukkitApiPlugin.getInstance(), hideTicks);
+        }.runTaskLater(plugin, hideTicks);
     }
 
     @Override
     public void hideToPlayer(@NonNull Player player) {
         receivers.remove(player);
 
-        for (IProtocolHolographicLine holographicLine : holographicLines) {
+        for (ProtocolHolographicLine holographicLine : holographicLines) {
             holographicLine.hideToPlayer(player);
         }
 
-        StonlexBukkitApiPlugin.getInstance().getHolographicManager()
-                .getPlayerHolographics().remove(player);
+        StonlexBukkitApi.HOLOGRAPHIC_MANAGER.getPlayerHolographics().remove(player);
     }
 
 
@@ -158,21 +158,20 @@ public class QuickStonlexHolographic implements IProtocolHolographic {
     public void teleport(@NonNull Location location) {
         this.location = location;
 
-        for (IProtocolHolographicLine holographicLine : holographicLines) {
+        for (ProtocolHolographicLine holographicLine : holographicLines) {
             holographicLine.teleport(location);
         }
     }
 
     @Override
-    public void setHolographicTracker(@NonNull IProtocolHolographicTracker holographicTracker) {
+    public void setHolographicTracker(@NonNull ProtocolHolographicTracker holographicTracker) {
         this.holographicTracker = holographicTracker;
 
-        StonlexBukkitApiPlugin.getInstance().getHolographicManager()
-                .addHolographicToTracking(this);
+        StonlexBukkitApi.HOLOGRAPHIC_MANAGER.addHolographicToTracking(this);
     }
 
     @Override
-    public void setHolographicUpdater(long updateTicks, @NonNull IProtocolHolographicUpdater holographicUpdater) {
+    public void setHolographicUpdater(long updateTicks, @NonNull ProtocolHolographicUpdater holographicUpdater) {
         this.holographicUpdater = holographicUpdater;
 
         holographicUpdater.setEnable(true);

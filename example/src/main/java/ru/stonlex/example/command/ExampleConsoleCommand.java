@@ -10,7 +10,7 @@ public class ExampleConsoleCommand extends BaseCommand<ConsoleCommandSender> {
     }
 
     @Override
-    protected void executeCommand(ConsoleCommandSender console, String[] args) {
+    protected void onExecute(ConsoleCommandSender console, String[] args) {
         // command logic...
     }
 

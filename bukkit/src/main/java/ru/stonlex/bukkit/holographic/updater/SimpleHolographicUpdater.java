@@ -5,17 +5,17 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.bukkit.scheduler.BukkitRunnable;
 import ru.stonlex.bukkit.StonlexBukkitApiPlugin;
-import ru.stonlex.bukkit.holographic.IProtocolHolographic;
-import ru.stonlex.bukkit.holographic.addon.IProtocolHolographicUpdater;
+import ru.stonlex.bukkit.holographic.ProtocolHolographic;
+import ru.stonlex.bukkit.holographic.addon.ProtocolHolographicUpdater;
 
 import java.util.function.Consumer;
 
 @Getter
 @Setter
 @RequiredArgsConstructor
-public abstract class StonlexHolographicUpdater extends BukkitRunnable implements IProtocolHolographicUpdater, Consumer<IProtocolHolographic> {
+public abstract class SimpleHolographicUpdater extends BukkitRunnable implements ProtocolHolographicUpdater, Consumer<ProtocolHolographic> {
 
-    private final IProtocolHolographic holographic;
+    private final ProtocolHolographic holographic;
 
     private boolean enable;
     private boolean cancelled;

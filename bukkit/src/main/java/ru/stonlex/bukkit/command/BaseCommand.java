@@ -6,7 +6,6 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import ru.stonlex.bukkit.StonlexBukkitApiPlugin;
 import ru.stonlex.bukkit.command.annotation.CommandCooldown;
 import ru.stonlex.bukkit.command.annotation.CommandPermission;
 import ru.stonlex.bukkit.command.manager.CommandManager;
@@ -20,7 +19,7 @@ public abstract class BaseCommand<S extends CommandSender>
         implements CommandExecutor {
 
     @Getter
-    private final String cooldownName = ("@StonlexCommand=").concat(RandomStringUtils.randomAlphanumeric(64));
+    protected final String cooldownName = ("@StonlexCommand=").concat(RandomStringUtils.randomAlphanumeric(64));
 
 
     /**
@@ -67,19 +66,33 @@ public abstract class BaseCommand<S extends CommandSender>
 
         //задержка к выполнению команды
         if (commandCooldown != null) {
-            if (CooldownUtil.hasCooldown(cooldownName)) {
-                return true;
-            }
+            switch (commandCooldown.receiverModifier()) {
 
-            CooldownUtil.putCooldown(cooldownName, commandCooldown.cooldownMillis());
+                case PUBLIC: {
+                    if (CooldownUtil.hasCooldown(cooldownName)) {
+                        return true;
+                    }
+
+                    CooldownUtil.putCooldown(cooldownName, commandCooldown.cooldownMillis());
+                    break;
+                }
+
+                case ONLY_SENDER: {
+                    if (CooldownUtil.hasCooldown(cooldownName.concat("_").concat(commandSender.getName()))) {
+                        return true;
+                    }
+
+                    CooldownUtil.putCooldown(cooldownName.concat("_").concat(commandSender.getName()), commandCooldown.cooldownMillis());
+                    break;
+                }
+            }
         }
 
         //проверка на право для команды
-        if (commandPermission != null) {
-            if (!commandSender.hasPermission(commandPermission.permission())) {
-                commandSender.sendMessage(commandPermission.message());
-                return true;
-            }
+        if (commandPermission != null && !commandSender.hasPermission(commandPermission.permission())) {
+            commandSender.sendMessage(commandPermission.message());
+
+            return true;
         }
 
         //выполнение команды
@@ -99,7 +112,7 @@ public abstract class BaseCommand<S extends CommandSender>
             }
         }
 
-        executeCommand((S) commandSender, args);
+        onExecute((S) commandSender, args);
         return true;
     }
 
@@ -114,5 +127,5 @@ public abstract class BaseCommand<S extends CommandSender>
      * @param commandSender - отправитель
      * @param args - аргументы команды
      */
-    protected abstract void executeCommand(S commandSender, String[] args);
+    protected abstract void onExecute(S commandSender, String[] args);
 }

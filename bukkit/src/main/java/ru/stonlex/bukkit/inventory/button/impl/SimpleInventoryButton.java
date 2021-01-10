@@ -7,7 +7,7 @@ import ru.stonlex.bukkit.inventory.button.BaseInventoryButton;
 
 @RequiredArgsConstructor
 @Getter
-public class OriginalStonlexInventoryButton implements BaseInventoryButton {
+public class SimpleInventoryButton implements BaseInventoryButton {
 
     private final ItemStack itemStack;
 

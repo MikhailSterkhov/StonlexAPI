@@ -3,20 +3,20 @@ package ru.stonlex.bukkit.holographic.line.impl;
 import lombok.Getter;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
-import ru.stonlex.bukkit.holographic.IProtocolHolographic;
-import ru.stonlex.bukkit.holographic.line.IProtocolHolographicLine;
+import ru.stonlex.bukkit.holographic.ProtocolHolographic;
+import ru.stonlex.bukkit.holographic.line.ProtocolHolographicLine;
 
 @Getter
-public class EmptyStonlexHolographicLine implements IProtocolHolographicLine {
+public class EmptyHolographicLine implements ProtocolHolographicLine {
 
     private final int lineIndex;
 
-    private final IProtocolHolographic holographic;
+    private final ProtocolHolographic holographic;
 
     private Location location;
 
 
-    public EmptyStonlexHolographicLine(int lineIndex, IProtocolHolographic holographic) {
+    public EmptyHolographicLine(int lineIndex, ProtocolHolographic holographic) {
         this.lineIndex = lineIndex;
         this.holographic = holographic;
         this.location = holographic.getLocation();

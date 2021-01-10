@@ -4,16 +4,21 @@ import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
-import ru.stonlex.bukkit.holographic.IProtocolHolographic;
-import ru.stonlex.bukkit.holographic.line.IProtocolHolographicLine;
+import ru.stonlex.bukkit.holographic.ProtocolHolographic;
+import ru.stonlex.bukkit.holographic.line.ProtocolHolographicLine;
 import ru.stonlex.bukkit.protocollib.entity.impl.FakeArmorStand;
+import ru.stonlex.bukkit.protocollib.entity.impl.FakeSilverfish;
+
+import java.util.function.Consumer;
 
 @Getter
-public class OriginalStonlexHolographicLine implements IProtocolHolographicLine {
+public class ActionHolographicLine implements ProtocolHolographicLine {
 
     protected final int lineIndex;
 
-    protected final IProtocolHolographic holographic;
+    protected final ProtocolHolographic holographic;
+
+    private final Consumer<Player> clickAction;
 
     protected Location location;
 
@@ -25,9 +30,13 @@ public class OriginalStonlexHolographicLine implements IProtocolHolographicLine 
     @Setter
     private FakeArmorStand fakeArmorStand;
 
+    @Setter
+    private FakeSilverfish clickableSilverfish;
 
-    public OriginalStonlexHolographicLine(int lineIndex, String lineText, IProtocolHolographic holographic) {
+
+    public ActionHolographicLine(int lineIndex, String lineText, ProtocolHolographic holographic, Consumer<Player> clickAction) {
         this.lineIndex = lineIndex;
+        this.clickAction = clickAction;
         this.holographic = holographic;
         this.lineText = lineText;
         this.location = holographic.getLocation();
@@ -38,12 +47,19 @@ public class OriginalStonlexHolographicLine implements IProtocolHolographicLine 
 
     @Override
     public void create() {
+        //armor stand holographic
         setFakeArmorStand(new FakeArmorStand(getLocation().clone().add(0, -(0.25 * lineIndex), 0)));
 
-        getFakeArmorStand().setInvisible(true);
-        getFakeArmorStand().setBasePlate(false);
-        getFakeArmorStand().setCustomNameVisible(true);
-        getFakeArmorStand().setCustomName(lineText);
+        fakeArmorStand.setInvisible(true);
+        fakeArmorStand.setBasePlate(false);
+        fakeArmorStand.setCustomNameVisible(true);
+        fakeArmorStand.setCustomName(lineText);
+
+        //clickable silverfish
+        setClickableSilverfish(new FakeSilverfish(fakeArmorStand.getLocation().clone().add(0, 2.2, 0)));
+
+        clickableSilverfish.setInvisible(true);
+        clickableSilverfish.setClickAction(clickAction);
     }
 
     @Override
@@ -54,6 +70,7 @@ public class OriginalStonlexHolographicLine implements IProtocolHolographicLine 
     @Override
     public void remove() {
         fakeArmorStand.remove();
+        clickableSilverfish.remove();
     }
 
     @Override
@@ -65,17 +82,19 @@ public class OriginalStonlexHolographicLine implements IProtocolHolographicLine 
 
     @Override
     public boolean isSpawnedToPlayer(Player player) {
-        return fakeArmorStand.hasViewer(player);
+        return clickableSilverfish.hasViewer(player) && fakeArmorStand.hasViewer(player);
     }
 
     @Override
     public void showToPlayer(Player player) {
         fakeArmorStand.addViewers(player);
+        clickableSilverfish.addViewers(player);
     }
 
     @Override
     public void hideToPlayer(Player player) {
         fakeArmorStand.removeViewers(player);
+        clickableSilverfish.removeViewers(player);
     }
 
 }
