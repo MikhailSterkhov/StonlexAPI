@@ -8,7 +8,7 @@ import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.inventory.ItemStack;
-import ru.lattycraft.bukkit.util.cooldown.PlayerCooldownUtil;
+import ru.stonlex.bukkit.utility.PlayerCooldownUtil;
 import ru.stonlex.bukkit.utility.custom.CustomItem;
 
 public class CustomItemListener implements Listener {

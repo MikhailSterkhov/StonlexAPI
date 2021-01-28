@@ -6,7 +6,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
-import ru.lattycraft.bukkit.util.MetadataUtil;
+import ru.stonlex.bukkit.utility.MetadataUtil;
 import ru.stonlex.bukkit.utility.custom.CustomBlock;
 
 public class CustomBlockListener implements Listener {
