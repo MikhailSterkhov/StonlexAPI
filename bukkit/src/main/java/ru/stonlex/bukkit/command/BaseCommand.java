@@ -61,11 +61,13 @@ public abstract class BaseCommand<S extends CommandSender>
     @Override
     public boolean execute(CommandSender commandSender, String label, String[] args) {
         //инициализация аннотаций команды
-        CommandCooldown commandCooldown = getClass().getAnnotation(CommandCooldown.class);
-        CommandPermission commandPermission = getClass().getAnnotation(CommandPermission.class);
+        CommandCooldown commandCooldown = getClass().getDeclaredAnnotation(CommandCooldown.class);
+        CommandPermission commandPermission = getClass().getDeclaredAnnotation(CommandPermission.class);
 
         //задержка к выполнению команды
         if (commandCooldown != null) {
+            System.out.println("HAS COOLDOWN ANNOTATION BLYAT!!!!! " + commandCooldown.receiverModifier() + " " + commandCooldown.cooldownMillis());
+
             switch (commandCooldown.receiverModifier()) {
 
                 case PUBLIC: {
@@ -89,6 +91,10 @@ public abstract class BaseCommand<S extends CommandSender>
         }
 
         //проверка на право для команды
+        if (commandPermission != null) {
+            System.out.println("HAS PERMISSION ANNOTATION ALOOOOOOOOOOOOOOOO!!!!! " + commandPermission.permission() + " " + commandPermission.message());
+        }
+
         if (commandPermission != null && !commandSender.hasPermission(commandPermission.permission())) {
             commandSender.sendMessage(commandPermission.message());
 

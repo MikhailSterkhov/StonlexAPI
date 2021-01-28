@@ -7,6 +7,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.material.MaterialData;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import ru.stonlex.bukkit.StonlexBukkitApi;
 import ru.stonlex.bukkit.command.manager.CommandManager;
@@ -19,10 +20,18 @@ import ru.stonlex.bukkit.protocollib.entity.impl.FakePlayer;
 import ru.stonlex.bukkit.scoreboard.BaseScoreboardBuilder;
 import ru.stonlex.bukkit.scoreboard.BaseScoreboardScope;
 import ru.stonlex.bukkit.scoreboard.animation.ScoreboardDisplayFlickAnimation;
+import ru.stonlex.bukkit.utility.custom.CustomBlock;
+import ru.stonlex.bukkit.utility.custom.CustomItem;
+import ru.stonlex.bukkit.utility.custom.CustomMob;
+import ru.stonlex.bukkit.utility.custom.CustomRecipe;
 import ru.stonlex.bukkit.utility.location.LocationUtil;
 import ru.stonlex.example.command.ExampleConsoleCommand;
 import ru.stonlex.example.command.ExamplePlayerCommand;
 import ru.stonlex.example.configuration.TestConfiguration;
+import ru.stonlex.example.custom.ExampleCustomBlock;
+import ru.stonlex.example.custom.ExampleCustomEntity;
+import ru.stonlex.example.custom.ExampleCustomItem;
+import ru.stonlex.example.custom.ExampleCustomRecipe;
 import ru.stonlex.example.game.ExampleGameCountdown;
 import ru.stonlex.example.game.ExampleGameItem;
 import ru.stonlex.example.game.ExampleGameProcess;
@@ -33,6 +42,26 @@ import ru.stonlex.global.utility.MailUtil;
 import java.util.function.Consumer;
 
 public final class ApiExample {
+
+    @TestAccessible
+    public void exampleCustom(@NonNull Plugin plugin, @NonNull Player player) {
+
+        CustomBlock customBlock = new ExampleCustomBlock();
+        customBlock.placeBlock(player.getLocation()); // можно поставить данный блок
+        customBlock.drop(player.getLocation()); //  можно создать дроп этого блока на указанной локации
+        customBlock.breakBlock(player.getLocation()); // а можно сломать его, если он там стоит
+
+        CustomMob customMob = new ExampleCustomEntity();
+        customMob.register(); // после регистра он начинает рандомно спавнить ентити по карте с указанным шансом
+        customMob.spawnEntity(player.getLocation()); // или можно просто сразу заспавнить энтити))
+
+        CustomItem customItem = new ExampleCustomItem();
+        customItem.register(); // регистрация предмета обязательна
+        customItem.give(player); // после чего выдаем его игроку
+
+        CustomRecipe customRecipe = new ExampleCustomRecipe();
+        customRecipe.register(plugin); // с рецептом особо ничего не сделаешь, он просто есть, и просто крафтится
+    }
 
     @TestAccessible
     protected void exampleSkyWars(@NonNull MysqlConnection mysqlConnection) {

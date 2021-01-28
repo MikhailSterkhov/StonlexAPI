@@ -99,9 +99,11 @@ public class GamingProcessBuilder {
             gameProcess.onStart();
         }
 
-        Bukkit.getPluginManager().registerEvents(new GamingPlayerDatabaseListener(gameProcess), StonlexBukkitApiPlugin.getInstance());
-        Bukkit.getPluginManager().registerEvents(new GamingProcessListener(gameProcess), StonlexBukkitApiPlugin.getInstance());
-        Bukkit.getPluginManager().registerEvents(new GamingSettingsListener(), StonlexBukkitApiPlugin.getInstance());
+        StonlexBukkitApiPlugin stonlexBukkitApiPlugin = StonlexBukkitApiPlugin.getPlugin(StonlexBukkitApiPlugin.class);
+
+        Bukkit.getPluginManager().registerEvents(new GamingPlayerDatabaseListener(gameProcess), stonlexBukkitApiPlugin);
+        Bukkit.getPluginManager().registerEvents(new GamingProcessListener(gameProcess), stonlexBukkitApiPlugin);
+        Bukkit.getPluginManager().registerEvents(new GamingSettingsListener(), stonlexBukkitApiPlugin);
 
         gameProcessConsumer.accept(gameProcess);
     }

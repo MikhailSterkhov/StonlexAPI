@@ -11,7 +11,7 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="Maven: org.spigotmc:spigot:1.12.2-R0.1-SNAPSHOT" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.spigotmc:spigot:1.12.2-R0.1-SNAPSHOT" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: com.github.azbh111:ProtocolLib:4.4.0" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: net.milkbowl:Vault:1.7.1-b91" level="project" />
     <orderEntry type="module" module-name="global" />

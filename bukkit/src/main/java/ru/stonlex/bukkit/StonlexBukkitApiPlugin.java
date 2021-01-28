@@ -3,20 +3,19 @@ package ru.stonlex.bukkit;
 import com.comphenix.protocol.ProtocolLibrary;
 import lombok.Getter;
 import org.bukkit.plugin.java.JavaPlugin;
-import ru.stonlex.bukkit.command.manager.CommandManager;
-import ru.stonlex.bukkit.protocollib.entity.listener.FakeEntityClickListener;
 import ru.stonlex.bukkit.inventory.listener.SimpleInventoryListener;
 import ru.stonlex.bukkit.inventory.manager.BukkitInventoryManager;
 import ru.stonlex.bukkit.listener.PlayerListener;
+import ru.stonlex.bukkit.protocollib.entity.listener.FakeEntityClickListener;
 import ru.stonlex.bukkit.protocollib.entity.listener.FakeEntityScopeListener;
 import ru.stonlex.bukkit.protocollib.entity.listener.FakeEntityTrackListener;
 import ru.stonlex.bukkit.scoreboard.listener.BaseScoreboardListener;
 import ru.stonlex.bukkit.tag.listener.TagListener;
 import ru.stonlex.bukkit.test.TestCommand;
+import ru.stonlex.bukkit.utility.custom.listener.CustomBlockListener;
+import ru.stonlex.bukkit.utility.custom.listener.CustomItemListener;
+import ru.stonlex.bukkit.utility.custom.listener.CustomMobListener;
 import ru.stonlex.bukkit.vault.VaultManager;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @Getter
 public final class StonlexBukkitApiPlugin extends JavaPlugin {
@@ -30,6 +29,10 @@ public final class StonlexBukkitApiPlugin extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new TagListener(), this);
         getServer().getPluginManager().registerEvents(new PlayerListener(), this);
         getServer().getPluginManager().registerEvents(new BaseScoreboardListener(), this);
+
+        getServer().getPluginManager().registerEvents(new CustomBlockListener(), this);
+        getServer().getPluginManager().registerEvents(new CustomItemListener(), this);
+        getServer().getPluginManager().registerEvents(new CustomMobListener(), this);
 
         getServer().getPluginManager().registerEvents(StonlexBukkitApi.HOLOGRAPHIC_MANAGER, this);
 

@@ -8,6 +8,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import ru.stonlex.bukkit.StonlexBukkitApiPlugin;
 import ru.stonlex.bukkit.protocollib.packet.scoreboard.WrapperPlayServerScoreboardTeam;
 import ru.stonlex.bukkit.tag.PlayerTag;
+import ru.stonlex.bukkit.tag.manager.TagManager;
 import ru.stonlex.global.utility.query.AsyncUtil;
 
 public class TagListener implements Listener {
@@ -16,14 +17,14 @@ public class TagListener implements Listener {
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
 
-        AsyncUtil.submitAsync(() -> StonlexBukkitApiPlugin.getInstance().getTagManager().getPlayerTagMap().values().forEach(
+        AsyncUtil.submitAsync(() -> TagManager.INSTANCE.getPlayerTagMap().values().forEach(
                 playerTag -> playerTag.sendPacket(player, WrapperPlayServerScoreboardTeam.Mode.TEAM_UPDATED)));
     }
 
     @EventHandler
     public void onPlayerLeave(PlayerQuitEvent event) {
         Player player = event.getPlayer();
-        PlayerTag playerTag = StonlexBukkitApiPlugin.getInstance().getTagManager().getPlayerTag(player);
+        PlayerTag playerTag = TagManager.INSTANCE.getPlayerTag(player);
 
         if (playerTag == null) {
             return;
@@ -32,8 +33,8 @@ public class TagListener implements Listener {
         playerTag.broadcastPacket(WrapperPlayServerScoreboardTeam.Mode.PLAYERS_REMOVED);
         playerTag.broadcastPacket(WrapperPlayServerScoreboardTeam.Mode.TEAM_REMOVED);
 
-        StonlexBukkitApiPlugin.getInstance().getTagManager().getTeamCacheMap().remove(playerTag.getTeamName());
-        StonlexBukkitApiPlugin.getInstance().getTagManager().getPlayerTagMap().remove(player.getName().toLowerCase());
+        TagManager.INSTANCE.getTeamCacheMap().remove(playerTag.getTeamName());
+        TagManager.INSTANCE.getPlayerTagMap().remove(player.getName().toLowerCase());
     }
 
 }

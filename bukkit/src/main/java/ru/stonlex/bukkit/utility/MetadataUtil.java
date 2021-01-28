@@ -10,7 +10,7 @@ import ru.stonlex.bukkit.StonlexBukkitApiPlugin;
 @UtilityClass
 public class MetadataUtil {
 
-    private final Plugin plugin = StonlexBukkitApiPlugin.getInstance();
+    private final Plugin plugin = StonlexBukkitApiPlugin.getPlugin(StonlexBukkitApiPlugin.class);
 
 
     /**

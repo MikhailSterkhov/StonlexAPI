@@ -98,7 +98,7 @@ public class FakePlayer extends FakeBaseEntityLiving {
                 sendPlayerInfoPacket(EnumWrappers.PlayerInfoAction.REMOVE_PLAYER, player);
             }
 
-        }.runTaskLater(StonlexBukkitApiPlugin.getInstance(), 30);
+        }.runTaskLater(StonlexBukkitApiPlugin.getProvidingPlugin(StonlexBukkitApiPlugin.class), 30);
     }
 
     private synchronized void sendPlayerInfoPacket(EnumWrappers.PlayerInfoAction action, Player player) {
@@ -152,7 +152,7 @@ public class FakePlayer extends FakeBaseEntityLiving {
                         sendTeamPacket(getTeamName(), receiver, WrapperPlayServerScoreboardTeam.Mode.TEAM_UPDATED));
             }
 
-        }.runTaskLater(StonlexBukkitApiPlugin.getInstance(), 20);
+        }.runTaskLater(StonlexBukkitApiPlugin.getProvidingPlugin(StonlexBukkitApiPlugin.class), 20);
     }
 
     protected synchronized String getTeamName() {

@@ -89,7 +89,7 @@ public abstract class GamingChestStorage {
         };
 
         this.autoRefillRunnable
-                .runTaskTimer(StonlexBukkitApiPlugin.getInstance(), 0, 20);
+                .runTaskTimer(StonlexBukkitApiPlugin.getPlugin(StonlexBukkitApiPlugin.class), 0, 20);
 
         onRefillAdd();
     }

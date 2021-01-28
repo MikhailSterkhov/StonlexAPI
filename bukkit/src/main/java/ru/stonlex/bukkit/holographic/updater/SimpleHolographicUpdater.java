@@ -30,8 +30,11 @@ public abstract class SimpleHolographicUpdater extends BukkitRunnable implements
     public void startUpdater(long periodTick) {
         this.cancelled = !cancelled;
 
+
+        StonlexBukkitApiPlugin stonlexBukkitApiPlugin = StonlexBukkitApiPlugin.getPlugin(StonlexBukkitApiPlugin.class);
+
         if (isCancelled()) {
-            runTaskTimer(StonlexBukkitApiPlugin.getInstance(), 0, periodTick);
+            runTaskTimer(stonlexBukkitApiPlugin, 0, periodTick);
         }
     }
 

@@ -7,6 +7,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import ru.stonlex.bukkit.StonlexBukkitApiPlugin;
 import ru.stonlex.bukkit.protocollib.packet.scoreboard.WrapperPlayServerScoreboardTeam;
+import ru.stonlex.bukkit.tag.manager.TagManager;
 
 import java.util.*;
 
@@ -43,7 +44,7 @@ public class PlayerTag {
             scoreboardTeamPacket.setPackOptionData(0);
             scoreboardTeamPacket.setColor(0);
         } else {
-            scoreboardTeamPacket.setPlayers( StonlexBukkitApiPlugin.getInstance().getTagManager().getTeamCacheMap().get(teamName) );
+            scoreboardTeamPacket.setPlayers( TagManager.INSTANCE.getTeamCacheMap().get(teamName) );
         }
 
         scoreboardTeamPacket.sendPacket(receiver);
@@ -64,7 +65,7 @@ public class PlayerTag {
      * @param mode - тип пакета
      */
     private int checkTeam(int mode) {
-        Map<String, List<String>> teamCacheMap = StonlexBukkitApiPlugin.getInstance().getTagManager().getTeamCacheMap();
+        Map<String, List<String>> teamCacheMap = TagManager.INSTANCE.getTeamCacheMap();
 
         if (teamCacheMap.containsKey(teamName) && mode == 0) {
             mode = WrapperPlayServerScoreboardTeam.Mode.TEAM_UPDATED;

@@ -182,7 +182,7 @@ public class BaseScoreboard {
                 }
             }
 
-        }.runTaskTimer(StonlexBukkitApiPlugin.getInstance(), durationTick, durationTick);
+        }.runTaskTimer(StonlexBukkitApiPlugin.getPlugin(StonlexBukkitApiPlugin.class), durationTick, durationTick);
         scoreboardUpdaterCollection.add(bukkitTask);
     }
 

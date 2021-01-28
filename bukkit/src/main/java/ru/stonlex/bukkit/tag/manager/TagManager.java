@@ -1,6 +1,8 @@
 package ru.stonlex.bukkit.tag.manager;
 
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import ru.stonlex.bukkit.protocollib.packet.scoreboard.WrapperPlayServerScoreboardTeam;
@@ -10,6 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class TagManager {
 
     @Getter
@@ -17,6 +20,9 @@ public final class TagManager {
 
     @Getter // тут будем кешировать тимы
     private final Map<String, List<String>> teamCacheMap = new HashMap<>();
+
+
+    public static final TagManager INSTANCE = new TagManager();
 
 
     /**

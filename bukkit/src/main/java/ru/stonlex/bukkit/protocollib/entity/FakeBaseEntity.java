@@ -11,6 +11,7 @@ import lombok.SneakyThrows;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
@@ -27,13 +28,13 @@ import java.util.function.Consumer;
 @Getter
 public abstract class FakeBaseEntity implements Cloneable, FakeEntityClickable {
 
-    protected static @NonNull WrappedDataWatcher.Serializer BYTE_SERIALIZER = WrappedDataWatcher.Registry.get(Byte.class);
-    protected static @NonNull WrappedDataWatcher.Serializer FLOAT_SERIALIZER = WrappedDataWatcher.Registry.get(Float.class);
-    protected static @NonNull WrappedDataWatcher.Serializer INT_SERIALIZER = WrappedDataWatcher.Registry.get(Integer.class);
-    protected static @NonNull WrappedDataWatcher.Serializer STRING_SERIALIZER = WrappedDataWatcher.Registry.get(String.class);
-    protected static @NonNull WrappedDataWatcher.Serializer BOOLEAN_SERIALIZER = WrappedDataWatcher.Registry.get(Boolean.class);
+    public static @NonNull WrappedDataWatcher.Serializer BYTE_SERIALIZER = WrappedDataWatcher.Registry.get(Byte.class);
+    public static @NonNull WrappedDataWatcher.Serializer FLOAT_SERIALIZER = WrappedDataWatcher.Registry.get(Float.class);
+    public static @NonNull WrappedDataWatcher.Serializer INT_SERIALIZER = WrappedDataWatcher.Registry.get(Integer.class);
+    public static @NonNull WrappedDataWatcher.Serializer STRING_SERIALIZER = WrappedDataWatcher.Registry.get(String.class);
+    public static @NonNull WrappedDataWatcher.Serializer BOOLEAN_SERIALIZER = WrappedDataWatcher.Registry.get(Boolean.class);
 
-    protected static @NonNull FieldAccessor ENTITY_ID_ACCESSOR = Accessors.getFieldAccessor(MinecraftReflection.getEntityClass(), "entityCount", true);
+    public static @NonNull FieldAccessor ENTITY_ID_ACCESSOR = Accessors.getFieldAccessor(MinecraftReflection.getEntityClass(), "entityCount", true);
 
 
     protected @NonNull int entityId;
@@ -285,6 +286,24 @@ public abstract class FakeBaseEntity implements Cloneable, FakeEntityClickable {
         this.customName = customName;
 
         broadcastDataWatcherObject(2, STRING_SERIALIZER, customName);
+    }
+
+
+    public void setCustomName(Entity entity, Player player) {
+
+        // change entity datawatcher
+        WrappedDataWatcher wrappedDataWatcher = WrappedDataWatcher.getEntityWatcher(entity);
+
+        wrappedDataWatcher.setObject(new WrappedDataWatcher.WrappedDataWatcherObject(2, STRING_SERIALIZER), player.getName());
+        wrappedDataWatcher.setObject(new WrappedDataWatcher.WrappedDataWatcherObject(3, BOOLEAN_SERIALIZER), true);
+
+        // send datawatcher change packet
+        WrapperPlayServerEntityMetadata entityMetadataPacket = new WrapperPlayServerEntityMetadata();
+
+        entityMetadataPacket.setEntityID(entity.getEntityId());
+        entityMetadataPacket.setMetadata(wrappedDataWatcher.getWatchableObjects());
+
+        entityMetadataPacket.sendPacket(player);
     }
 
     public void setNoGravity(boolean noGravity) {

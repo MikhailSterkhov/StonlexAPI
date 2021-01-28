@@ -58,7 +58,7 @@ public abstract class GameCountdownProcess {
         gameProcess.setSetting(GamingSettingType.GAME_STATUS, GamingStatus.WAIT_PLAYERS);
         int startCountdown = gameProcess.getSetting(GamingSettingType.COUNTDOWN_START_SECONDS, int.class);
 
-        runTask0(StonlexBukkitApiPlugin.getInstance(), bukkitRunnable -> onCountdownTick(currentCountdown, startCountdown, gameProcess));
+        runTask0(StonlexBukkitApiPlugin.getPlugin(StonlexBukkitApiPlugin.class), bukkitRunnable -> onCountdownTick(currentCountdown, startCountdown, gameProcess));
     }
 
     /**

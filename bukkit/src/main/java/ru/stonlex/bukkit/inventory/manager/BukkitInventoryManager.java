@@ -95,7 +95,7 @@ public final class BukkitInventoryManager {
                 currentTicks++;
             }
 
-        }.runTaskTimer(StonlexBukkitApiPlugin.getInstance(), 0, 1);
+        }.runTaskTimer(StonlexBukkitApiPlugin.getPlugin(StonlexBukkitApiPlugin.class), 0, 1);
     }
 
 }

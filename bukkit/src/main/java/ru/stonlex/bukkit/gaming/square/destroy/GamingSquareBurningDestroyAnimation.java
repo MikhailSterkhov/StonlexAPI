@@ -36,7 +36,7 @@ public class GamingSquareBurningDestroyAnimation implements SquareDestroyAnimati
                 blockCount--;
             }
 
-        }.runTaskTimer(StonlexBukkitApiPlugin.getInstance(), 0, 10);
+        }.runTaskTimer(StonlexBukkitApiPlugin.getProvidingPlugin(StonlexBukkitApiPlugin.class), 0, 10);
 
     }
 
