@@ -15,5 +15,7 @@ public enum FakeEntityScope {
      * необходимо спавнить вручную, самостоятельно
      * он устанавливаться никому не будет :(
      */
-    PROTOTYPE;
+    PROTOTYPE,
+
+    ;
 }

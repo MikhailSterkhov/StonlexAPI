@@ -20,7 +20,7 @@ public class FakeSlime extends FakeBaseEntityLiving {
      *
      * @param size - новый размер
      */
-    public void setSize(int size) {
+    public synchronized void setSize(int size) {
         this.size = size;
 
         broadcastDataWatcherObject(15, INT_SERIALIZER, size);

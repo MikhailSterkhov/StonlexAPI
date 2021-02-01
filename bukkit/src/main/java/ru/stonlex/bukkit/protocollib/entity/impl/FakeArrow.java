@@ -17,20 +17,20 @@ public class FakeArrow extends FakeBaseEntity {
     }
 
 
-    public void setCritical(boolean critical) {
+    public synchronized void setCritical(boolean critical) {
         this.critical = critical;
 
         broadcastDataWatcherObject(6, BYTE_SERIALIZER, generateBitMask());
     }
 
-    public void setNoClip(boolean noClip) {
+    public synchronized void setNoClip(boolean noClip) {
         this.noClip = noClip;
 
         broadcastDataWatcherObject(6, BYTE_SERIALIZER, generateBitMask());
     }
 
 
-    private byte generateBitMask() {
+    private synchronized byte generateBitMask() {
         return (byte) ((critical ? 0x01 : 0) + (noClip ? 0x02 : 0));
     }
 }

@@ -142,17 +142,10 @@ public class FakePlayer extends FakeBaseEntityLiving {
 
     @Override
     public synchronized void setGlowingColor(ChatColor glowingColor) {
-        new BukkitRunnable() {
+        FakePlayer.super.setGlowingColor(glowingColor);
 
-            @Override
-            public void run() {
-                FakePlayer.super.setGlowingColor(glowingColor);
-
-                getViewerCollection().forEach(receiver ->
-                        sendTeamPacket(getTeamName(), receiver, WrapperPlayServerScoreboardTeam.Mode.TEAM_UPDATED));
-            }
-
-        }.runTaskLater(StonlexBukkitApiPlugin.getProvidingPlugin(StonlexBukkitApiPlugin.class), 20);
+        getViewerCollection().forEach(receiver ->
+                sendTeamPacket(getTeamName(), receiver, WrapperPlayServerScoreboardTeam.Mode.TEAM_UPDATED));
     }
 
     protected synchronized String getTeamName() {

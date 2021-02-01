@@ -14,13 +14,13 @@ public class FakeBat extends FakeBaseEntityLiving {
         super(EntityType.BAT, location);
     }
 
-    public void setHanging(boolean hanging) {
+    public synchronized void setHanging(boolean hanging) {
         this.hanging = hanging;
 
         broadcastDataWatcherObject(12, BYTE_SERIALIZER, generateBitMask());
     }
 
-    public byte generateBitMask() {
+    public synchronized byte generateBitMask() {
         return (byte) (hanging ? 0x01 : 0);
     }
 

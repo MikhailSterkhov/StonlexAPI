@@ -7,8 +7,7 @@ import org.bukkit.entity.EntityType;
 
 @Getter
 public abstract class FakeBaseEntityBabbie
-        extends FakeBaseEntityLiving
-        implements FakeEntityLiving {
+        extends FakeBaseEntityLiving implements FakeEntityLiving {
 
 
     protected boolean baby;
@@ -17,7 +16,7 @@ public abstract class FakeBaseEntityBabbie
         super(entityType, location);
     }
 
-    public void setBaby(boolean baby) {
+    public synchronized void setBaby(boolean baby) {
         this.baby = baby;
 
         broadcastDataWatcherObject(15, BOOLEAN_SERIALIZER, baby);

@@ -12,8 +12,7 @@ import ru.stonlex.bukkit.protocollib.packet.ProtocolPacketUtil;
 
 @Getter
 public abstract class FakeBaseEntityLiving
-        extends FakeBaseEntity
-        implements FakeEntityLiving {
+        extends FakeBaseEntity implements FakeEntityLiving {
 
 
     protected int arrowCount;

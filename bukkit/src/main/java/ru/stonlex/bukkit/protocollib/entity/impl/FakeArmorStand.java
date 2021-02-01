@@ -18,31 +18,31 @@ public class FakeArmorStand extends FakeBaseEntityLiving {
     }
 
 
-    public void setSmall(boolean small) {
+    public synchronized void setSmall(boolean small) {
         this.small = small;
 
         broadcastDataWatcherObject(11, BYTE_SERIALIZER, generateBitMask());
     }
 
-    public void setArms(boolean arms) {
+    public synchronized void setArms(boolean arms) {
         this.arms = arms;
 
         broadcastDataWatcherObject(11, BYTE_SERIALIZER, generateBitMask());
     }
 
-    public void setBasePlate(boolean basePlate) {
+    public synchronized void setBasePlate(boolean basePlate) {
         this.basePlate = basePlate;
 
         broadcastDataWatcherObject(11, BYTE_SERIALIZER, generateBitMask());
     }
 
-    public void setMarker(boolean marker) {
+    public synchronized void setMarker(boolean marker) {
         this.marker = marker;
 
         broadcastDataWatcherObject(11, BYTE_SERIALIZER, generateBitMask());
     }
 
-    private byte generateBitMask() {
+    private synchronized byte generateBitMask() {
         return (byte) ((small ? 0x01 : 0) + (arms ? 0x04 : 0) + (!basePlate ? 0x08 : 0) + (marker ? 0x10 : 0));
     }
 

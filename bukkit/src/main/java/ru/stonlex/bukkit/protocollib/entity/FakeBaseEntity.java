@@ -145,13 +145,13 @@ public abstract class FakeBaseEntity implements Cloneable, FakeEntityClickable {
                 ProtocolPacketUtil.createEntityDestroyPacket(entityId));
     }
 
-    public void teleport(@NonNull Location location) {
+    public synchronized void teleport(@NonNull Location location) {
         this.location = location;
 
         viewerCollection.forEach(this::sendTeleportPacket);
     }
 
-    public void look(@NonNull Player player, @NonNull Location location) {
+    public synchronized void look(@NonNull Player player, @NonNull Location location) {
         Vector vector = location.clone().subtract(this.location).toVector().normalize();
 
         this.location.setDirection(vector);
@@ -162,11 +162,11 @@ public abstract class FakeBaseEntity implements Cloneable, FakeEntityClickable {
         sendHeadRotationPacket(player);
     }
 
-    public void look(@NonNull Player player) {
+    public synchronized void look(@NonNull Player player) {
         look(player, player.getLocation());
     }
 
-    public void look(float yaw, float pitch) {
+    public synchronized void look(float yaw, float pitch) {
         location.setYaw(yaw);
         location.setPitch(pitch);
 
@@ -240,13 +240,13 @@ public abstract class FakeBaseEntity implements Cloneable, FakeEntityClickable {
     }
 
 
-    public void setBurning(boolean burning) {
+    public synchronized void setBurning(boolean burning) {
         this.burning = burning;
 
         broadcastDataWatcherObject(0, BYTE_SERIALIZER, generateBitMask());
     }
 
-    public void setSneaking(boolean sneaking) {
+    public synchronized void setSneaking(boolean sneaking) {
         this.sneaking = sneaking;
 
         broadcastDataWatcherObject(0, BYTE_SERIALIZER, generateBitMask());
@@ -258,55 +258,57 @@ public abstract class FakeBaseEntity implements Cloneable, FakeEntityClickable {
         broadcastDataWatcherObject(0, BYTE_SERIALIZER, generateBitMask());
     }
 
-    public void setInvisible(boolean invisible) {
+    public synchronized void setInvisible(boolean invisible) {
         this.invisible = invisible;
 
         broadcastDataWatcherObject(0, BYTE_SERIALIZER, generateBitMask());
     }
 
-    public void setElytraFlying(boolean elytraFlying) {
+    public synchronized void setElytraFlying(boolean elytraFlying) {
         this.elytraFlying = elytraFlying;
 
         broadcastDataWatcherObject(0, BYTE_SERIALIZER, generateBitMask());
     }
 
-    public void setGlowingColor(@NonNull ChatColor glowingColor) {
+    public synchronized void setGlowingColor(@NonNull ChatColor glowingColor) {
         this.glowingColor = glowingColor;
 
         broadcastDataWatcherObject(0, BYTE_SERIALIZER, generateBitMask());
     }
 
-    public void setCustomNameVisible(boolean customNameVisible) {
+    public synchronized void setCustomNameVisible(boolean customNameVisible) {
         this.customNameVisible = customNameVisible;
 
         broadcastDataWatcherObject(3, BOOLEAN_SERIALIZER, customNameVisible);
     }
 
-    public void setCustomName(@NonNull String customName) {
+    public synchronized void setCustomName(@NonNull String customName) {
         this.customName = customName;
 
         broadcastDataWatcherObject(2, STRING_SERIALIZER, customName);
     }
 
 
-    public void setCustomName(Entity entity, Player player) {
+    public synchronized void setCustomName(@NonNull String customName,
+                              @NonNull Player player) {
 
-        // change entity datawatcher
-        WrappedDataWatcher wrappedDataWatcher = WrappedDataWatcher.getEntityWatcher(entity);
+        // update entity metadata objects
+        WrappedDataWatcher wrappedDataWatcher = new WrappedDataWatcher();
 
-        wrappedDataWatcher.setObject(new WrappedDataWatcher.WrappedDataWatcherObject(2, STRING_SERIALIZER), player.getName());
+        wrappedDataWatcher.setObject(new WrappedDataWatcher.WrappedDataWatcherObject(2, STRING_SERIALIZER), customName);
         wrappedDataWatcher.setObject(new WrappedDataWatcher.WrappedDataWatcherObject(3, BOOLEAN_SERIALIZER), true);
 
-        // send datawatcher change packet
+
+        // send entity metadata packet
         WrapperPlayServerEntityMetadata entityMetadataPacket = new WrapperPlayServerEntityMetadata();
 
-        entityMetadataPacket.setEntityID(entity.getEntityId());
+        entityMetadataPacket.setEntityID(entityId);
         entityMetadataPacket.setMetadata(wrappedDataWatcher.getWatchableObjects());
 
         entityMetadataPacket.sendPacket(player);
     }
 
-    public void setNoGravity(boolean noGravity) {
+    public synchronized void setNoGravity(boolean noGravity) {
         this.noGravity = noGravity;
 
         broadcastDataWatcherObject(5, BOOLEAN_SERIALIZER, noGravity);
@@ -316,7 +318,6 @@ public abstract class FakeBaseEntity implements Cloneable, FakeEntityClickable {
     public synchronized FakeBaseEntity clone() {
         return (FakeBaseEntity) super.clone();
     }
-
 
     private synchronized byte generateBitMask() {
         return (byte) ((burning ? 0x01 : 0) + (sneaking ? 0x02 : 0) + (sprinting ? 0x08 : 0) + (invisible ? 0x20 : 0) + (glowingColor != null ? 0x40 : 0) + (elytraFlying ? 0x80 : 0));
