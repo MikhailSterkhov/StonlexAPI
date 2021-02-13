@@ -2,6 +2,7 @@ package ru.stonlex.bukkit.test;
 
 import org.bukkit.Location;
 import org.bukkit.Particle;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import ru.stonlex.bukkit.command.BaseCommand;
 import ru.stonlex.bukkit.command.annotation.CommandCooldown;
@@ -34,6 +35,7 @@ public class TestCommand extends BaseCommand<Player> {
 
         double radius = Double.parseDouble(args[0]);
         double radian = Math.pow(2, 5);
+        EntityType.
 
         for (double p = 0; p <= 2 * Math.PI; p += Math.PI / 10) {
             for (double t = 0; t <= 360; t += Math.PI / radian) {

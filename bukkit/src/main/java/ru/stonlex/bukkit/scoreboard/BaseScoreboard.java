@@ -32,16 +32,12 @@ public class BaseScoreboard {
 
     @Getter
     private BaseScoreboardScope scoreboardScope;
-    @Getter
-    private boolean objectiveInitialized = false;
 
 
-    @Getter
-    private final Collection<Player> playerReceiverCollection                   = new ArrayList<>();
-    @Getter
-    private final Map<Player, BaseScoreboard> scoreboardQueueMap               = new ConcurrentHashMap<>();
+    @Getter private final Collection<Player> playerReceiverCollection      = new ArrayList<>();
+    @Getter private final Map<Player, BaseScoreboard> scoreboardQueueMap   = new ConcurrentHashMap<>();
 
-    private final Collection<BukkitTask> scoreboardUpdaterCollection               = new ArrayList<>();
+    private final Collection<BukkitTask> scoreboardUpdaterCollection       = new ArrayList<>();
 
     /**
      * Установить скорбоард для игрока
