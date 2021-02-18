@@ -10,12 +10,9 @@ import org.bukkit.material.MaterialData;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import ru.stonlex.bukkit.StonlexBukkitApi;
-import ru.stonlex.bukkit.command.manager.CommandManager;
 import ru.stonlex.bukkit.gaming.GamingMode;
-import ru.stonlex.bukkit.gaming.GamingProcessBuilder;
 import ru.stonlex.bukkit.gaming.team.GamingTeam;
 import ru.stonlex.bukkit.holographic.ProtocolHolographic;
-import ru.stonlex.bukkit.holographic.impl.QuickHolographic;
 import ru.stonlex.bukkit.protocollib.entity.impl.FakePlayer;
 import ru.stonlex.bukkit.scoreboard.BaseScoreboardBuilder;
 import ru.stonlex.bukkit.scoreboard.BaseScoreboardScope;
@@ -35,8 +32,8 @@ import ru.stonlex.example.custom.ExampleCustomRecipe;
 import ru.stonlex.example.game.ExampleGameCountdown;
 import ru.stonlex.example.game.ExampleGameItem;
 import ru.stonlex.example.game.ExampleGameProcess;
-import ru.stonlex.example.localize.Lang;
-import ru.stonlex.example.localize.LanguageType;
+import ru.stonlex.example.localizable.ExampleLang;
+import ru.stonlex.global.localtization.LanguageType;
 import ru.stonlex.global.mail.MailSender;
 import ru.stonlex.global.mysql.MysqlConnection;
 import ru.stonlex.global.utility.MailUtil;
@@ -46,8 +43,20 @@ import java.util.function.Consumer;
 public final class ApiExample {
 
     @TestAccessible
-    public void exampleLocalization(@NonNull Player player, @NonNull LanguageType languageType) {
-        player.sendMessage( Lang.of(languageType, "TEST_LOCALIZED_MESSAGE") );
+    public void exampleLocalization(@NonNull Player player) {
+        LanguageType englishLanguage = (ExampleLang.EN_LANGUAGE);
+
+        // Simple localized message to player
+        player.sendMessage(ExampleLang.of(englishLanguage, "TEST_LOCALIZED_MESSAGE"));
+
+        // Localized message with placeholders
+        player.sendMessage(ExampleLang.message(englishLanguage, "TEST_LOCALIZED_MESSAGE")
+
+                .replace("%player_name%", player.getName())
+                .replace("%player_level%", player.getLevel())
+                .replace("%player_gamemode%", player.getGameMode())
+
+                .toText());
     }
 
     @TestAccessible
