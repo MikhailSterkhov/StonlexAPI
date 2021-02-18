@@ -1,7 +1,7 @@
 package ru.stonlex.example.localization;
 
-import ru.stonlex.global.localtization.LanguageType;
-import ru.stonlex.global.localtization.LocalizationResource;
+import ru.stonlex.global.localization.LanguageType;
+import ru.stonlex.global.localization.LocalizationResource;
 
 public class ExampleLang {
 

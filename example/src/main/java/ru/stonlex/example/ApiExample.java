@@ -33,7 +33,7 @@ import ru.stonlex.example.game.ExampleGameCountdown;
 import ru.stonlex.example.game.ExampleGameItem;
 import ru.stonlex.example.game.ExampleGameProcess;
 import ru.stonlex.example.localization.ExampleLang;
-import ru.stonlex.global.localtization.LanguageType;
+import ru.stonlex.global.localization.LanguageType;
 import ru.stonlex.global.mail.MailSender;
 import ru.stonlex.global.mysql.MysqlConnection;
 import ru.stonlex.global.utility.MailUtil;

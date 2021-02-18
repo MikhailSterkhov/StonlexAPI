@@ -1,4 +1,4 @@
-package ru.stonlex.global.localtization;
+package ru.stonlex.global.localization;
 
 import lombok.*;
 import org.yaml.snakeyaml.Yaml;
