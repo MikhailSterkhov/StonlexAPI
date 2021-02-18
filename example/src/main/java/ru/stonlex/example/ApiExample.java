@@ -32,7 +32,7 @@ import ru.stonlex.example.custom.ExampleCustomRecipe;
 import ru.stonlex.example.game.ExampleGameCountdown;
 import ru.stonlex.example.game.ExampleGameItem;
 import ru.stonlex.example.game.ExampleGameProcess;
-import ru.stonlex.example.localizable.ExampleLang;
+import ru.stonlex.example.localization.ExampleLang;
 import ru.stonlex.global.localtization.LanguageType;
 import ru.stonlex.global.mail.MailSender;
 import ru.stonlex.global.mysql.MysqlConnection;
@@ -44,13 +44,13 @@ public final class ApiExample {
 
     @TestAccessible
     public void exampleLocalization(@NonNull Player player) {
-        LanguageType englishLanguage = (ExampleLang.EN_LANGUAGE);
+        LanguageType englishLanguage = ExampleLang.EN_LANGUAGE;
 
         // Simple localized message to player
-        player.sendMessage(ExampleLang.of(englishLanguage, "TEST_LOCALIZED_MESSAGE"));
+        player.sendMessage(englishLanguage.getText("TEST_LOCALIZED_MESSAGE"));
 
         // Localized message with placeholders
-        player.sendMessage(ExampleLang.message(englishLanguage, "TEST_LOCALIZED_MESSAGE")
+        player.sendMessage(englishLanguage.getMessage("TEST_LOCALIZED_MESSAGE")
 
                 .replace("%player_name%", player.getName())
                 .replace("%player_level%", player.getLevel())

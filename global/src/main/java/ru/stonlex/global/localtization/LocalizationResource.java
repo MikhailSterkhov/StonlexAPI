@@ -1,25 +1,27 @@
 package ru.stonlex.global.localtization;
 
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
+import lombok.*;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
 import org.yaml.snakeyaml.introspector.PropertyUtils;
 
-import java.io.InputStreamReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-@RequiredArgsConstructor
+@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
 public class LocalizationResource {
 
-    private final String resourceURL;
+    public static LocalizationResource create() {
+        return new LocalizationResource();
+    }
+
     private final Map<String, Object> localizationMessages = new LinkedHashMap<>();
 
 
@@ -43,12 +45,30 @@ public class LocalizationResource {
      * со стороннего ресурса в формате YAML
      */
     @SneakyThrows
-    public synchronized LocalizationResource initResources() {
-        try (InputStreamReader inputStream = new InputStreamReader(new URL(resourceURL).openStream())) {
-            localizationMessages.putAll(newYaml().loadAs(inputStream, LinkedHashMap.class));
-        }
+    public synchronized LocalizationResource init(@NonNull InputStream inputStream) {
+        localizationMessages.clear();
+        localizationMessages.putAll(newYaml().loadAs(inputStream, LinkedHashMap.class));
 
+        inputStream.close();
         return this;
+    }
+
+    /**
+     * Инициализировать локализированные сообщения
+     * со стороннего ресурса в формате YAML
+     */
+    @SneakyThrows
+    public synchronized LocalizationResource initResources(@NonNull String resourceUrl) {
+        return init(new URL(resourceUrl).openStream());
+    }
+
+    /**
+     * Инициализировать локализированные сообщения
+     * со стороннего ресурса в формате YAML
+     */
+    @SneakyThrows
+    public synchronized LocalizationResource initYaml(@NonNull File file) {
+        return init(new FileInputStream(file));
     }
 
     /**
