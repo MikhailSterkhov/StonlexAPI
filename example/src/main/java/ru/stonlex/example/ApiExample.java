@@ -35,6 +35,8 @@ import ru.stonlex.example.custom.ExampleCustomRecipe;
 import ru.stonlex.example.game.ExampleGameCountdown;
 import ru.stonlex.example.game.ExampleGameItem;
 import ru.stonlex.example.game.ExampleGameProcess;
+import ru.stonlex.example.localize.Lang;
+import ru.stonlex.example.localize.LanguageType;
 import ru.stonlex.global.mail.MailSender;
 import ru.stonlex.global.mysql.MysqlConnection;
 import ru.stonlex.global.utility.MailUtil;
@@ -42,6 +44,11 @@ import ru.stonlex.global.utility.MailUtil;
 import java.util.function.Consumer;
 
 public final class ApiExample {
+
+    @TestAccessible
+    public void exampleLocalization(@NonNull Player player, @NonNull LanguageType languageType) {
+        player.sendMessage( Lang.of(languageType, "TEST_LOCALIZED_MESSAGE") );
+    }
 
     @TestAccessible
     public void exampleCustom(@NonNull Plugin plugin, @NonNull Player player) {

@@ -5,8 +5,10 @@ import com.mojang.authlib.properties.Property;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.UtilityClass;
+import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Material;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
@@ -23,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @UtilityClass
 public class ItemUtil {
@@ -31,6 +34,69 @@ public class ItemUtil {
 
     public final MaterialData EMPTY_ITEM_DATA   = EMPTY_ITEM_TYPE.getNewData((byte) 0);
     public final ItemStack EMPTY_ITEM           = EMPTY_ITEM_DATA.toItemStack(1);
+
+
+    public ItemStack parseItem(@NonNull ConfigurationSection configurationSection) {
+        Material material = Material.matchMaterial(configurationSection.getString("type", "BEDROCK"));
+
+        int amount = configurationSection.getInt("amount", 1);
+        int durability = configurationSection.getInt("data", 0);
+
+        String displayName = ChatColor.translateAlternateColorCodes('&', configurationSection.getString("name", ChatColor.RESET.toString()));
+        String playerSkill = configurationSection.getString("player-skull");
+
+        List<String> displayLore = configurationSection.getStringList("lore");
+
+        if (displayLore != null) {
+            displayLore = displayLore.stream()
+                    .map(line -> ChatColor.translateAlternateColorCodes('&', line))
+                    .collect(Collectors.toList());
+        }
+
+        List<String> enchantmentList = configurationSection.getStringList("enchantments");
+        List<String> itemFlagList = configurationSection.getStringList("flags");
+
+
+        ItemBuilder itemBuilder = newBuilder(material);
+
+        itemBuilder.setAmount(amount);
+        itemBuilder.setDurability(durability);
+
+        itemBuilder.setName(displayName);
+        itemBuilder.setLore(displayLore);
+
+        if (playerSkill != null && durability == 3) {
+
+            if (playerSkill.length() >= 32) {
+                itemBuilder.setPlayerSkull(playerSkill);
+
+            } else {
+
+                itemBuilder.setTextureValue(playerSkill);
+            }
+        }
+
+        if (enchantmentList != null) {
+            for (String enchantmentString : enchantmentList) {
+                String[] enchantmentData = enchantmentString.split(":", 2);
+
+                Enchantment enchantmentType = Enchantment.getByName(enchantmentData[0].toUpperCase());
+                int enchantmentLevel = Integer.parseInt(enchantmentData[1]);
+
+                itemBuilder.addEnchantment(enchantmentType, enchantmentLevel);
+            }
+        }
+
+        if (itemFlagList != null) {
+            for (String itemFlagString : itemFlagList) {
+
+                ItemFlag itemFlag = ItemFlag.valueOf(itemFlagString.toUpperCase());
+                itemBuilder.addItemFlag(itemFlag);
+            }
+        }
+
+        return itemBuilder.build();
+    }
 
 
     public ItemStack getNamedItemStack(@NonNull Material material, int durability,
