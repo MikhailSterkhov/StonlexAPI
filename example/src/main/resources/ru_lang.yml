@@ -1,1 +1,3 @@
 TEST_LOCALIZED_MESSAGE: 'Привет, Bukkit разработчик!'
+TEST_LOCALIZED_TITLE: '§6§lРусский заголовок'
+TEST_LOCALIZED_SUBTITLE: '§eРусский подзаголок'

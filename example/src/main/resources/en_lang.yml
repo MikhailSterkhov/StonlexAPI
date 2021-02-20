@@ -1,1 +1,3 @@
 TEST_LOCALIZED_MESSAGE: 'Hello, Bukkit developer!'
+TEST_LOCALIZED_TITLE: '§6§lEnglish title'
+TEST_LOCALIZED_SUBTITLE: '§eEnglish subtitle'
