@@ -14,9 +14,9 @@ import org.bukkit.entity.Player;
 import ru.stonlex.bukkit.protocollib.packet.scoreboard.WrapperPlayServerScoreboardScore;
 import ru.stonlex.bukkit.protocollib.packet.scoreboard.WrapperPlayServerScoreboardTeam;
 
-import java.util.Collection;
+import java.util.Arrays;
 import java.util.Collections;
-import java.util.Iterator;
+import java.util.List;
 
 @AllArgsConstructor
 public class BaseScoreboardLine {
@@ -27,54 +27,52 @@ public class BaseScoreboardLine {
     @Getter
     private String scoreText;
 
-    public static final int TEAM_CREATED = 0;
-    public static final int TEAM_REMOVED = 1;
-    public static final int TEAM_UPDATED = 2;
-    public static final int PLAYERS_ADDED = 3;
-    public static final int PLAYERS_REMOVED = 4;
+    public static final int TEAM_CREATED    = (0);
+    public static final int TEAM_REMOVED    = (1);
+    public static final int TEAM_UPDATED    = (2);
+    public static final int PLAYERS_ADDED   = (3);
+    public static final int PLAYERS_REMOVED = (4);
 
     private static final ChatColor[] COLORS = ChatColor.values();
     private static final Splitter SPLITTER  = Splitter.fixedLength(16);
 
 
     public void create(@NonNull BaseScoreboard baseScoreboard, @NonNull Player player) {
-        getTeamPacket(player, WrapperPlayServerScoreboardTeam.Mode.TEAM_CREATED).sendPacket(player);
+        getTeamPacket(player, TEAM_CREATED).sendPacket(player);
         getScorePacket(baseScoreboard, EnumWrappers.ScoreboardAction.CHANGE).sendPacket(player);
     }
 
     public void remove(@NonNull BaseScoreboard baseScoreboard, @NonNull Player player) {
-        getTeamPacket(player, WrapperPlayServerScoreboardTeam.Mode.TEAM_REMOVED).sendPacket(player);
+        getTeamPacket(player, TEAM_REMOVED).sendPacket(player);
         getScorePacket(baseScoreboard, EnumWrappers.ScoreboardAction.REMOVE).sendPacket(player);
     }
 
     public void modify(@NonNull BaseScoreboard baseScoreboard, @NonNull String scoreText, @NonNull Player player) {
         this.scoreText = scoreText;
 
-        getTeamPacket(player, WrapperPlayServerScoreboardTeam.Mode.TEAM_UPDATED).sendPacket(player);
+        getTeamPacket(player, TEAM_UPDATED).sendPacket(player);
         getScorePacket(baseScoreboard, EnumWrappers.ScoreboardAction.CHANGE).sendPacket(player);
     }
-
 
     protected WrapperPlayServerScoreboardScore getScorePacket(@NonNull BaseScoreboard baseScoreboard,
                                                               @NonNull EnumWrappers.ScoreboardAction scoreboardAction) {
 
-        WrapperPlayServerScoreboardScore scorePacket = new WrapperPlayServerScoreboardScore();
+        WrapperPlayServerScoreboardScore scoreboardScorePacket = new WrapperPlayServerScoreboardScore();
 
-        scorePacket.getHandle().getStrings().write(0, COLORS[scoreIndex].toString());
-        scorePacket.getHandle().getStrings().write(1, baseScoreboard.getScoreboardName());
+        scoreboardScorePacket.setScoreName(getTeamName());
+        scoreboardScorePacket.setObjectiveName(baseScoreboard.getScoreboardName());
 
-        scorePacket.getHandle().getScoreboardActions().write(0, scoreboardAction);
+        scoreboardScorePacket.setScoreboardAction(scoreboardAction);
+        scoreboardScorePacket.setValue(scoreIndex);
 
-        scorePacket.getHandle().getIntegers().write(0, scoreIndex);
-        return scorePacket;
+        return scoreboardScorePacket;
     }
 
     protected WrapperPlayServerScoreboardTeam getTeamPacket(@NonNull Player player, int teamMode) {
-        String teamEntry = COLORS[scoreIndex].toString();
         WrapperPlayServerScoreboardTeam teamPacket = new WrapperPlayServerScoreboardTeam();
 
-        teamPacket.getHandle().getStrings().write(0, teamEntry);
-        teamPacket.getHandle().getIntegers().write(1, teamMode);
+        teamPacket.setName(COLORS[scoreIndex].toString());
+        teamPacket.setMode(teamMode);
 
         if (teamMode == TEAM_REMOVED) {
             return teamPacket;
@@ -84,7 +82,6 @@ public class BaseScoreboardLine {
         int currentVersion = MinecraftProtocolVersion.getVersion(ProtocolLibrary.getProtocolManager().getMinecraftVersion());
         int playerVersion = ProtocolLibrary.getProtocolManager().getProtocolVersion(player);
 
-        teamPacket.getHandle().getSpecificModifier(Collection.class).write(0, Collections.singletonList(teamEntry));
 
         // Since 1.13 character limit for prefix/suffix was removed
         if (playerVersion >= aquaticVersion) {
@@ -107,38 +104,35 @@ public class BaseScoreboardLine {
             return teamPacket;
         }
 
-        Iterator<String> iterator = SPLITTER.split(scoreText).iterator();
-        String prefix = iterator.next();
+        String[] splittingText = getSplittingText();
 
-        teamPacket.getHandle().getStrings().write(2, prefix);
+        teamPacket.setPrefix(splittingText[0]);
+        teamPacket.setSuffix(splittingText[2]);
 
-        if (scoreText.length() > 16) {
-            String prefixColor = ChatColor.getLastColors(prefix);
-            String suffix = iterator.next();
-
-            if (prefix.endsWith(String.valueOf(ChatColor.COLOR_CHAR))) {
-                prefix = prefix.substring(0, prefix.length() - 1);
-
-                teamPacket.getHandle().getStrings().write(2, prefix);
-
-                prefixColor = ChatColor.getByChar(suffix.charAt(0)).toString();
-                suffix = suffix.substring(1);
-            }
-
-            if (prefixColor == null) {
-                prefixColor = "";
-            }
-
-            suffix = ((prefixColor.equals("") ? ChatColor.RESET : prefixColor) + suffix);
-
-            if (suffix.length() > 16) {
-                suffix = suffix.substring(0, 13) + "...";
-            }
-
-            teamPacket.getHandle().getStrings().write(3, suffix);
-        }
+        teamPacket.setPlayers(Collections.singletonList(getTeamName()));
 
         return teamPacket;
+    }
+
+    @SuppressWarnings("all")
+    protected String[] getSplittingText() {
+        String text = (scoreText);
+
+        if (text.length() > 48) {
+            text = text.substring(0, 48);
+        }
+
+        List<String> modifierList = SPLITTER.splitToList(text);
+        return Arrays.stream( modifierList.toArray(new String[3]) )
+
+                .map(element -> (element == null ? ("") : element))
+                .toArray(value -> new String[3]);
+    }
+
+    protected String getTeamName() {
+        String name = getSplittingText()[1];
+
+        return (!ChatColor.stripColor(name.trim()).isEmpty() ? name : COLORS[scoreIndex].toString());
     }
 
 }

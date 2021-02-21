@@ -45,7 +45,7 @@ public class BaseScoreboard {
      * @param player - игрок
      */
     public void setScoreboardToPlayer(@NonNull Player player) {
-        BaseScoreboard previousScoreboard = getCachedPlayerScoreboard(player).stream().findFirst().orElse(null);
+        BaseScoreboard previousScoreboard = getFirstCachedPlayerScoreboard(player);
         if (previousScoreboard != null) {
 
             if (equals(previousScoreboard)) {
@@ -104,7 +104,7 @@ public class BaseScoreboard {
      */
     public void removeScoreboardToPlayer(@NonNull Player player) {
         // Удаление борда
-        for (BaseScoreboardLine baseScoreboardLine : scoreboardLineMap.valueCollection()) {
+        for (BaseScoreboardLine baseScoreboardLine : new ArrayList<>(scoreboardLineMap.valueCollection())) {
             baseScoreboardLine.remove(this, player);
         }
 
@@ -164,7 +164,7 @@ public class BaseScoreboard {
             public void run() {
                 scoreboardDisplay.nextDisplay();
 
-                for (Player playerReceiver : playerReceiverCollection) {
+                for (Player playerReceiver : new ArrayList<>(playerReceiverCollection)) {
                     // Чекаем борд из метадаты игрока
                     BaseScoreboard playerScoreboard = MetadataUtil.getMetadata(playerReceiver, PLAYER_METADATA_NAME, BaseScoreboard.class);
 
@@ -222,6 +222,10 @@ public class BaseScoreboard {
      * @param scoreText - новый текст строки
      */
     public void setScoreboardLine(int lineIndex, @NonNull Player player, @NonNull String scoreText) {
+        if (!hasPlayerReceiver(player)) {
+            return;
+        }
+
         BaseScoreboardLine scoreboardLine = getScoreboardLine(lineIndex);
 
         if (scoreboardLine != null) {
@@ -230,12 +234,14 @@ public class BaseScoreboard {
             return;
         }
 
-        if (scoreText.length() > 32) {
-            scoreText = scoreText.substring(0, 31);
+        if (scoreText.length() > 48) {
+            scoreText = scoreText.substring(0, 48);
         }
 
-        scoreboardLine = scoreboardLineMap.put(lineIndex, new BaseScoreboardLine(lineIndex, scoreText));
+        scoreboardLine = new BaseScoreboardLine(lineIndex, scoreText);
         scoreboardLine.create(this, player);
+
+        scoreboardLineMap.put(lineIndex, scoreboardLine);
     }
 
     /**
@@ -257,6 +263,26 @@ public class BaseScoreboard {
                 }
 
                 break;
+        }
+    }
+
+    /**
+     * Удалить строку скорбоарда по данному
+     * индексу для всех игроков
+     *
+     * @param lineIndex - индекс строки
+     */
+    public void removeScoreboardLine(int lineIndex) {
+        BaseScoreboardLine scoreboardLine = getScoreboardLine(lineIndex);
+
+        if (scoreboardLine == null) {
+            return;
+        }
+
+        scoreboardLineMap.remove(lineIndex);
+
+        for (Player player : playerReceiverCollection) {
+            scoreboardLine.remove(this, player);
         }
     }
 
@@ -288,14 +314,13 @@ public class BaseScoreboard {
         getObjectivePacket(WrapperPlayServerScoreboardObjective.Mode.UPDATE_VALUE).sendPacket(playerReceiver);
     }
 
-
 // ======================================================= // SCOREBOARD PROTOCOL // ======================================================= //
 
     public WrapperPlayServerScoreboardObjective getObjectivePacket(@NonNull int objectiveMode) {
         String currentDisplay = scoreboardDisplay.getCurrentDisplay();
 
-        if (currentDisplay.length() > 16) {
-            currentDisplay = currentDisplay.substring(0, 16);
+        if (currentDisplay.length() > 32) {
+            currentDisplay = currentDisplay.substring(0, 32);
         }
 
         WrapperPlayServerScoreboardObjective objectivePacket = new WrapperPlayServerScoreboardObjective();
@@ -320,8 +345,8 @@ public class BaseScoreboard {
 
 // ========================================================= // STATIC FACTORY // ========================================================= //
 
-    public static final String PLAYER_METADATA_NAME = "currentLattyScoreboard";
-
+    public static final String PLAYER_METADATA_NAME
+            = ("CURRENT_BASE_SCOREBOARD");
 
     public static BaseScoreboard getFirstCachedPlayerScoreboard(@NonNull Player player) {
         return getCachedPlayerScoreboard(player)
