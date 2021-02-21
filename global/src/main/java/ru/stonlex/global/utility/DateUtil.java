@@ -1,60 +1,43 @@
 package ru.stonlex.global.utility;
 
+import lombok.NonNull;
+import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
 
-import java.sql.Timestamp;
+import java.sql.Time;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.TimeZone;
 
 @UtilityClass
 public class DateUtil {
 
-    static {
-        TimeZone timeZone = TimeZone.getTimeZone("Europe/Moscow");
+    public static final Date DATE_FORMATTER = new Date();
 
-        TimeZone.setDefault( timeZone );
+    public static final String DEFAULT_DATETIME_PATTERN = ("dd.MM.yyyy h:mm:ss a");
+    public static final String DEFAULT_DATE_PATTERN     = ("EEE, MMM d, yyyy");
+    public static final String DEFAULT_TIME_PATTERN     = ("h:mm a");
+
+
+    public String formatPattern(@NonNull String pattern) {
+        return createDateFormat(pattern).format(DATE_FORMATTER);
     }
 
-    /**
-     * Получить дату по указанному формату
-     *
-     * @param pattern - формат
-     */
-    public String getDate(String pattern) {
-        return new SimpleDateFormat(pattern).format(new Date());
+    public String formatTime(long millis, @NonNull String pattern) {
+        return createDateFormat(pattern).format(new Time(millis));
     }
 
-    /**
-     * Получить дату по стандартному формату
-     */
-    public String getDate() {
-        return getDate("dd/MM/yyyy");
+
+    private DateFormat createDateFormat(@NonNull String pattern) {
+        return new SimpleDateFormat(pattern);
     }
 
-    /**
-     * Получить дату и время по стандартному формату
-     */
-    public String getDateWithTime() {
-        return getDate("dd/MM/yyyy HH:mm:ss");
-    }
 
-    /**
-     * Получить Timestamp по количеству миллисекунд
-     *
-     * @param mills - кол-во миллисекунд
-     */
-    public Timestamp getTimestamp(long mills) {
-        return new Timestamp(mills);
-    }
+    @SneakyThrows
+    public Date parseDate(@NonNull String datePattern,
+                          @NonNull String formattedDate) {
 
-    /**
-     * Получить количество миллисекунд из Timestamp
-     *
-     * @param timestamp - timestamp
-     */
-    public long fromTimestamp(Timestamp timestamp) {
-        return timestamp.getTime();
+        return createDateFormat(datePattern).parse(formattedDate);
     }
 
 }

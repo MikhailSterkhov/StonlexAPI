@@ -21,6 +21,7 @@ import ru.stonlex.bukkit.utility.custom.CustomBlock;
 import ru.stonlex.bukkit.utility.custom.CustomItem;
 import ru.stonlex.bukkit.utility.custom.CustomMob;
 import ru.stonlex.bukkit.utility.custom.CustomRecipe;
+import ru.stonlex.bukkit.utility.localization.LocalizedPlayer;
 import ru.stonlex.bukkit.utility.location.LocationUtil;
 import ru.stonlex.example.command.ExampleConsoleCommand;
 import ru.stonlex.example.command.ExamplePlayerCommand;
@@ -33,7 +34,6 @@ import ru.stonlex.example.game.ExampleGameCountdown;
 import ru.stonlex.example.game.ExampleGameItem;
 import ru.stonlex.example.game.ExampleGameProcess;
 import ru.stonlex.example.localization.ExampleLang;
-import ru.stonlex.global.localization.LanguageType;
 import ru.stonlex.global.mail.MailSender;
 import ru.stonlex.global.mysql.MysqlConnection;
 import ru.stonlex.global.utility.MailUtil;
@@ -44,13 +44,16 @@ public final class ApiExample {
 
     @TestAccessible
     public void exampleLocalization(@NonNull Player player) {
-        LanguageType englishLanguage = ExampleLang.EN_LANGUAGE;
+        LocalizedPlayer localizedPlayer = LocalizedPlayer.create(player, ExampleLang.EN_LANGUAGE.getLocalizationResource());
+
+        // Simple localized title to player
+        localizedPlayer.sendTitle("TEST_LOCALIZED_TITLE", "TEST_LOCALIZED_SUBTITLE");
 
         // Simple localized message to player
-        player.sendMessage(englishLanguage.getText("TEST_LOCALIZED_MESSAGE"));
+        localizedPlayer.sendMessage("TEST_LOCALIZED_MESSAGE");
 
         // Localized message with placeholders
-        player.sendMessage(englishLanguage.getMessage("TEST_LOCALIZED_MESSAGE")
+        localizedPlayer.sendMessage(localizationResource -> localizationResource.getMessage("TEST_LOCALIZED_MESSAGE")
 
                 .replace("%player_name%", player.getName())
                 .replace("%player_level%", player.getLevel())

@@ -1,5 +1,6 @@
 package ru.stonlex.global.localization;
 
+import com.google.common.base.Joiner;
 import lombok.*;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
@@ -9,10 +10,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.net.URL;
-import java.util.Arrays;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
@@ -100,9 +98,7 @@ public class LocalizationResource {
      * @param messageKey - ключ локализированного сообщения
      */
     public synchronized List<String> getTextList(@NonNull String messageKey) {
-        String message = getText(messageKey);
-
-        return Arrays.asList(message.substring(1, message.length() - 1).split(", "));
+        return ((List<String>) localizationMessages.get(messageKey.toLowerCase()));
     }
 
     /**
@@ -125,7 +121,6 @@ public class LocalizationResource {
         return localizationMessages.containsKey(messageKey);
     }
 
-
     /**
      * Проверить наличие локализированного сообщения
      * в списке загруженных
@@ -133,7 +128,7 @@ public class LocalizationResource {
      * @param messageKey - ключ локализированного сообщения
      */
     public synchronized boolean isText(@NonNull String messageKey) {
-        return (localizationMessages.get(messageKey) instanceof String);
+        return hasMessage(messageKey) && (localizationMessages.get(messageKey) instanceof String);
     }
 
     /**
@@ -143,7 +138,7 @@ public class LocalizationResource {
      * @param messageKey - ключ локализированного сообщения
      */
     public  synchronized boolean isList(@NonNull String messageKey) {
-        return (localizationMessages.get(messageKey) instanceof List);
+        return hasMessage(messageKey) && (localizationMessages.get(messageKey) instanceof List);
     }
 
 }
