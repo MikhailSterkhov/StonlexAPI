@@ -66,7 +66,6 @@ public abstract class BaseCommand<S extends CommandSender>
 
         //задержка к выполнению команды
         if (commandCooldown != null) {
-            System.out.println("HAS COOLDOWN ANNOTATION BLYAT!!!!! " + commandCooldown.receiverModifier() + " " + commandCooldown.cooldownMillis());
 
             switch (commandCooldown.receiverModifier()) {
 
@@ -88,11 +87,6 @@ public abstract class BaseCommand<S extends CommandSender>
                     break;
                 }
             }
-        }
-
-        //проверка на право для команды
-        if (commandPermission != null) {
-            System.out.println("HAS PERMISSION ANNOTATION ALOOOOOOOOOOOOOOOO!!!!! " + commandPermission.permission() + " " + commandPermission.message());
         }
 
         if (commandPermission != null && !commandSender.hasPermission(commandPermission.permission())) {

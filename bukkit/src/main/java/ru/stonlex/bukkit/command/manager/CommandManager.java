@@ -27,13 +27,13 @@ public final class CommandManager {
 
     /**
      * Регистрация комманд при помощи org.bukkit.command.CommandMap
-     *
-     *  (Код старый, переписывать его было лень, так как он и так
-     *   стабильно и правильно работает. Сделал его только чуток красивее)
+     * <p>
+     * (Код старый, переписывать его было лень, так как он и так
+     * стабильно и правильно работает. Сделал его только чуток красивее)
      *
      * @param baseCommand - команда
-     * @param command - главная команда
-     * @param aliases - ее алиасы
+     * @param command     - главная команда
+     * @param aliases     - ее алиасы
      */
     public void registerCommand(BaseCommand<?> baseCommand,
                                 String command, String... aliases) {
@@ -43,14 +43,14 @@ public final class CommandManager {
 
     /**
      * Регистрация комманд при помощи org.bukkit.command.CommandMap
+     * <p>
+     * (Код старый, переписывать его было лень, так как он и так
+     * стабильно и правильно работает. Сделал его только чуток красивее)
      *
-     *  (Код старый, переписывать его было лень, так как он и так
-     *   стабильно и правильно работает. Сделал его только чуток красивее)
-     *
-     * @param plugin - плагин, от имени котрого регистрируется команда
+     * @param plugin      - плагин, от имени котрого регистрируется команда
      * @param baseCommand - команда
-     * @param command - главная команда
-     * @param aliases - ее алиасы
+     * @param command     - главная команда
+     * @param aliases     - ее алиасы
      */
     public void registerCommand(Plugin plugin, BaseCommand<?> baseCommand,
                                 String command, String... aliases) {
@@ -71,7 +71,7 @@ public final class CommandManager {
 
                 commandMapField.setAccessible(true);
 
-                COMMAND_MAP = (SimpleCommandMap)commandMapField.get(craftServerObject);
+                COMMAND_MAP = (SimpleCommandMap) commandMapField.get(craftServerObject);
             }
 
             COMMAND_MAP.register(plugin.getName(), baseCommand);
