@@ -234,8 +234,8 @@ public class BaseScoreboard {
             return;
         }
 
-        if (scoreText.length() > 48) {
-            scoreText = scoreText.substring(0, 48);
+        if (scoreText.length() > 32) {
+            scoreText = scoreText.substring(0, 32);
         }
 
         scoreboardLine = new BaseScoreboardLine(lineIndex, scoreText);
