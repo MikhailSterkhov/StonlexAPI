@@ -23,6 +23,7 @@ import ru.stonlex.bukkit.protocollib.packet.entity.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 
 @Getter
@@ -74,9 +75,13 @@ public abstract class FakeBaseEntity implements Cloneable, FakeEntityClickable {
     }
 
     public FakeBaseEntity(@NonNull EntityType entityType, @NonNull Location location, @NonNull FakeEntityScope entityScope) {
-        this((int) ENTITY_ID_ACCESSOR.get(null), entityType, location, entityScope);
+        this(ENTITY_ID_ACCESSOR.get(null) instanceof AtomicInteger ? ((AtomicInteger) ENTITY_ID_ACCESSOR.get(null)).incrementAndGet() : ((int) ENTITY_ID_ACCESSOR.get(null)),
+                entityType, location, entityScope);
 
-        ENTITY_ID_ACCESSOR.set(null, (entityId + 1));
+        // 1.13+ using final AtomicInteger
+        if (!(ENTITY_ID_ACCESSOR.get(null) instanceof AtomicInteger)) {
+            ENTITY_ID_ACCESSOR.set(null, entityId + 1);
+        }
     }
 
     public FakeBaseEntity(@NonNull EntityType entityType, @NonNull Location location) {
@@ -92,11 +97,7 @@ public abstract class FakeBaseEntity implements Cloneable, FakeEntityClickable {
     }
 
     public synchronized void remove() {
-
-        /* ConcurrentModificationException fix */
-        Collection<Player> copiedViewerCollection = new ArrayList<>(viewerCollection);
-
-        removeViewers(copiedViewerCollection.toArray(new Player[0]));
+        removeViewers(viewerCollection.toArray(new Player[0]));
     }
 
 
