@@ -3,6 +3,8 @@ package ru.stonlex.bukkit;
 import com.comphenix.protocol.ProtocolLibrary;
 import lombok.Getter;
 import org.bukkit.plugin.java.JavaPlugin;
+import ru.stonlex.bukkit.game.BukkitGameAPI;
+import ru.stonlex.bukkit.game.type.SimpleGameAPI;
 import ru.stonlex.bukkit.inventory.listener.SimpleInventoryListener;
 import ru.stonlex.bukkit.inventory.manager.BukkitInventoryManager;
 import ru.stonlex.bukkit.listener.PlayerListener;
@@ -12,6 +14,7 @@ import ru.stonlex.bukkit.protocollib.entity.listener.FakeEntityTrackListener;
 import ru.stonlex.bukkit.scoreboard.listener.BaseScoreboardListener;
 import ru.stonlex.bukkit.tag.listener.TagListener;
 import ru.stonlex.bukkit.test.TestCommand;
+import ru.stonlex.bukkit.test.TestMegaCommand;
 import ru.stonlex.bukkit.utility.custom.listener.CustomBlockListener;
 import ru.stonlex.bukkit.utility.custom.listener.CustomItemListener;
 import ru.stonlex.bukkit.utility.custom.listener.CustomMobListener;
@@ -22,9 +25,11 @@ public final class StonlexBukkitApiPlugin extends JavaPlugin {
 
     @Override
     public void onEnable() {
+
+        // protocol lib
         registerFakeEntityClicker();
 
-        //events
+        // events
         getServer().getPluginManager().registerEvents(new SimpleInventoryListener(), this);
         getServer().getPluginManager().registerEvents(new TagListener(), this);
         getServer().getPluginManager().registerEvents(new PlayerListener(), this);
@@ -36,16 +41,20 @@ public final class StonlexBukkitApiPlugin extends JavaPlugin {
 
         getServer().getPluginManager().registerEvents(StonlexBukkitApi.HOLOGRAPHIC_MANAGER, this);
 
-        //vault
+        // vault
         VaultManager.INSTANCE.getChatProvider().registerProvider(this);
         VaultManager.INSTANCE.getEconomyProvider().registerProvider(this);
         VaultManager.INSTANCE.getPermissionProvider().registerProvider(this);
 
-        //inventories
+        // inventories
         BukkitInventoryManager.INSTANCE.startInventoryUpdaters();
 
-        //test
-        StonlexBukkitApi.registerCommand(new TestCommand(), "test");
+        // test
+        StonlexBukkitApi.registerCommand(new TestCommand());
+        StonlexBukkitApi.registerCommand(new TestMegaCommand());
+
+        // game
+        BukkitGameAPI.setInstance(new SimpleGameAPI());
     }
 
 
