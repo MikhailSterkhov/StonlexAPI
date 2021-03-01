@@ -19,7 +19,8 @@ public abstract class BaseCommand<S extends CommandSender>
         implements CommandExecutor {
 
     @Getter
-    protected final String cooldownName = ("@StonlexCommand=").concat(RandomStringUtils.randomAlphanumeric(64));
+    protected final String cooldownName
+            = ("@StonlexCommand=").concat(RandomStringUtils.randomAlphanumeric(64));
 
 
     /**
