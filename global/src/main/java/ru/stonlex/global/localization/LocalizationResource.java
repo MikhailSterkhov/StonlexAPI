@@ -1,7 +1,9 @@
 package ru.stonlex.global.localization;
 
-import com.google.common.base.Joiner;
-import lombok.*;
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
 import org.yaml.snakeyaml.introspector.PropertyUtils;
@@ -9,10 +11,14 @@ import org.yaml.snakeyaml.introspector.PropertyUtils;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.URL;
-import java.util.*;
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
-@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
+@RequiredArgsConstructor
 @Getter
 public class LocalizationResource {
 
@@ -57,7 +63,13 @@ public class LocalizationResource {
      */
     @SneakyThrows
     public synchronized LocalizationResource initResources(@NonNull String resourceUrl) {
-        return init(new URL(resourceUrl).openStream());
+        localizationMessages.clear();
+
+        try (InputStreamReader inputStream = new InputStreamReader(new URL(resourceUrl).openStream())) {
+            localizationMessages.putAll(newYaml().loadAs(inputStream, LinkedHashMap.class));
+        }
+
+        return this;
     }
 
     /**
@@ -76,7 +88,7 @@ public class LocalizationResource {
      * @param messageKey - ключ локализированного сообщения
      * @param message    - локализированное сообщение
      */
-    public synchronized LocalizationResource addMessage(@NonNull String messageKey, @NonNull String message) {
+    public synchronized LocalizationResource addMessage(@NonNull String messageKey, @NonNull Object message) {
         localizationMessages.put(messageKey, message);
         return this;
     }
@@ -88,7 +100,7 @@ public class LocalizationResource {
      * @param messageKey - ключ локализированного сообщения
      */
     public synchronized String getText(@NonNull String messageKey) {
-        return localizationMessages.get(messageKey).toString();
+        return localizationMessages.getOrDefault(messageKey, messageKey).toString();
     }
 
     /**
@@ -98,7 +110,7 @@ public class LocalizationResource {
      * @param messageKey - ключ локализированного сообщения
      */
     public synchronized List<String> getTextList(@NonNull String messageKey) {
-        return ((List<String>) localizationMessages.get(messageKey.toLowerCase()));
+        return ((List<String>) localizationMessages.getOrDefault(messageKey, Collections.singletonList(messageKey)));
     }
 
     /**

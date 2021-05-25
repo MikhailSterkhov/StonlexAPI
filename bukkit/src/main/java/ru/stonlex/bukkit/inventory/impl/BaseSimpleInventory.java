@@ -1,179 +1,146 @@
 package ru.stonlex.bukkit.inventory.impl;
 
-import gnu.trove.map.TIntObjectMap;
-import gnu.trove.map.hash.TIntObjectHashMap;
 import lombok.Getter;
 import lombok.NonNull;
-import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import ru.stonlex.bukkit.StonlexBukkitApi;
 import ru.stonlex.bukkit.inventory.BaseInventory;
-import ru.stonlex.bukkit.inventory.button.BaseInventoryButton;
-import ru.stonlex.bukkit.inventory.addon.BaseInventoryUpdater;
-import ru.stonlex.bukkit.inventory.button.action.impl.ClickableButtonAction;
-import ru.stonlex.bukkit.inventory.button.action.impl.DraggableButtonAction;
-import ru.stonlex.bukkit.inventory.button.impl.ActionInventoryButton;
-import ru.stonlex.bukkit.inventory.button.impl.DraggableInventoryButton;
-import ru.stonlex.bukkit.inventory.button.impl.SimpleInventoryButton;
-import ru.stonlex.bukkit.inventory.manager.BukkitInventoryManager;
+import ru.stonlex.bukkit.inventory.BaseInventoryItem;
+import ru.stonlex.bukkit.inventory.BaseInventoryMarkup;
+import ru.stonlex.bukkit.inventory.handler.impl.BaseInventoryClickHandler;
+import ru.stonlex.bukkit.inventory.handler.impl.BaseInventoryDisplayableHandler;
+import ru.stonlex.bukkit.inventory.handler.impl.BaseInventoryUpdateHandler;
+import ru.stonlex.bukkit.inventory.item.BaseInventoryClickItem;
+import ru.stonlex.bukkit.inventory.item.BaseInventorySelectItem;
+import ru.stonlex.bukkit.inventory.item.BaseInventoryStackItem;
+import ru.stonlex.bukkit.inventory.update.BaseInventoryUpdateTask;
 
 @Getter
 public abstract class BaseSimpleInventory implements BaseInventory {
 
-    protected String inventoryTitle;
+    protected final int inventoryRows;
+    protected final String inventoryTitle;
 
-    protected int inventoryRows;
-    protected int inventorySize;
+    protected BaseInventoryInfo inventoryInfo;
+    protected Inventory inventory;
 
-    protected final TIntObjectMap<BaseInventoryButton> buttons = new TIntObjectHashMap<>();
+    protected BaseInventoryMarkup inventoryMarkup;
 
-
-    protected BaseInventoryUpdater inventoryUpdater;
-
-    protected Inventory bukkitInventory;
+    protected final BaseInventorySettings inventorySettings = new BaseInventorySettings();
 
 
-    /**
-     * Инициализировать данные инвентаря
-     *
-     * @param inventoryTitle - название инвентаря
-     * @param inventoryRows  - количество линий в разметке инвентаря
-     */
-    public BaseSimpleInventory(String inventoryTitle, int inventoryRows) {
-        this.inventoryTitle = inventoryTitle;
+    public BaseSimpleInventory(int inventoryRows, @NonNull String inventoryTitle) {
         this.inventoryRows = inventoryRows;
+        this.inventoryTitle = inventoryTitle;
 
-        this.inventorySize = inventoryRows * 9;
-    }
+        this.inventoryInfo = new BaseInventoryInfo(this, inventoryTitle, inventoryRows * 9, inventoryRows);
 
-    @Override
-    public void create(Player player, boolean inventoryInitialize) {
-        if (inventoryInitialize) {
-            this.bukkitInventory = Bukkit.createInventory(player, inventorySize, inventoryTitle);
-        }
-
-        if (player == null) {
-            return;
-        }
-
-        clearInventory(player);
-        drawInventory(player);
-
-        buttons.forEachEntry((buttonSlot, inventoryButton) -> {
-
-            bukkitInventory.setItem(buttonSlot - 1, inventoryButton.getItemStack());
-            return true;
-        });
+        this.inventory = Bukkit.createInventory(null, inventoryInfo.getInventorySize(), inventoryTitle);
     }
 
     @Override
     public void openInventory(@NonNull Player player) {
-        player.closeInventory();
+        closeInventory(player);
+        drawInventory(player);
 
-        create(player, true);
+        for (BaseInventoryItem baseInventoryItem : inventoryInfo.getInventoryItemMap().valueCollection()) {
+            inventory.setItem(baseInventoryItem.getSlot(), baseInventoryItem.getItemStack());
+        }
 
-        BukkitInventoryManager.INSTANCE.addOpenInventoryToPlayer(player, this);
-        player.openInventory(getBukkitInventory());
+        StonlexBukkitApi.INVENTORY_MANAGER
+                .createInventory(player, this);
+
+        player.openInventory(inventory);
+    }
+
+    @Override
+    public void openInventory(@NonNull Player player, @NonNull BaseInventoryDisplayableHandler inventoryDisplayableHandler) {
+        addHandler(BaseInventoryDisplayableHandler.class, inventoryDisplayableHandler);
+
+        openInventory(player);
+    }
+
+    @Override
+    public void clearInventory() {
+        inventoryInfo.getInventoryItemMap().clear();
+        inventory.clear();
     }
 
     @Override
     public void updateInventory(@NonNull Player player) {
-        create(player, false);
+        clearInventory();
+        drawInventory(player);
 
-        //player.openInventory(getBukkitInventory());
+        for (BaseInventoryItem baseInventoryItem : inventoryInfo.getInventoryItemMap().valueCollection()) {
+            inventory.setItem(baseInventoryItem.getSlot(), baseInventoryItem.getItemStack());
+        }
     }
 
     @Override
-    public void clearInventory(@NonNull Player player) {
-        getBukkitInventory().clear();
-
-        getButtons().clear();
+    public void updateInventory(@NonNull Player player, @NonNull BaseInventoryUpdateHandler inventoryUpdateHandler) {
+        inventoryUpdateHandler.onUpdate(this, player);
+        updateInventory(player);
     }
 
     @Override
-    public void setInventoryTitle(@NonNull String inventoryTitle) {
-        Validate.isTrue(inventoryTitle.length() < 32, "inventory title length cannot be > 32");
+    public void enableAutoUpdate(@NonNull Player player, BaseInventoryUpdateHandler inventoryUpdateHandler, long secondDelay) {
+        StonlexBukkitApi.INVENTORY_MANAGER.addInventoryUpdateTask(this, new BaseInventoryUpdateTask(this, secondDelay, () -> {
 
-        this.inventoryTitle = inventoryTitle;
-
-        create(null, true);
+            if (inventoryUpdateHandler != null)
+                updateInventory(player, inventoryUpdateHandler);
+            else
+                updateInventory(player);
+        }));
     }
 
     @Override
-    public void setInventoryRows(int inventoryRows) {
-        Validate.isTrue(inventoryRows <= 6, "inventory rows length cannot be > 6");
-
-        this.inventoryRows = inventoryRows;
-        this.inventorySize = inventoryRows * 9;
-
-        create(null, true);
-    }
-
-    @Override
-    public void setInventorySize(int inventorySize) {
-        Validate.isTrue(inventoryRows % 9 == 0, "Inventory must have a size that is a multiple of 9!");
-
-        this.inventorySize = inventorySize;
-        this.inventoryRows = inventorySize / 9;
-
-        create(null, true);
-    }
-
-    @Override
-    public void setItem(int buttonSlot, @NonNull BaseInventoryButton inventoryButton) {
-        buttons.put(buttonSlot, inventoryButton);
-    }
-
-    @Override
-    public void setOriginalItem(int buttonSlot,
-                             ItemStack itemStack) {
-
-        BaseInventoryButton inventoryButton = new SimpleInventoryButton(itemStack);
-
-        setItem(buttonSlot, inventoryButton);
-    }
-
-    @Override
-    public void setClickItem(int buttonSlot,
-                        ItemStack itemStack,
-                        ClickableButtonAction buttonAction) {
-
-        BaseInventoryButton inventoryButton = new ActionInventoryButton(
-                itemStack, buttonAction
-        );
-
-        setItem(buttonSlot, inventoryButton);
-    }
-
-    @Override
-    public void setDragItem(int buttonSlot,
-                            ItemStack itemStack,
-                            DraggableButtonAction buttonAction) {
-
-        BaseInventoryButton inventoryButton = new DraggableInventoryButton(
-                itemStack, buttonAction
-        );
-
-        setItem(buttonSlot, inventoryButton);
-    }
-
-    @Override
-    public void setInventoryUpdater(long updateTicks, @NonNull BaseInventoryUpdater inventoryUpdater) {
-        //check old updater
-        if (inventoryUpdater != null) {
-            inventoryUpdater.cancelUpdater();
+    public void closeInventory(@NonNull Player player) {
+        if (player.getOpenInventory() == null) {
+            return;
         }
 
-        this.inventoryUpdater = inventoryUpdater;
+        player.closeInventory();
 
-        getInventoryUpdater().setEnable(true);
-        getInventoryUpdater().startUpdater(updateTicks);
+        StonlexBukkitApi.INVENTORY_MANAGER.removeInventory(player, this);
+        StonlexBukkitApi.INVENTORY_MANAGER.removeInventoryUpdateTask(this);
     }
 
+    @Override
+    public void addItem(@NonNull BaseInventoryItem baseInventoryItem) {
+        if (inventoryMarkup != null && !inventoryMarkup.hasInventorySlot(baseInventoryItem.getSlot())) {
+            return;
+        }
 
-    @Override public void onOpen(Player player) { }
-    @Override public void onClose(Player player) { }
+        baseInventoryItem.onDraw(this);
+
+        inventoryInfo.addItem(baseInventoryItem.getSlot() - 1, baseInventoryItem);
+    }
+
+    @Override
+    public void setItemMarkup(@NonNull BaseInventoryMarkup baseInventoryMarkup) {
+        this.inventoryMarkup = baseInventoryMarkup;
+    }
+
+    public void addItem(int itemSlot, @NonNull ItemStack itemStack) {
+        addItem(new BaseInventoryStackItem(itemSlot - 1, itemStack));
+    }
+
+    public void addItem(int itemSlot, @NonNull ItemStack itemStack, @NonNull BaseInventoryClickHandler inventoryClickHandler) {
+        addItem(new BaseInventoryClickItem(itemSlot - 1, itemStack, inventoryClickHandler));
+    }
+
+    public void addItemSelect(int itemSlot, @NonNull ItemStack itemStack, @NonNull BaseInventoryClickHandler inventoryClickHandler, boolean isEnchanting) {
+        addItem(new BaseInventorySelectItem(itemSlot - 1, itemStack, inventoryClickHandler, isEnchanting, false));
+    }
+
+    public void addItemSelect(int itemSlot, @NonNull ItemStack itemStack, @NonNull BaseInventoryClickHandler inventoryClickHandler) {
+        addItemSelect(itemSlot, itemStack, inventoryClickHandler, true);
+    }
+
+    @Override
+    public abstract void drawInventory(@NonNull Player player);
 
 }

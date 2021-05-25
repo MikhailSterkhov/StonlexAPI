@@ -1,11 +1,10 @@
 package ru.stonlex.bukkit.protocollib.packet.entity;
 
-import org.bukkit.World;
-import org.bukkit.entity.Entity;
-
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.events.PacketEvent;
+import org.bukkit.World;
+import org.bukkit.entity.Entity;
 import ru.stonlex.bukkit.protocollib.packet.AbstractPacket;
 
 public class WrapperPlayServerRelEntityMoveLook extends AbstractPacket {

@@ -2,18 +2,20 @@ package ru.stonlex.bukkit.holographic;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
-import ru.stonlex.bukkit.holographic.addon.ProtocolHolographicTracker;
-import ru.stonlex.bukkit.holographic.addon.ProtocolHolographicUpdater;
-import ru.stonlex.bukkit.holographic.line.ProtocolHolographicLine;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
+import java.util.Set;
 import java.util.function.Consumer;
 
 public interface ProtocolHolographic extends ProtocolHolographicSpawnable {
 
-    ProtocolHolographicTracker getHolographicTracker();
-
     Location getLocation();
+
+
+    Set<Player> getViewers();
+
+    Set<Player> getReceivers();
 
 
     List<ProtocolHolographicLine> getHolographicLines();
@@ -26,30 +28,32 @@ public interface ProtocolHolographic extends ProtocolHolographicSpawnable {
     void setHolographicLine(int lineIndex, ProtocolHolographicLine holographicLine);
 
 
-    void setOriginalHolographicLine(int lineIndex, String holographicLine);
+    void setTextLine(int lineIndex, String holographicLine);
 
-    void setClickHolographicLine(int lineIndex, String holographicLine, Consumer<Player> clickAction);
+    void setClickLine(int lineIndex, String holographicLine, Consumer<Player> clickAction);
 
-    void setHeadHolographicLine(int lineIndex, String headTexture, boolean small);
+    void setSkullLine(int lineIndex, String headTexture, boolean small);
 
-    void setEmptyHolographicLine(int lineIndex);
+    void setDropLine(int lineIndex, ItemStack itemStack);
+
+    void setEmptyLine(int lineIndex);
 
 
     void addHolographicLine(ProtocolHolographicLine holographicLine);
 
-    void addOriginalHolographicLine(String holographicLine);
+    void addTextLine(String holographicLine);
 
-    void addClickHolographicLine(String holographicLine, Consumer<Player> clickAction);
+    void addClickLine(String holographicLine, Consumer<Player> clickAction);
 
-    void addHeadHolographicLine(String headTexture, boolean small);
+    void addSkullLine(String headTexture, boolean small);
 
-    void addEmptyHolographicLine();
+    void addDropLine(ItemStack itemStack);
+
+    void addEmptyLine();
 
 
     void teleport(Location location);
 
-    void setHolographicTracker(ProtocolHolographicTracker holographicTracker);
 
-
-    void setHolographicUpdater(long updateTicks, ProtocolHolographicUpdater holographicUpdater);
+    void setUpdater(long updateTicks, ProtocolHolographicUpdater holographicUpdater);
 }

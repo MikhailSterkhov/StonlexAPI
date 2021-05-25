@@ -8,7 +8,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import ru.stonlex.bukkit.protocollib.entity.animation.FakeEntityAnimation;
 import ru.stonlex.bukkit.protocollib.packet.AbstractPacket;
-import ru.stonlex.bukkit.protocollib.packet.ProtocolPacketUtil;
+import ru.stonlex.bukkit.protocollib.packet.ProtocolPacketFactory;
 
 @Getter
 public abstract class FakeBaseEntityLiving
@@ -36,7 +36,7 @@ public abstract class FakeBaseEntityLiving
 
     @Override
     public synchronized void playAnimation(@NonNull FakeEntityAnimation fakeEntityAnimation, @NonNull Player player) {
-        ProtocolPacketUtil.createAnimationPacket(entityId, fakeEntityAnimation.ordinal())
+        ProtocolPacketFactory.createAnimationPacket(entityId, fakeEntityAnimation.ordinal())
                 .sendPacket(player);
     }
 

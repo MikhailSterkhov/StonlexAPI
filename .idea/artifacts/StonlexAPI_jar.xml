@@ -2,14 +2,16 @@
   <artifact type="jar" name="StonlexAPI:jar">
     <output-path>$USER_HOME$/OneDrive/Рабочий стол/Разработки/говно для переписи</output-path>
     <root id="archive" name="StonlexAPI.jar">
-      <element id="module-output" name="StonlexAPI" />
-      <element id="module-output" name="bungee" />
       <element id="module-output" name="example" />
-      <element id="module-output" name="bukkit" />
       <element id="module-output" name="global" />
+      <element id="module-output" name="bungee" />
+      <element id="module-output" name="bukkit" />
       <element id="extracted-dir" path="$MAVEN_REPOSITORY$/javax/mail/mail/1.5.0-b01/mail-1.5.0-b01.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/apache/commons/commons-lang3/3.10/commons-lang3-3.10.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/net/sf/trove4j/trove4j/3.0.3/trove4j-3.0.3.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/trove/trove/1.0.2/trove-1.0.2.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$MAVEN_REPOSITORY$/javax/activation/activation/1.1/activation-1.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/google/code/findbugs/jsr305/3.0.2/jsr305-3.0.2.jar" path-in-jar="/" />
     </root>
   </artifact>
 </component>

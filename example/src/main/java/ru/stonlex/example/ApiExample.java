@@ -4,38 +4,21 @@ import jline.internal.TestAccessible;
 import lombok.NonNull;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.material.MaterialData;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import ru.stonlex.bukkit.StonlexBukkitApi;
-import ru.stonlex.bukkit.gaming.GamingMode;
-import ru.stonlex.bukkit.gaming.team.GamingTeam;
 import ru.stonlex.bukkit.holographic.ProtocolHolographic;
 import ru.stonlex.bukkit.protocollib.entity.impl.FakePlayer;
 import ru.stonlex.bukkit.scoreboard.BaseScoreboardBuilder;
 import ru.stonlex.bukkit.scoreboard.BaseScoreboardScope;
 import ru.stonlex.bukkit.scoreboard.animation.ScoreboardDisplayFlickAnimation;
-import ru.stonlex.bukkit.utility.custom.CustomBlock;
-import ru.stonlex.bukkit.utility.custom.CustomItem;
-import ru.stonlex.bukkit.utility.custom.CustomMob;
-import ru.stonlex.bukkit.utility.custom.CustomRecipe;
 import ru.stonlex.bukkit.utility.localization.LocalizedPlayer;
 import ru.stonlex.bukkit.utility.location.LocationUtil;
 import ru.stonlex.example.command.ExampleConsoleCommand;
 import ru.stonlex.example.command.ExamplePlayerCommand;
 import ru.stonlex.example.configuration.TestConfiguration;
-import ru.stonlex.example.custom.ExampleCustomBlock;
-import ru.stonlex.example.custom.ExampleCustomEntity;
-import ru.stonlex.example.custom.ExampleCustomItem;
-import ru.stonlex.example.custom.ExampleCustomRecipe;
-import ru.stonlex.example.game.ExampleGameCountdown;
-import ru.stonlex.example.game.ExampleGameItem;
-import ru.stonlex.example.game.ExampleGameProcess;
 import ru.stonlex.example.localization.ExampleLang;
 import ru.stonlex.global.mail.MailSender;
-import ru.stonlex.global.mysql.MysqlConnection;
 import ru.stonlex.global.utility.MailUtil;
 
 import java.util.function.Consumer;
@@ -44,7 +27,7 @@ public final class ApiExample {
 
     @TestAccessible
     public void exampleLocalization(@NonNull Player player) {
-        LocalizedPlayer localizedPlayer = LocalizedPlayer.create(player, ExampleLang.EN_LANGUAGE.getLocalizationResource());
+        LocalizedPlayer localizedPlayer = LocalizedPlayer.create(player, ExampleLang.EN_LANGUAGE.getResource());
 
         // Simple localized title to player
         localizedPlayer.sendTitle("TEST_LOCALIZED_TITLE", "TEST_LOCALIZED_SUBTITLE");
@@ -60,56 +43,6 @@ public final class ApiExample {
                 .replace("%player_gamemode%", player.getGameMode())
 
                 .toText());
-    }
-
-    @TestAccessible
-    public void exampleCustom(@NonNull Plugin plugin, @NonNull Player player) {
-
-        CustomBlock customBlock = new ExampleCustomBlock();
-        customBlock.placeBlock(player.getLocation()); // можно поставить данный блок
-        customBlock.drop(player.getLocation()); //  можно создать дроп этого блока на указанной локации
-        customBlock.breakBlock(player.getLocation()); // а можно сломать его, если он там стоит
-
-        CustomMob customMob = new ExampleCustomEntity();
-        customMob.register(); // после регистра он начинает рандомно спавнить ентити по карте с указанным шансом
-        customMob.spawnEntity(player.getLocation()); // или можно просто сразу заспавнить энтити))
-
-        CustomItem customItem = new ExampleCustomItem();
-        customItem.register(); // регистрация предмета обязательна
-        customItem.give(player); // после чего выдаем его игроку
-
-        CustomRecipe customRecipe = new ExampleCustomRecipe();
-        customRecipe.register(plugin); // с рецептом особо ничего не сделаешь, он просто есть, и просто крафтится
-    }
-
-    @TestAccessible
-    protected void exampleSkyWars(@NonNull MysqlConnection mysqlConnection) {
-        ExampleGameProcess exampleGameProcess = new ExampleGameProcess(GamingMode.SOLO, mysqlConnection);
-
-        StonlexBukkitApi.newGamingBuilder()
-                .name("SkyWars")
-                .lobby("SWLobby-1")
-
-                .arena("Ballons")
-                .world("Ballons")
-
-                .process(exampleGameProcess)
-                .countdown(new ExampleGameCountdown(exampleGameProcess, 2))
-
-                .itemRegistry()
-                .item(new ExampleGameItem(100, "Example1", new MaterialData(Material.STONE)))
-                .item(new ExampleGameItem(150, "Example2", new MaterialData(Material.EGG)))
-                .item(new ExampleGameItem(200, "Example3", new MaterialData(Material.WOOL, (byte) 14)))
-                .register()
-
-                .teamRegistry()
-                .team(GamingTeam.DEFAULT_RED_TEAM)
-                .team(GamingTeam.DEFAULT_BLUE_TEAM)
-                .team(GamingTeam.DEFAULT_YELLOW_TEAM)
-                .team(GamingTeam.DEFAULT_WHITE_TEAM)
-                .register()
-
-                .create(null);
     }
 
     @TestAccessible
@@ -151,6 +84,7 @@ public final class ApiExample {
 
     @TestAccessible
     protected void exampleCommand() {
+
         // Если в классе команды наследуется конструктор из
         //  StonlexCommand, то команды регистрируются автоматически, вызовом
         //  самого конструктора.
@@ -163,7 +97,7 @@ public final class ApiExample {
 
     @TestAccessible
     protected void exampleHolographic(Player receiver, Location location) {
-        ProtocolHolographic protocolHolographic = StonlexBukkitApi.createQuickHolographic(location);
+        ProtocolHolographic protocolHolographic = StonlexBukkitApi.createSimpleHolographic(location);
 
         // Создание кликабельных голограмм
         Consumer<Player> playerConsumer = player -> { //player = игрок, который кликнул
@@ -173,10 +107,10 @@ public final class ApiExample {
         };
 
         // Добавление строк в голограмму
-        protocolHolographic.addClickHolographicLine(ChatColor.YELLOW + "Разработчик данной API", playerConsumer);
-        protocolHolographic.addClickHolographicLine(ChatColor.GREEN + "https://vk.com/itzstonlex", playerConsumer);
+        protocolHolographic.addClickLine(ChatColor.YELLOW + "Разработчик данной API", playerConsumer);
+        protocolHolographic.addClickLine(ChatColor.GREEN + "https://vk.com/itzstonlex", playerConsumer);
 
-        protocolHolographic.showToPlayer(receiver); //заспавнить только для одного игрока
+        protocolHolographic.addReceivers(receiver); //заспавнить только для одного игрока
     }
 
     @TestAccessible

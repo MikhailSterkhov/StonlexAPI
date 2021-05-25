@@ -1,10 +1,10 @@
 package ru.stonlex.bukkit.protocollib.entity.impl;
 
-import com.comphenix.protocol.utility.MinecraftProtocolVersion;
 import com.comphenix.protocol.wrappers.*;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.EntityType;
@@ -26,35 +26,33 @@ import java.util.UUID;
 public class FakePlayer extends FakeBaseEntityLiving {
 
     private final UUID uuid;
-    private MojangSkin mojangSkin;
-
     private final String name;
 
+    private MojangSkin mojangSkin;
     private WrappedGameProfile wrappedGameProfile;
 
 
-    public FakePlayer(String skin, Location location) {
+    public FakePlayer(@NonNull MojangSkin skin, @NonNull Location location) {
         super(EntityType.PLAYER, location);
 
         this.name = String.format("§8NPC [%s]", NumberUtil.randomInt(0, 999_999));
         this.uuid = UUID.randomUUID();
 
-        this.mojangSkin = MojangUtil.getMojangSkin(skin);
+        this.mojangSkin = skin;
 
         updateSkinPart(PlayerSkinPart.TOTAL);
     }
 
+    public FakePlayer(@NonNull String skin, @NonNull Location location) {
+        this(MojangUtil.getMojangSkin(skin), location);
+    }
+
+    public FakePlayer(@NonNull Location location) {
+        this("Steve", location);
+    }
+
     public synchronized void updateSkinPart(byte skinParts) {
-        int currentVersion = MinecraftProtocolVersion.getCurrentVersion();
-
-        int dataWatcherIndex1_8 = 10;
-        int dataWatcherIndex1_12 = 13;
-        int dataWatcherIndex1_15 = 16;
-
-        int dataWatcherIndex = currentVersion >= 393 ? dataWatcherIndex1_15 :
-                currentVersion <= 47 ? dataWatcherIndex1_8 : dataWatcherIndex1_12;
-
-        broadcastDataWatcherObject(dataWatcherIndex, BYTE_SERIALIZER, skinParts);
+        broadcastDataWatcherObject(13, BYTE_SERIALIZER, skinParts);
     }
 
     public synchronized void updateSkinPart(@NonNull PlayerSkinPart... playerSkinParts) {
@@ -67,8 +65,44 @@ public class FakePlayer extends FakeBaseEntityLiving {
         updateSkinPart(skinParts);
     }
 
+    public synchronized void setSkin(@NonNull Player player, @NonNull MojangSkin mojangSkin) {
+        this.mojangSkin = mojangSkin;
+        sendPlayerInfoPacket(EnumWrappers.PlayerInfoAction.ADD_PLAYER, player);
+
+        new BukkitRunnable() {
+
+            @Override
+            public void run() {
+                sendPlayerInfoPacket(EnumWrappers.PlayerInfoAction.REMOVE_PLAYER, player);
+            }
+
+        }.runTaskLater(StonlexBukkitApiPlugin.getProvidingPlugin(StonlexBukkitApiPlugin.class), 30);
+    }
+
+    public synchronized void setSkin(@NonNull MojangSkin mojangSkin) {
+        this.mojangSkin = mojangSkin;
+
+        for (Player receiver : Bukkit.getOnlinePlayers())
+            sendPlayerInfoPacket(EnumWrappers.PlayerInfoAction.ADD_PLAYER, receiver);
+
+        new BukkitRunnable() {
+
+            @Override
+            public void run() {
+
+                for (Player receiver : Bukkit.getOnlinePlayers())
+                    sendPlayerInfoPacket(EnumWrappers.PlayerInfoAction.REMOVE_PLAYER, receiver);
+            }
+
+        }.runTaskLater(StonlexBukkitApiPlugin.getProvidingPlugin(StonlexBukkitApiPlugin.class), 30);
+    }
+
+    public synchronized void setSkin(@NonNull String skinName) {
+        setSkin(MojangUtil.getMojangSkin(skinName));
+    }
+
     @Override
-    protected synchronized void sendSpawnPackets(Player player) {
+    public synchronized void sendSpawnPackets(Player player) {
         String teamName = getTeamName();
 
         sendPlayerInfoPacket(EnumWrappers.PlayerInfoAction.ADD_PLAYER, player);
@@ -99,6 +133,13 @@ public class FakePlayer extends FakeBaseEntityLiving {
             }
 
         }.runTaskLater(StonlexBukkitApiPlugin.getProvidingPlugin(StonlexBukkitApiPlugin.class), 30);
+    }
+
+    @Override
+    public synchronized void sendDestroyPackets(@NonNull Player player) {
+        super.sendDestroyPackets(player);
+
+        sendTeamPacket(getTeamName(), player, WrapperPlayServerScoreboardTeam.Mode.TEAM_REMOVED);
     }
 
     private synchronized void sendPlayerInfoPacket(EnumWrappers.PlayerInfoAction action, Player player) {
@@ -133,6 +174,7 @@ public class FakePlayer extends FakeBaseEntityLiving {
             scoreboardTeam.setPrefix(getGlowingColor() == null ? "§8" : getGlowingColor().toString());
             scoreboardTeam.setPackOptionData(0);
             scoreboardTeam.setColor(0);
+
         } else {
             scoreboardTeam.setPlayers(Collections.singletonList(name));
         }

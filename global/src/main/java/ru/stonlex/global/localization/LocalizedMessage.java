@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,18 +19,35 @@ public class LocalizedMessage {
     private final String messageKey;
     private final LocalizationResource localizationResource;
 
+    private Object handle;
+
 
     public synchronized String toText() {
+        if (handle != null)
+            return handle.toString();
+
         return localizationResource.getText(messageKey);
     }
 
     public synchronized List<String> toList() {
+        if (handle != null)
+            return ((List<String>) handle);
+
         return localizationResource.getTextList(messageKey);
     }
 
 
     public synchronized LocalizedMessage replace(@NonNull String placeholder, @NonNull Object value) {
-        Object handle = localizationResource.getLocalizationMessages().get(messageKey);
+        if (handle == null) {
+
+            if (localizationResource.isText(messageKey)) {
+                handle = new String(toText().getBytes());
+            }
+
+            if (localizationResource.isList(messageKey)) {
+                handle = new ArrayList<>(toList());
+            }
+        }
 
         if (handle instanceof String) {
             handle = toText().replace(placeholder, value.toString());
@@ -39,7 +57,7 @@ public class LocalizedMessage {
             handle = toList().stream().map(line -> line.replace(placeholder, value.toString())).collect(Collectors.toList());
         }
 
-        localizationResource.addMessage(messageKey, handle.toString());
+        localizationResource.addMessage(messageKey, handle);
         return this;
     }
 

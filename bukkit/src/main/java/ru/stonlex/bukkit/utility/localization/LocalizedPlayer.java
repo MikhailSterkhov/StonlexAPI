@@ -1,6 +1,7 @@
 package ru.stonlex.bukkit.utility.localization;
 
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.Bukkit;
@@ -10,6 +11,7 @@ import ru.stonlex.global.localization.LocalizationResource;
 import ru.stonlex.global.utility.query.ResponseHandler;
 
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
+@Getter
 public class LocalizedPlayer {
 
     public static LocalizedPlayer create(@NonNull String playerName, @NonNull LocalizationResource localizationResource) {

@@ -4,6 +4,7 @@ import lombok.experimental.UtilityClass;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.block.BlockFace;
 
 import java.util.Objects;
 
@@ -45,6 +46,21 @@ public class LocationUtil {
      */
     public boolean isDistance(Location location1, Location location2, double distance) {
         return location1.distance(location2) <= distance;
+    }
+
+    public final BlockFace[] axis = { BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH, BlockFace.WEST };
+    public final BlockFace[] radial = { BlockFace.NORTH, BlockFace.NORTH_EAST, BlockFace.EAST, BlockFace.SOUTH_EAST, BlockFace.SOUTH, BlockFace.SOUTH_WEST, BlockFace.WEST, BlockFace.NORTH_WEST };
+
+    public BlockFace yawToFace(float yaw) {
+        return yawToFace(yaw, true);
+    }
+
+    public BlockFace yawToFace(float yaw, boolean useSubCardinalDirections) {
+        if (useSubCardinalDirections) {
+            return radial[Math.round(yaw / 45f) & 0x7];
+        } else {
+            return axis[Math.round(yaw / 90f) & 0x3];
+        }
     }
 
 }

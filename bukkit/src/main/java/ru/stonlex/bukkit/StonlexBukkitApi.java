@@ -9,16 +9,13 @@ import org.bukkit.material.MaterialData;
 import org.bukkit.plugin.Plugin;
 import ru.stonlex.bukkit.command.BaseCommand;
 import ru.stonlex.bukkit.command.manager.CommandManager;
-import ru.stonlex.bukkit.gaming.GamingProcessBuilder;
-import ru.stonlex.bukkit.gaming.player.GamingPlayer;
 import ru.stonlex.bukkit.holographic.ProtocolHolographic;
-import ru.stonlex.bukkit.holographic.impl.QuickHolographic;
 import ru.stonlex.bukkit.holographic.impl.SimpleHolographic;
 import ru.stonlex.bukkit.holographic.manager.ProtocolHolographicManager;
 import ru.stonlex.bukkit.inventory.BaseInventory;
+import ru.stonlex.bukkit.inventory.BaseInventoryManager;
 import ru.stonlex.bukkit.inventory.impl.BasePaginatedInventory;
 import ru.stonlex.bukkit.inventory.impl.BaseSimpleInventory;
-import ru.stonlex.bukkit.inventory.manager.BukkitInventoryManager;
 import ru.stonlex.bukkit.scoreboard.BaseScoreboardBuilder;
 import ru.stonlex.bukkit.utility.ItemUtil;
 import ru.stonlex.bukkit.utility.location.CuboidRegion;
@@ -32,9 +29,13 @@ import java.util.function.BiConsumer;
 public interface StonlexBukkitApi {
 
     CommandManager COMMAND_MANAGER                  = (CommandManager.INSTANCE);
+
     VaultManager VAULT_MANAGER                      = (VaultManager.INSTANCE);
+
     ProtocolHolographicManager HOLOGRAPHIC_MANAGER  = (ProtocolHolographicManager.INSTANCE);
-    BukkitInventoryManager INVENTORY_MANAGER        = (BukkitInventoryManager.INSTANCE);
+
+    BaseInventoryManager INVENTORY_MANAGER          = new BaseInventoryManager();
+
 
     Map<String, Integer> SERVERS_ONLINE_MAP         = new HashMap<>();
 
@@ -69,15 +70,6 @@ public interface StonlexBukkitApi {
         return new SimpleHolographic(location);
     }
 
-    /**
-     * Создать временную голограмму
-     *
-     * @param location - начальная локация голограммы
-     */
-    static ProtocolHolographic createQuickHolographic(@NonNull Location location) {
-        return new QuickHolographic(location);
-    }
-
 
     /**
      * Получить игрока с данными библиотеки Vault
@@ -95,25 +87,6 @@ public interface StonlexBukkitApi {
      */
     static VaultPlayer getVaultPlayer(@NonNull Player player) {
         return VAULT_MANAGER.getVaultPlayer(player);
-    }
-
-
-    /**
-     * Получить игрока с данными игровой библиотеки
-     *
-     * @param playerName - ник игрока
-     */
-    static GamingPlayer getGamingPlayer(@NonNull String playerName) {
-        return GamingPlayer.of(playerName);
-    }
-
-    /**
-     * Получить игрока с данными игровой библиотеки
-     *
-     * @param player - онлайн игрок
-     */
-    static GamingPlayer getGamingPlayer(@NonNull Player player) {
-        return GamingPlayer.of(player);
     }
 
 
@@ -167,7 +140,7 @@ public interface StonlexBukkitApi {
     static BaseInventory createSimpleInventory(int inventoryRows, @NonNull String inventoryTitle,
                                                 @NonNull BiConsumer<Player, BaseInventory> inventoryConsumer) {
 
-        return new BaseSimpleInventory(inventoryTitle, inventoryRows) {
+        return new BaseSimpleInventory(inventoryRows, inventoryTitle) {
 
             @Override
             public void drawInventory(Player player) {
@@ -186,7 +159,7 @@ public interface StonlexBukkitApi {
     static BasePaginatedInventory createPaginatedInventory(int inventoryRows, @NonNull String inventoryTitle,
                                                             @NonNull BiConsumer<Player, BasePaginatedInventory> inventoryConsumer) {
 
-        return new BasePaginatedInventory(inventoryTitle, inventoryRows) {
+        return new BasePaginatedInventory(inventoryRows, inventoryTitle) {
 
             @Override
             public void drawInventory(Player player) {
@@ -260,13 +233,4 @@ public interface StonlexBukkitApi {
         return BaseScoreboardBuilder.newScoreboardBuilder(objectiveName);
     }
 
-    /**
-     * Инициализация игрового процесса по Builder паттерну,
-     * Регистрация листенеров,
-     * Создание всех обработчиков действий, команд, кешей и предметов,
-     * Подключение к базам данным и т. д.
-     */
-    static GamingProcessBuilder newGamingBuilder() {
-        return GamingProcessBuilder.newBuilder();
-    }
 }

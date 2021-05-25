@@ -62,12 +62,11 @@ public abstract class BaseCommand<S extends CommandSender>
     @Override
     public boolean execute(CommandSender commandSender, String label, String[] args) {
         //инициализация аннотаций команды
-        CommandCooldown commandCooldown = getClass().getDeclaredAnnotation(CommandCooldown.class);
+        CommandCooldown commandCooldown     = getClass().getDeclaredAnnotation(CommandCooldown.class);
         CommandPermission commandPermission = getClass().getDeclaredAnnotation(CommandPermission.class);
 
         //задержка к выполнению команды
         if (commandCooldown != null) {
-
             switch (commandCooldown.receiverModifier()) {
 
                 case PUBLIC: {

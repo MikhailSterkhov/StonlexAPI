@@ -6,14 +6,15 @@ import lombok.Setter;
 import org.bukkit.scheduler.BukkitRunnable;
 import ru.stonlex.bukkit.StonlexBukkitApiPlugin;
 import ru.stonlex.bukkit.holographic.ProtocolHolographic;
-import ru.stonlex.bukkit.holographic.addon.ProtocolHolographicUpdater;
+import ru.stonlex.bukkit.holographic.ProtocolHolographicUpdater;
 
 import java.util.function.Consumer;
 
 @Getter
 @Setter
 @RequiredArgsConstructor
-public abstract class SimpleHolographicUpdater extends BukkitRunnable implements ProtocolHolographicUpdater, Consumer<ProtocolHolographic> {
+public abstract class SimpleHolographicUpdater extends BukkitRunnable
+        implements ProtocolHolographicUpdater, Consumer<ProtocolHolographic> {
 
     private final ProtocolHolographic holographic;
 
@@ -23,18 +24,21 @@ public abstract class SimpleHolographicUpdater extends BukkitRunnable implements
 
     @Override
     public void run() {
-        this.accept(holographic);
+        if (holographic.getViewers().isEmpty()) {
+            return;
+        }
+
+        accept(holographic);
     }
 
     @Override
     public void startUpdater(long periodTick) {
         this.cancelled = !cancelled;
 
-
-        StonlexBukkitApiPlugin stonlexBukkitApiPlugin = StonlexBukkitApiPlugin.getPlugin(StonlexBukkitApiPlugin.class);
+        StonlexBukkitApiPlugin plugin = StonlexBukkitApiPlugin.getPlugin(StonlexBukkitApiPlugin.class);
 
         if (isCancelled()) {
-            runTaskTimer(stonlexBukkitApiPlugin, 0, periodTick);
+            runTaskTimerAsynchronously(plugin, 0, periodTick);
         }
     }
 

@@ -1,28 +1,27 @@
 package ru.stonlex.bukkit.holographic;
 
+import lombok.NonNull;
 import org.bukkit.entity.Player;
 
 public interface ProtocolHolographicSpawnable {
 
-    /**
-     * Проверить, видит ли игрок голограмму
-     *
-     * @param player - игрок
-     */
-    boolean isSpawnedToPlayer(Player player);
+    boolean hasReceiver(@NonNull Player player);
 
-    /**
-     * Показать голограмму игроку
-     *
-     * @param player - игрок
-     */
-    void showToPlayer(Player player);
+    void addReceivers(@NonNull Player... receivers);
 
-    /**
-     * Скрыть голограмму от игрока
-     *
-     * @param player - игрок
-     */
-    void hideToPlayer(Player player);
+    void removeReceivers(@NonNull Player... receivers);
 
+
+    boolean hasViewer(@NonNull Player player);
+
+    void addViewers(@NonNull Player... viewers);
+
+    void removeViewers(@NonNull Player... viewers);
+
+
+    void spawn();
+
+    void remove();
+
+    void update();
 }
