@@ -2,7 +2,7 @@
 
 ***
 ## Обратная связь
-* **[Discord chat](https://discord.gg/GmT9pUy8af)**    
+* **[Discord chat](https://discord.gg/GmT9pUy8af)**
 * **[ВКонтакте](https://vk.com/itzstonlex)**
 
 ***
@@ -23,7 +23,7 @@
 
 Для начала создадим обычную команду при помощи `BaseCommand`, использовать которую может **ТОЛЬКО** игрок:
 ```java
-public class ExamplePlayerCommand 
+public class ExamplePlayerCommand
         extends BaseCommand<Player> {
 
     public ExamplePlayerCommand() {
@@ -88,9 +88,9 @@ StonlexBukkitApi.registerCommand(new ExamplePlayerCommand());
 ### `Конфигурации:`
 Для начала попробуем создать обычную конфигурацию, которая ничего не загружает и не воспроизводит на основе `ru.stonlex.bukkit.configuration.BaseConfiguration`:
 ```java
-public class TestConfiguration 
+public class TestConfiguration
         extends BaseConfiguration {
-    
+
     public TestConfiguration(@NonNull Plugin plugin) {
         super(plugin, "messages.yml");
     }
@@ -105,7 +105,7 @@ public class TestConfiguration
 
 Теперь можно ее доделать так, чтобы это было похоже на конфигурацию, которая хранит в себе сообщения для локализации Вашего плагина:
 ```java
-public class TestConfiguration 
+public class TestConfiguration
         extends BaseConfiguration {
 
     protected final Map<String, String> messagesCacheMap = new HashMap<>();
@@ -129,9 +129,9 @@ public class TestConfiguration
 ```java
 @Override
 public void onEnable() {
-    TestConfiguration configuration = new TestConfiguration(this);
-    configuration.createIfNotExists();
-}
+        TestConfiguration configuration = new TestConfiguration(this);
+        configuration.createIfNotExists();
+        }
 ```
 В данном куске кода мы создали (или скопировали из ресурсов плагина) конфигурацию, инициализировали в ней данные, и можем спокойно пользоваться!
 ***
@@ -143,7 +143,7 @@ public void onEnable() {
 
 Для начала попробуем понять, как вообще создаются голограммы:
 ```java
-ProtocolHolographic protocolHolographic 
+ProtocolHolographic protocolHolographic
         = StonlexBukkitApi.createSimpleHolographic(location);
 ```
 
@@ -157,13 +157,13 @@ protocolHolographic.addTextLine(ChatColor.AQUA + "Этот клубничный 
 // Создание кликабельных голограмм
 Consumer<Player> playerConsumer = player -> { //player = игрок, который кликнул
 
-    player.sendMessage(ChatColor.GOLD + "Клик по голограмме прошел успешно!");
-    player.sendMessage(ChatColor.GOLD + "Локация: " + LocationUtil.locationToString(protocolHolographic.getLocation()));
-};
+        player.sendMessage(ChatColor.GOLD + "Клик по голограмме прошел успешно!");
+        player.sendMessage(ChatColor.GOLD + "Локация: " + LocationUtil.locationToString(protocolHolographic.getLocation()));
+        };
 
 // Добавление строк в голограмму
-protocolHolographic.addClickLine(ChatColor.YELLOW + "Разработчик данной API", playerConsumer);
-protocolHolographic.addClickLine(ChatColor.GREEN + "https://vk.com/itzstonlex", playerConsumer);
+        protocolHolographic.addClickLine(ChatColor.YELLOW + "Разработчик данной API", playerConsumer);
+        protocolHolographic.addClickLine(ChatColor.GREEN + "https://vk.com/itzstonlex", playerConsumer);
 ```
 
 Строчки с предметами:
@@ -179,7 +179,7 @@ protocolHolographic.addEmptyLine();
 И даже строчки с головами по нику или текстуре:
 ```java
 protocolHolographic.addSkullLine("ItzStonlex", false);
-protocolHolographic.addSkullLine("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNDUyOGVkNDU4MDI0MDBmNDY1YjVjNGUzYTZiN2E5ZjJiNmE1YjNkNDc4YjZmZDg0OTI1Y2M1ZDk4ODM5MWM3ZCJ9fX0=", false);
+        protocolHolographic.addSkullLine("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNDUyOGVkNDU4MDI0MDBmNDY1YjVjNGUzYTZiN2E5ZjJiNmE1YjNkNDc4YjZmZDg0OTI1Y2M1ZDk4ODM5MWM3ZCJ9fX0=", false);
 ```
 
 Так как голограмма является пакетной, то ей можно манипулировать как угодно, пример тому функционал спавна и удаления этих голограм, взаимодействуя с игроками сервера:
@@ -228,7 +228,7 @@ public class ExampleSimpleGUI
 **Важно знать**, что подсчет слотов в данной API начинается **не с 0, а с 1**
 
 ```java
-public class ExampleSimpleGUI 
+public class ExampleSimpleGUI
         extends BaseSimpleInventory {
 
     public ExampleSimpleGUI() {
@@ -238,19 +238,19 @@ public class ExampleSimpleGUI
     @Override
     public void drawInventory(Player player) {
         addItem(5, ItemUtil.newBuilder(Material.STONE)
-                .setName("§eБаклажан")
-                .build(), 
-                
+                        .setName("§eБаклажан")
+                        .build(),
+
                 (player1, event) -> {
-            
+
                     player.sendMessage("§eКлик прошел, закрываю инвентарь");
                     player.closeInventory();
                 });
 
         addItem(6, ItemUtil.newBuilder(Material.CHEST)
-                .setName("§aОбновить инвентарь")
-                .build(), 
-                
+                        .setName("§aОбновить инвентарь")
+                        .build(),
+
                 (player1, event) -> updateInventory(player));
     }
 
@@ -265,18 +265,18 @@ public class ExampleSimpleGUI
         // Обработчик открытия/закрытия инвентаря
         addHandler(BaseInventoryDisplayableHandler.class, new BaseInventoryDisplayableHandler() {
 
-            @Override
-            public void onOpen(@NonNull Player player) {
-                player.sendMessage("§aТы открыл Example-инвентарь");
-            }
+@Override
+public void onOpen(@NonNull Player player) {
+        player.sendMessage("§aТы открыл Example-инвентарь");
+        }
 
-            @Override
-            public void onClose(@NonNull Player player) {
-                player.sendMessage("§cТы закрыл Example-инвентарь");
-            }
+@Override
+public void onClose(@NonNull Player player) {
+        player.sendMessage("§cТы закрыл Example-инвентарь");
+        }
         });
-    }
-}
+        }
+        }
 ```
 
 На данном моменте можно было бы и закончить список функционала инвентарей, однако, этим они не ограничиваются.
@@ -286,7 +286,7 @@ public class ExampleSimpleGUI
 Для начала попробуем создать обычный страничный инвентарь, наследуя `ru.stonlex.bukkit.inventory.impl.BasePaginatedInventory`:
 
 ```java
-public class ExamplePaginatedGUI 
+public class ExamplePaginatedGUI
         extends BasePaginatedInventory {
 
     public ExamplePaginatedGUI() {
@@ -303,7 +303,7 @@ public class ExamplePaginatedGUI
 
 Затем выставим разметку страничных предметов в виде квадрата (одного из шаблонных разметок):
 ```java
-public class ExamplePaginatedGUI 
+public class ExamplePaginatedGUI
         extends BasePaginatedInventory {
 
     public ExamplePaginatedGUI() {
@@ -313,7 +313,7 @@ public class ExamplePaginatedGUI
     @Override
     public void drawInventory(Player player) {
         setItemMarkup(new BaseInventoryBlockMarkup(inventoryRows));
-        
+
         // ...
     }
 
@@ -324,7 +324,7 @@ public class ExamplePaginatedGUI
 
 **P.S:** API автоматически рассортирует их по необходимым слотам и страницам
 ```java
-public class ExamplePaginatedGUI 
+public class ExamplePaginatedGUI
         extends BasePaginatedInventory {
 
     public ExamplePaginatedGUI() {
@@ -340,7 +340,7 @@ public class ExamplePaginatedGUI
         addItemToMarkup(new ItemStack(Material.BANNER), (player1, event) -> player.closeInventory());
         addItemToMarkup(new ItemStack(Material.BARRIER), (player1, event) -> player.closeInventory());
         addItemToMarkup(new ItemStack(Material.CACTUS), (player1, event) -> player.closeInventory());
-        
+
         //...
     }
 
@@ -351,7 +351,7 @@ public class ExamplePaginatedGUI
 
 В моем случае выставлен предмет без клика, который показывает текущую страницу, на которой находится игрок:
 ```java
-public class ExamplePaginatedGUI 
+public class ExamplePaginatedGUI
         extends BasePaginatedInventory {
 
     public ExamplePaginatedGUI() {
@@ -384,17 +384,17 @@ public class ExamplePaginatedGUI
         // Обработчик открытия/закрытия инвентаря
         addHandler(BaseInventoryDisplayableHandler.class, new BaseInventoryDisplayableHandler() {
 
-            @Override
-            public void onOpen(@NonNull Player player) {
-                player.sendMessage("§aТы открыл страничный Example-инвентарь");
-            }
+@Override
+public void onOpen(@NonNull Player player) {
+        player.sendMessage("§aТы открыл страничный Example-инвентарь");
+        }
 
-            @Override
-            public void onClose(@NonNull Player player) {
-                player.sendMessage("§cТы закрыл страничный Example-инвентарь");
-            }
+@Override
+public void onClose(@NonNull Player player) {
+        player.sendMessage("§cТы закрыл страничный Example-инвентарь");
+        }
         });
-    }
+        }
 ```
 
 ***
@@ -412,29 +412,29 @@ public class ExamplePaginatedGUI
 
 Возьмем в пример того же `ru.stonlex.bukkit.protocollib.entity.impl.FakePlayer`, сейчас на простом примере попробуем создать обычного NPC, который будет выводить сообщение при клике, а также воспроизводить анимацию получения урона при ударе:
 ```java
-FakePlayer fakePlayer 
+FakePlayer fakePlayer
         = new FakePlayer(playerSkin, location);
 
 // создаем желтую подсветку для NPC
-fakePlayer.setGlowingColor(ChatColor.YELLOW);
+        fakePlayer.setGlowingColor(ChatColor.YELLOW);
 
 // добавить действие при клике на NPC
-fakePlayer.setClickAction(player -> { // player = игрок, который кликнул
+        fakePlayer.setClickAction(player -> { // player = игрок, который кликнул
 
-    player.sendMessage(ChatColor.GOLD + "Клик по NPC прошел успешно");
-    player.sendMessage(ChatColor.GOLD + "Локация: " + LocationUtil.locationToString(fakePlayer.getLocation()));
-});
+        player.sendMessage(ChatColor.GOLD + "Клик по NPC прошел успешно");
+        player.sendMessage(ChatColor.GOLD + "Локация: " + LocationUtil.locationToString(fakePlayer.getLocation()));
+        });
 
 // добавить действие при атаке NPC
-fakePlayer.setAttackAction(player -> {
-    fakePlayer.playAnimation(FakeEntityAnimation.TAKE_DAMAGE, player);
-});
+        fakePlayer.setAttackAction(player -> {
+        fakePlayer.playAnimation(FakeEntityAnimation.TAKE_DAMAGE, player);
+        });
 
-fakePlayer.look(receiver); //посмотреть на игрока
+        fakePlayer.look(receiver); //посмотреть на игрока
 
-fakePlayer.setBurning(true); // поджечь
-fakePlayer.setSneaking(true); // присесть
-fakePlayer.setInvisible(false); // сделать видимым
+        fakePlayer.setBurning(true); // поджечь
+        fakePlayer.setSneaking(true); // присесть
+        fakePlayer.setInvisible(false); // сделать видимым
 ```
 
 Спавн этих Entity работает ровно также, как и в голограммах:
