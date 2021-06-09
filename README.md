@@ -131,7 +131,7 @@ public class TestConfiguration
 public void onEnable() {
         TestConfiguration configuration = new TestConfiguration(this);
         configuration.createIfNotExists();
-        }
+}
 ```
 В данном куске кода мы создали (или скопировали из ресурсов плагина) конфигурацию, инициализировали в ней данные, и можем спокойно пользоваться!
 ***
@@ -157,13 +157,13 @@ protocolHolographic.addTextLine(ChatColor.AQUA + "Этот клубничный 
 // Создание кликабельных голограмм
 Consumer<Player> playerConsumer = player -> { //player = игрок, который кликнул
 
-        player.sendMessage(ChatColor.GOLD + "Клик по голограмме прошел успешно!");
-        player.sendMessage(ChatColor.GOLD + "Локация: " + LocationUtil.locationToString(protocolHolographic.getLocation()));
-        };
+    player.sendMessage(ChatColor.GOLD + "Клик по голограмме прошел успешно!");
+    player.sendMessage(ChatColor.GOLD + "Локация: " + LocationUtil.locationToString(protocolHolographic.getLocation()));
+};
 
 // Добавление строк в голограмму
-        protocolHolographic.addClickLine(ChatColor.YELLOW + "Разработчик данной API", playerConsumer);
-        protocolHolographic.addClickLine(ChatColor.GREEN + "https://vk.com/itzstonlex", playerConsumer);
+protocolHolographic.addClickLine(ChatColor.YELLOW + "Разработчик данной API", playerConsumer);
+protocolHolographic.addClickLine(ChatColor.GREEN + "https://vk.com/itzstonlex", playerConsumer);
 ```
 
 Строчки с предметами:
@@ -179,7 +179,7 @@ protocolHolographic.addEmptyLine();
 И даже строчки с головами по нику или текстуре:
 ```java
 protocolHolographic.addSkullLine("ItzStonlex", false);
-        protocolHolographic.addSkullLine("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNDUyOGVkNDU4MDI0MDBmNDY1YjVjNGUzYTZiN2E5ZjJiNmE1YjNkNDc4YjZmZDg0OTI1Y2M1ZDk4ODM5MWM3ZCJ9fX0=", false);
+protocolHolographic.addSkullLine("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNDUyOGVkNDU4MDI0MDBmNDY1YjVjNGUzYTZiN2E5ZjJiNmE1YjNkNDc4YjZmZDg0OTI1Y2M1ZDk4ODM5MWM3ZCJ9fX0=", false);
 ```
 
 Так как голограмма является пакетной, то ей можно манипулировать как угодно, пример тому функционал спавна и удаления этих голограм, взаимодействуя с игроками сервера:
@@ -265,17 +265,16 @@ public class ExampleSimpleGUI
         // Обработчик открытия/закрытия инвентаря
         addHandler(BaseInventoryDisplayableHandler.class, new BaseInventoryDisplayableHandler() {
 
-@Override
-public void onOpen(@NonNull Player player) {
-        player.sendMessage("§aТы открыл Example-инвентарь");
-        }
+                @Override
+                public void onOpen(@NonNull Player player) {
+                    player.sendMessage("§aТы открыл Example-инвентарь");
+                }
 
-@Override
-public void onClose(@NonNull Player player) {
-        player.sendMessage("§cТы закрыл Example-инвентарь");
-        }
-        });
-        }
+                @Override
+                public void onClose(@NonNull Player player) {
+                    player.sendMessage("§cТы закрыл Example-инвентарь");
+                }
+            });
         }
 ```
 
@@ -384,17 +383,17 @@ public class ExamplePaginatedGUI
         // Обработчик открытия/закрытия инвентаря
         addHandler(BaseInventoryDisplayableHandler.class, new BaseInventoryDisplayableHandler() {
 
-@Override
-public void onOpen(@NonNull Player player) {
-        player.sendMessage("§aТы открыл страничный Example-инвентарь");
-        }
+                @Override
+                public void onOpen(@NonNull Player player) {
+                    player.sendMessage("§aТы открыл страничный Example-инвентарь");
+                }
 
-@Override
-public void onClose(@NonNull Player player) {
-        player.sendMessage("§cТы закрыл страничный Example-инвентарь");
-        }
+                @Override
+                public void onClose(@NonNull Player player) {
+                    player.sendMessage("§cТы закрыл страничный Example-инвентарь");
+                }
         });
-        }
+    }
 ```
 
 ***
@@ -412,29 +411,28 @@ public void onClose(@NonNull Player player) {
 
 Возьмем в пример того же `ru.stonlex.bukkit.protocollib.entity.impl.FakePlayer`, сейчас на простом примере попробуем создать обычного NPC, который будет выводить сообщение при клике, а также воспроизводить анимацию получения урона при ударе:
 ```java
-FakePlayer fakePlayer
-        = new FakePlayer(playerSkin, location);
+FakePlayer fakePlayer = new FakePlayer(playerSkin, location);
 
 // создаем желтую подсветку для NPC
-        fakePlayer.setGlowingColor(ChatColor.YELLOW);
+fakePlayer.setGlowingColor(ChatColor.YELLOW);
 
 // добавить действие при клике на NPC
-        fakePlayer.setClickAction(player -> { // player = игрок, который кликнул
+fakePlayer.setClickAction(player -> { // player = игрок, который кликнул
 
-        player.sendMessage(ChatColor.GOLD + "Клик по NPC прошел успешно");
-        player.sendMessage(ChatColor.GOLD + "Локация: " + LocationUtil.locationToString(fakePlayer.getLocation()));
-        });
+    player.sendMessage(ChatColor.GOLD + "Клик по NPC прошел успешно");
+    player.sendMessage(ChatColor.GOLD + "Локация: " + LocationUtil.locationToString(fakePlayer.getLocation()));
+});
 
 // добавить действие при атаке NPC
-        fakePlayer.setAttackAction(player -> {
-        fakePlayer.playAnimation(FakeEntityAnimation.TAKE_DAMAGE, player);
-        });
+fakePlayer.setAttackAction(player -> {
+    fakePlayer.playAnimation(FakeEntityAnimation.TAKE_DAMAGE, player);
+});
 
-        fakePlayer.look(receiver); //посмотреть на игрока
-
-        fakePlayer.setBurning(true); // поджечь
-        fakePlayer.setSneaking(true); // присесть
-        fakePlayer.setInvisible(false); // сделать видимым
+fakePlayer.look(receiver); //посмотреть на игрока
+        
+fakePlayer.setBurning(true); // поджечь
+fakePlayer.setSneaking(true); // присесть
+fakePlayer.setInvisible(false); // сделать видимым
 ```
 
 Спавн этих Entity работает ровно также, как и в голограммах:
