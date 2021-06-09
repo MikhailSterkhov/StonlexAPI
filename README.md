@@ -1,7 +1,7 @@
 # StonlexAPI
 
 ***
-##Обратная связь
+## Обратная связь
 * **[Discord chat](https://discord.gg/GmT9pUy8af)**    
 * **[ВКонтакте](https://vk.com/itzstonlex)**
 
@@ -204,6 +204,6 @@ protocolHolographic.remove(); // удалить голограмму как дл
 ***
 
 ***
-##Обратная связь
+## Обратная связь
 * **[Discord chat](https://discord.gg/GmT9pUy8af)**
 * **[ВКонтакте](https://vk.com/itzstonlex)**
