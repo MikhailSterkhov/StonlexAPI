@@ -513,7 +513,7 @@ protocolTeam.addReceiver(player);
 ProtocolTeam protocolTeam = ProtocolTeam.findReceiver(player);
 ```
 
-![ProtocolTeam](https://psv4.userapi.com/c532036/u181576872/docs/d13/88642bc75dbc/ezgif_com-gif-maker_4.gif?extra=OEDf7EkwtdlbJLFtTi3EXoroDRolWBB_dNSBJwYw8aTsOsubWTQk95Ftx23B7l0paVPiupvI6kbslDmpQwf6znPDP_vqwVU6d1zksh2esQMeq_auENx7NLuEMMHxv7GX0nhjBRM0Uo7ZuP-YaiieFEIN)
+![ProtocolTeam](https://psv4.userapi.com/c532036/u181576872/docs/d13/88642bc75dbc/ezgif_com-gif-maker_4.gif?extra=OEDf7EkwtdlbJLFtTi3EXoroDRolWBB_dNSBJwYw8aTsOsubWTQk95Ftx23B7l0paVPiupvI6kbslDmpQwf6znPDP_vqwVU6d1zksh2esQMeq_auENx7NLuDOcnxv7GX0nhjBRM0Uo3fufudbCzJQxJY)
 
 ***
 - `Protocol Packets-API`:
