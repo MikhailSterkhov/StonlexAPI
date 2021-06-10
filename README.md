@@ -10,14 +10,14 @@
 ## Основная информация
 В основном данная апи предназначена для написания плагинов, различных систем и игр в сфере Minecraft.
 
-Она несет в себе множество функций, таких как управление базой данных, **~~Game API~~**, **ProtocolLib API**, множество удобных **утилит** и **адаптеров**, и даже **мультиязычность** (локализация сообщений).
+Она несет в себе множество функций, таких, как управление базой данных, **~~Game API~~**, **ProtocolLib API**, множество удобных **утилит**, **адаптеров**, и даже **мультиязычность** (локализация сообщений).
 
 ***
 
 ## Bukkit-API
 
 
-### `Создание команд:`
+### `Команды:`
 
 Теперь создавать, регистрировать и использовать команды стало куда проще! В данной разработке доступна реализации как для мелких, так и для больших команд, которые содержат огромное количество данных, алиасов и подкоманд.
 
@@ -136,7 +136,7 @@ public void onEnable() {
 В данном куске кода мы создали (или скопировали из ресурсов плагина) конфигурацию, инициализировали в ней данные, и можем спокойно пользоваться!
 ***
 
-### `Голограммы`
+### `Голограммы:`
 Неужели **HolographicDisplays** теперь окончательно устарел?
 
 По сути, так оно и есть, потому что **StonlexAPI** содержит в себе даже **API** для удобного создания голограмм с различными анимациями, обновлениями и типами строк.
@@ -150,6 +150,11 @@ ProtocolHolographic protocolHolographic
 Текстовые строки:
 ```java
 protocolHolographic.addTextLine(ChatColor.AQUA + "Этот клубничный пудинг был просто великолепен!");
+```
+
+Пустые строчки:
+```java
+protocolHolographic.addEmptyLine();
 ```
 
 Кликабельные строки:
@@ -171,18 +176,13 @@ protocolHolographic.addClickLine(ChatColor.GREEN + "https://vk.com/itzstonlex", 
 protocolHolographic.addDropLine(new ItemStack(Material.APPLE));
 ```
 
-Пустые строчки:
-```java
-protocolHolographic.addEmptyLine();
-```
-
 И даже строчки с головами по нику или текстуре:
 ```java
 protocolHolographic.addSkullLine("ItzStonlex", false);
 protocolHolographic.addSkullLine("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNDUyOGVkNDU4MDI0MDBmNDY1YjVjNGUzYTZiN2E5ZjJiNmE1YjNkNDc4YjZmZDg0OTI1Y2M1ZDk4ODM5MWM3ZCJ9fX0=", false);
 ```
 
-Так как голограмма является пакетной, то ей можно манипулировать как угодно, пример тому функционал спавна и удаления этих голограм, взаимодействуя с игроками сервера:
+Так как голограмма является пакетной, то ей можно манипулировать как угодно, пример тому является функционал спавна и удаления этих голограм, взаимодействуя с игроками сервера:
 ```java
 protocolHolographic.addReceivers(receiver); //заспавнить только для одного игрока
 ```
@@ -201,8 +201,11 @@ protocolHolographic.spawn(); // заспавнить для всех игрок�
 ```java
 protocolHolographic.remove(); // удалить голограмму как для всех, так и прекратить спавн для новых игроков
 ```
+
+![Holographics](https://sun9-55.userapi.com/impg/Kf_s2aox48iTqb-PSDqQCgRhpR6N1_ItCt2oUA/7awMBu53Cdw.jpg?size=1542x825&quality=96&sign=1a030c5d5dfe19dd1597994cdead8b6f&type=album)
+
 ***
-### `Инвентари, или же кликабельные GUI`
+### `Кликабельные инвентари:`
 
 Такая заезжая, но такая актуальная тема... Многим даже сейчас сложно писать кликабельные, мультистраничные, автообновляющиеся, или с какими-то другими фишками, но **GUI**-интерфейсы
 
@@ -265,18 +268,22 @@ public class ExampleSimpleGUI
         // Обработчик открытия/закрытия инвентаря
         addHandler(BaseInventoryDisplayableHandler.class, new BaseInventoryDisplayableHandler() {
 
-                @Override
-                public void onOpen(@NonNull Player player) {
-                    player.sendMessage("§aТы открыл Example-инвентарь");
-                }
+            @Override
+            public void onOpen(@NonNull Player player) {
+                player.sendMessage("§aТы открыл Example-инвентарь");
+            }
 
-                @Override
-                public void onClose(@NonNull Player player) {
-                    player.sendMessage("§cТы закрыл Example-инвентарь");
-                }
-            });
-        }
+            @Override
+            public void onClose(@NonNull Player player) {
+                player.sendMessage("§cТы закрыл Example-инвентарь");
+            }
+        });
+    }
+    
 ```
+
+![BaseSimpleInventory](https://psv4.userapi.com/c520036/u181576872/docs/d35/a0e0a1d54643/ezgif_com-gif-maker_2.gif?extra=gNpK16lJ7vdnEKlHDtZ4uawwrXrVI9UK04NSpdQ1GvhRbv5L7eDpcsHdAwfzDNKkCvr_SxY6UD5fWzvCHLnU71FNVHhpkyLHrwrP7uE3p_Qkb-QhodEWtNul9FtVvyvY5MGmCLBEA1NoRFLeGt6wS5i0)
+
 
 На данном моменте можно было бы и закончить список функционала инвентарей, однако, этим они не ограничиваются.
 
@@ -383,21 +390,24 @@ public class ExamplePaginatedGUI
         // Обработчик открытия/закрытия инвентаря
         addHandler(BaseInventoryDisplayableHandler.class, new BaseInventoryDisplayableHandler() {
 
-                @Override
-                public void onOpen(@NonNull Player player) {
-                    player.sendMessage("§aТы открыл страничный Example-инвентарь");
-                }
+            @Override
+            public void onOpen(@NonNull Player player) {
+                player.sendMessage("§aТы открыл страничный Example-инвентарь");
+            }
 
-                @Override
-                public void onClose(@NonNull Player player) {
-                    player.sendMessage("§cТы закрыл страничный Example-инвентарь");
-                }
+            @Override
+            public void onClose(@NonNull Player player) {
+                player.sendMessage("§cТы закрыл страничный Example-инвентарь");
+            }
         });
     }
 ```
 
+![BasePaginatedInventory](https://psv4.userapi.com/c536132/u181576872/docs/d11/93e8f4f8dcb1/ezgif_com-gif-maker_3.gif?extra=VSbyjVTH0yhHpCpPw7OQoBLYnwJv1pzqH3J03beUxa4vuAMKF8WDATc3FzcaDBgnc0O5iBjIe3uZDYlulTEW3OYboEMAjwk4xREX2CHvEVmHfMw5pRaEXbi1c04_am1doIKcVt4hvKjrsS_BpcFg2Xiw)
+
+
 ***
-### `ProtocolLib-API`
+### `ProtocolLib-API:`
 
 С одной стороны, библиотека **ProtocolLib** и без лишнего кода является вполне себе юзабельной и удобной, для реализации конкректных задач.
 
@@ -405,7 +415,8 @@ public class ExamplePaginatedGUI
 
 Функционал у данной API достаточно немаленький, но в то же время и небольшой, пройдемся по порядку:
 
-`FakeEntity-API`:
+***
+- `FakeEntity-API`:
 
 **StonlexAPI** позволяет создавать своих пакетных Entity с полной кастомизацией, управлением и настройкой.
 
@@ -431,7 +442,6 @@ fakePlayer.setAttackAction(player -> {
 fakePlayer.look(receiver); //посмотреть на игрока
         
 fakePlayer.setBurning(true); // поджечь
-fakePlayer.setSneaking(true); // присесть
 fakePlayer.setInvisible(false); // сделать видимым
 ```
 
@@ -455,16 +465,160 @@ fakePlayer.spawn(); // заспавнить для всех игроков, и �
 fakePlayer.remove(); // удалить Entity как для всех, так и прекратить спавн для новых игроков
 ```
 
+![FakeEntity](https://psv4.userapi.com/c505536/u181576872/docs/d51/459c8317c186/ezgif_com-gif-maker_1.gif?extra=bjK486KYhlZLwAG3Oha0wGqfJsyW9JtLKB5Q7re38wrUeFJOWSqUwB6LJ80aPHPkl3sOkxn8HoIUUh7TL3YspTDWuSiMfbPOfrL5QzE_eKoY96B8yEkduhYlaxys5fKJz4l6Cg6aqalv24N00Agj25TS)
+
 ***
-### `Scoreboards`
+- `FakeTeams-API`:
+
+**StonlexAPI** также позволяет создавать пакетные Team'ы с полной кастомизацией и настройкой.
+
+Рассмотрим простейший пример, где при заходе игрока в TabList и над головой будем создавать префикс и суффикс:
+```java
+@EventHandler
+public void onPlayerJoin(PlayerJoinEvent event) {
+    Player player = event.getPlayer();
+
+    ProtocolTeam protocolTeam = ProtocolTeam.get("Team_" + player.getName());
+    
+    protocolTeam.setPrefix("§e§lPREFIX §f");
+    protocolTeam.setSuffix(" §6§lSUFFIX");
+    
+    // ...
+}
+```
+
+После создания Team'ы, в нее необходимо добавить игроков, которым она будет принадлежать. Делается это через следующий метод:
+```java
+protocolTeam.addPlayerEntry(player);
+```
+
+После чего можно будет получать ProtocolTeam игрока по следующему методу:
+```java
+ProtocolTeam protocolTeam = ProtocolTeam.findEntry(player);
+```
+
+Так как ProtocolTeam является пакетным классом, следовательно, просто так он никому не будет виден (Кроме тех игроков, которым принадлежит Team). Это можно исправить двумя способами:
+
+**Способ 1**: Добавление ProtocolTeam в список авто-отрисовки всем игрокам онлайн, а также только зашедшим:
+```java
+protocolTeam.addAutoReceived();
+```
+**Способ 2**: Отдельное добавление игроков в список тех, кто может видеть ProtocolTeam:
+```java
+protocolTeam.addReceiver(player);
+```
+
+**Дополнение к Способу 2**: После чего можно будет получать ProtocolTeam игрока по следующему методу:
+```java
+ProtocolTeam protocolTeam = ProtocolTeam.findReceiver(player);
+```
+
+![ProtocolTeam](https://psv4.userapi.com/c532036/u181576872/docs/d13/88642bc75dbc/ezgif_com-gif-maker_4.gif?extra=OEDf7EkwtdlbJLFtTi3EXoroDRolWBB_dNSBJwYw8aTsOsubWTQk95Ftx23B7l0paVPiupvI6kbslDmpQwf6znPDP_vqwVU6d1zksh2esQMeq_auENx7NLuEMMHxv7GX0nhjBRM0Uo7ZuP-YaiieFEIN)
+
+***
+- `Protocol Packets-API`:
+
+Создание пакетов происходит через фабрику `ru.stonlex.bukkit.protocollib.packet.ProtocolPacketFactory`
+
+Рассмотрим на примере пакета воспроизведения анимации "маха" рукой игрока
+
+```java
+WrapperPlayServerAnimation animationPacket 
+                = ProtocolPacketFactory.createAnimationPacket(player.getEntityId(), FakeEntityAnimation.SWING_MAIN_HAND.ordinal());
+```
+
+Пакет можно отправить как одному игроку отдельно:
+```java
+animationPacket.sendPacket(player);
+```
+
+Так и всем игрокам, что сейчас находятся на сервере:
+```java
+animationPacket.broadcastPacket();
+```
+
+
+***
+### `Scoreboards:`
+
+Статистику игроков, сервера, либо какую-то другую информацию все привыкли выводить в **Scoreboard**, а StonlexAPI упрощает их написание.
+
+Теперь буквально в пару строчек можно написать пакетные скорборды, которые не будут конфликтовать с тегами, или другими барами, созданными через **Scoreboard**.
+
+Сейчас на простом примере попробуем создать подобный Scoreboard:
+
+![Scoreboards](https://psv4.userapi.com/c520036/u181576872/docs/d8/bc84b00b9819/ezgif_com-gif-maker.gif?extra=jdkMXQ7H0CIUkkjBuxH4ZM-ek-KqqRZekTKDEEmYR-sABA5NsUmcO-vQ5tsaadA0-funCgHe8fLBPbi1SjzTSm0jAna8TGK4z15x1o09Mynp09m9g_Ul_kB-IAkVnsLwIhdVeaw0cit9zS1r_liJrn6i)
+
+Для начала необходимо создать Builder, по которому будут выстраиваться необходимые данные для Scoreboard:
+
+```java
+BaseScoreboardBuilder scoreboardBuilder = StonlexBukkitApi.newScoreboardBuilder();
+```
+
+Установим прототипную видимость нашему Scoreboard`у:
+
+**Что такое видимость Scoreboard?** - Это категория, по которой определяется, кому и как будет показываться этот интерфейс.
+
+- **PROTOTYPE** - Для каждого игрока Scoreboard выставляется отдельно. Если позже для игрока был выставлен новый Scoreboard, то предыдущий полностью для него очиститься, предоставив место для нового.
+- **PUBLIC** - Scoreboard автоматически выставляется для всех текущих игроков онлайн и для только зашедших. Если позже для игрока будет выставлен Scoreboard типа PROTOTYPE, то PUBLIC на время скроется до того момента, пока PROTOTYPE не будет удален для игрока. Но если еще позже для игрока будет выставлен Scoreboard типа PUBLIC, то предыдущий Scoreboard с типом PUBLIC будет полностью удален и очищен для того же игрока.
+```java
+scoreboardBuilder.scoreboardScope(BaseScoreboardScope.PROTOTYPE);
+```
+
+Затем, создадим одну из шаблонных анимаций для заголовка Scoreboard - **Flick Animation**:
+```java
+ScoreboardDisplayFlickAnimation displayFlickAnimation = new ScoreboardDisplayFlickAnimation();
+
+// Поочередно добавляем цвета, которые будут переливаться
+displayFlickAnimation.addColor(ChatColor.RED);
+displayFlickAnimation.addColor(ChatColor.GOLD);
+displayFlickAnimation.addColor(ChatColor.YELLOW);
+displayFlickAnimation.addColor(ChatColor.WHITE);
+
+// Устанавливаем текст для анимации
+displayFlickAnimation.addTextToAnimation("§lSTONLEX API");
+```
+
+После чего можно установить эту анимацию в заголовок Scoreboard:
+```java
+scoreboardBuilder.scoreboardDisplay(displayFlickAnimation);
+```
+
+Далее, выставляем индексы линий и текст к каждой из них:
+```java
+scoreboardBuilder.scoreboardLine(6, ChatColor.GRAY + DateUtil.formatPattern(DateUtil.DEFAULT_DATE_PATTERN));
+scoreboardBuilder.scoreboardLine(5, "");
+scoreboardBuilder.scoreboardLine(4, "Ник: §c...");
+scoreboardBuilder.scoreboardLine(3, "Прыжков: §c...");
+scoreboardBuilder.scoreboardLine(2, "");
+scoreboardBuilder.scoreboardLine(1, "§ehttps://vk.com/itzstonlex");
+```
+
+Вот и все, основные настройки для Scoreboard выставлены!
+
+Теперь для такого скорборда необходимо выставить автообновляющийся таймер, который будет каждые, например, 5 тиков, обновлять текст определенных строчек:
+```java
+scoreboardBuilder.scoreboardUpdater((baseScoreboard, player1) -> {
+    
+    baseScoreboard.updateScoreboardLine(4, player1, "Ник: §7" + player1.getName());
+    baseScoreboard.updateScoreboardLine(3, player1, "Прыжков: §a" + NumberUtil.spaced(player1.getStatistic(Statistic.JUMP)));
+
+}, 20);
+```
+
+Так как наш Scoreboard имеет видимость типа PROTOTYPE, то необходимо будет каждому игроку устанавливать его отдельно. 
+
+Делается это следующим образом:
+```java
+scoreboardBuilder.build().setScoreboardToPlayer(player);
+```
+Scoreboard создан, полностью настроен и установлен игроку, что еще может быть лучше?
+***
+### `Vault-API:`
 ...
 
 ***
-### `Vault-API`
-...
-
-***
-### `Utilities`
+### `Utilities:`
 ...
 
 ***
