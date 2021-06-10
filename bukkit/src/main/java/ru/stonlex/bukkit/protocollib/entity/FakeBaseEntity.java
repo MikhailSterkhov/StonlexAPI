@@ -2,8 +2,11 @@ package ru.stonlex.bukkit.protocollib.entity;
 
 import com.comphenix.protocol.reflect.accessors.Accessors;
 import com.comphenix.protocol.reflect.accessors.FieldAccessor;
+import com.comphenix.protocol.utility.MinecraftProtocolVersion;
 import com.comphenix.protocol.utility.MinecraftReflection;
+import com.comphenix.protocol.utility.MinecraftVersion;
 import com.comphenix.protocol.wrappers.Vector3F;
+import com.comphenix.protocol.wrappers.WrappedChatComponent;
 import com.comphenix.protocol.wrappers.WrappedDataWatcher;
 import lombok.Getter;
 import lombok.NonNull;
@@ -32,6 +35,8 @@ public abstract class FakeBaseEntity implements Cloneable, FakeEntityClickable {
     public static @NonNull WrappedDataWatcher.Serializer INT_SERIALIZER         = WrappedDataWatcher.Registry.get(Integer.class);
     public static @NonNull WrappedDataWatcher.Serializer STRING_SERIALIZER      = WrappedDataWatcher.Registry.get(String.class);
     public static @NonNull WrappedDataWatcher.Serializer BOOLEAN_SERIALIZER     = WrappedDataWatcher.Registry.get(Boolean.class);
+
+    public static @NonNull WrappedDataWatcher.Serializer CHAT_COMPONENT_SERIALIZER     = WrappedDataWatcher.Registry.getChatComponentSerializer();
 
     public static @NonNull WrappedDataWatcher.Serializer ITEMSTACK_SERIALIZER   = WrappedDataWatcher.Registry.get(MinecraftReflection.getItemStackClass());
     public static @NonNull WrappedDataWatcher.Serializer ROTATION_SERIALIZER    = WrappedDataWatcher.Registry.get(Vector3F.getMinecraftClass());
@@ -164,6 +169,14 @@ public abstract class FakeBaseEntity implements Cloneable, FakeEntityClickable {
     public synchronized void sendSpawnPackets(@NonNull Player player) {
         for (AbstractPacket abstractPacket : getSpawnPackets())
             abstractPacket.sendPacket(player);
+
+
+        int aquaticVersion = MinecraftProtocolVersion.getVersion(MinecraftVersion.AQUATIC_UPDATE);
+        int currentVersion = MinecraftProtocolVersion.getCurrentVersion();
+
+        if (currentVersion >= aquaticVersion) {
+            sendDataWatcherPacket(player);
+        }
     }
 
     public synchronized void sendDestroyPackets(@NonNull Player player) {
@@ -174,7 +187,7 @@ public abstract class FakeBaseEntity implements Cloneable, FakeEntityClickable {
 
     public synchronized Collection<AbstractPacket> getSpawnPackets() {
         return Collections.singletonList(
-                ProtocolPacketFactory.createSpawnEntityPacket(entityId, getSpawnTypeId(), 1, location));
+                ProtocolPacketFactory.createSpawnEntityPacket(entityId, getSpawnTypeId(), entityType, location));
     }
 
     public synchronized Collection<AbstractPacket> getDestroyPackets() {
@@ -409,7 +422,17 @@ public abstract class FakeBaseEntity implements Cloneable, FakeEntityClickable {
         }
 
         this.customName = customName;
-        broadcastDataWatcherObject(2, STRING_SERIALIZER, customName);
+
+        int aquaticVersion = MinecraftProtocolVersion.getVersion(MinecraftVersion.AQUATIC_UPDATE);
+        int currentVersion = MinecraftProtocolVersion.getCurrentVersion();
+
+        if (currentVersion < aquaticVersion) {
+            broadcastDataWatcherObject(2, STRING_SERIALIZER, customName);
+
+        } else {
+
+            broadcastDataWatcherObject(2, CHAT_COMPONENT_SERIALIZER, WrappedChatComponent.fromText(customName));
+        }
     }
 
 
@@ -418,9 +441,18 @@ public abstract class FakeBaseEntity implements Cloneable, FakeEntityClickable {
 
         // update entity metadata objects
         WrappedDataWatcher wrappedDataWatcher = new WrappedDataWatcher();
-
-        wrappedDataWatcher.setObject(new WrappedDataWatcher.WrappedDataWatcherObject(2, STRING_SERIALIZER), customName);
         wrappedDataWatcher.setObject(new WrappedDataWatcher.WrappedDataWatcherObject(3, BOOLEAN_SERIALIZER), true);
+
+        int aquaticVersion = MinecraftProtocolVersion.getVersion(MinecraftVersion.AQUATIC_UPDATE);
+        int currentVersion = MinecraftProtocolVersion.getCurrentVersion();
+
+        if (currentVersion < aquaticVersion) {
+            wrappedDataWatcher.setObject(new WrappedDataWatcher.WrappedDataWatcherObject(2, STRING_SERIALIZER), customName);
+
+        } else {
+
+            wrappedDataWatcher.setObject(new WrappedDataWatcher.WrappedDataWatcherObject(2, CHAT_COMPONENT_SERIALIZER), WrappedChatComponent.fromText(customName));
+        }
 
 
         // send entity metadata packet

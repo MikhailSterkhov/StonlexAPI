@@ -15,7 +15,7 @@ public final class BaseScoreboardBuilder {
     private final String scoreboardName;
 
     private ScoreboardDisplayAnimation scoreboardDisplay;
-    private BaseScoreboardScope scoreboardScope;
+    private BaseScoreboardScope scoreboardScope = BaseScoreboardScope.PROTOTYPE;
 
     private long durationTick;
     private ScoreboardUpdater scoreboardUpdater;

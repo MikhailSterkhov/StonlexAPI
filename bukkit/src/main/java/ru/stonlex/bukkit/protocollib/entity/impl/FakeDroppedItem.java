@@ -7,6 +7,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 import ru.stonlex.bukkit.protocollib.entity.FakeBaseEntity;
+import ru.stonlex.bukkit.protocollib.packet.entity.WrapperPlayServerSpawnEntity;
 
 @Getter
 public class FakeDroppedItem extends FakeBaseEntity {
@@ -31,7 +32,7 @@ public class FakeDroppedItem extends FakeBaseEntity {
 
     @Override
     public synchronized int getSpawnTypeId() {
-        return 2;
+        return WrapperPlayServerSpawnEntity.ObjectTypes.ITEM_STACK;
     }
 
 }

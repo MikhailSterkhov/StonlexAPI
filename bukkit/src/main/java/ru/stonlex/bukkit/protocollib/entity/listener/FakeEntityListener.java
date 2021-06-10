@@ -152,25 +152,26 @@ public class FakeEntityListener extends PacketAdapter
         }, 20);
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.MONITOR)
     public void onWorldChange(PlayerChangedWorldEvent event) {
         Player player = event.getPlayer();
 
-        for (FakeBaseEntity fakeBaseEntity : FakeEntityRegistry.INSTANCE.getReceivableEntities(player)) {
-            if (!fakeBaseEntity.getLocation().getWorld().equals(player.getWorld())) {
+        Bukkit.getScheduler().runTaskLater(getPlugin(), () -> {
 
-                if (fakeBaseEntity.hasViewer(player)) {
-                    fakeBaseEntity.removeViewers(player);
-                }
+            for (FakeBaseEntity fakeBaseEntity : FakeEntityRegistry.INSTANCE.getReceivableEntities(player)) {
 
-            } else {
+                boolean equalsWorld = fakeBaseEntity.getLocation().getWorld().equals(player.getWorld());
+                boolean hasViewer = fakeBaseEntity.hasViewer(player);
 
-                if (!fakeBaseEntity.hasViewer(player)) {
+                if (!hasViewer && equalsWorld) {
                     fakeBaseEntity.addViewers(player);
                 }
-            }
-        }
 
+                if (hasViewer && !equalsWorld) {
+                    fakeBaseEntity.removeViewers(player);
+                }
+            }
+        }, 10);
     }
 
 }

@@ -3,11 +3,9 @@ package ru.stonlex.bukkit.protocollib.entity.impl;
 import lombok.NonNull;
 import org.bukkit.Location;
 import org.bukkit.entity.EntityType;
-import ru.stonlex.bukkit.protocollib.entity.FakeBaseEntityLiving;
-import ru.stonlex.bukkit.protocollib.entity.FakeEntityLiving;
+import ru.stonlex.bukkit.protocollib.entity.FakeBaseMob;
 
-public class FakePig extends FakeBaseEntityLiving
-        implements FakeEntityLiving {
+public class FakePig extends FakeBaseMob {
 
     private boolean hasSaddle;
 

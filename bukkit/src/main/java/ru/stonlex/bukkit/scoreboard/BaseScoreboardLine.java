@@ -72,14 +72,22 @@ public class BaseScoreboardLine {
         WrapperPlayServerScoreboardTeam teamPacket = new WrapperPlayServerScoreboardTeam();
 
         teamPacket.getHandle().getStrings().write(0, teamEntry);
-        teamPacket.getHandle().getIntegers().write(1, teamMode);
+
+        int aquaticVersion = MinecraftProtocolVersion.getVersion(MinecraftVersion.AQUATIC_UPDATE);
+        int currentVersion = MinecraftProtocolVersion.getVersion(ProtocolLibrary.getProtocolManager().getMinecraftVersion());
+
+        if (currentVersion >= aquaticVersion) {
+            teamPacket.getHandle().getIntegers().write(0, teamMode);
+
+        } else {
+
+            teamPacket.getHandle().getIntegers().write(1, teamMode);
+        }
 
         if (teamMode == TEAM_REMOVED) {
             return teamPacket;
         }
 
-        int aquaticVersion = MinecraftProtocolVersion.getVersion(MinecraftVersion.AQUATIC_UPDATE);
-        int currentVersion = MinecraftProtocolVersion.getVersion(ProtocolLibrary.getProtocolManager().getMinecraftVersion());
         int version = ProtocolLibrary.getProtocolManager().getProtocolVersion(player);
 
         teamPacket.getHandle().getSpecificModifier(Collection.class).write(0, Collections.singletonList(teamEntry));
@@ -97,9 +105,9 @@ public class BaseScoreboardLine {
                 teamPacket.getHandle().getChatComponents().write(2,
                         WrappedChatComponent.fromText(ChatColor.RESET.toString())); // suffix
             } else {
+
                 teamPacket.getHandle().getStrings().write(2, scoreText); // prefix
                 teamPacket.getHandle().getStrings().write(3, ChatColor.RESET.toString()); // suffix
-
             }
 
             return teamPacket;

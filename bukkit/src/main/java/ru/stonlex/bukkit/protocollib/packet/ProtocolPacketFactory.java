@@ -1,5 +1,7 @@
 package ru.stonlex.bukkit.protocollib.packet;
 
+import com.comphenix.protocol.utility.MinecraftProtocolVersion;
+import com.comphenix.protocol.utility.MinecraftVersion;
 import com.comphenix.protocol.wrappers.BlockPosition;
 import com.comphenix.protocol.wrappers.EnumWrappers;
 import com.comphenix.protocol.wrappers.PlayerInfoData;
@@ -66,11 +68,17 @@ public class ProtocolPacketFactory {
     }
 
     public WrapperPlayServerNamedEntitySpawn createNamedEntitySpawnPacket(int entityId, WrappedDataWatcher dataWatcher, UUID uuid, Location location) {
+        int beeVersion = MinecraftProtocolVersion.getVersion(MinecraftVersion.BEE_UPDATE);
+        int currentVersion = MinecraftProtocolVersion.getCurrentVersion();
+
         WrapperPlayServerNamedEntitySpawn packet = new WrapperPlayServerNamedEntitySpawn();
 
         packet.setEntityID(entityId);
-        packet.setMetadata(dataWatcher);
         packet.setPlayerUUID(uuid);
+
+        if (currentVersion < beeVersion) {
+            packet.setMetadata(dataWatcher);
+        }
 
         packet.setPosition(location.toVector());
         packet.setYaw(location.getYaw());
@@ -91,12 +99,22 @@ public class ProtocolPacketFactory {
         return packet;
     }
 
-    public WrapperPlayServerSpawnEntity createSpawnEntityPacket(int entityId, int spawnTypeId, int entityData, Location location) {
+    public WrapperPlayServerSpawnEntity createSpawnEntityPacket(int entityId, int spawnTypeId, EntityType entityType, Location location) {
+        int beeVersion = MinecraftProtocolVersion.getVersion(MinecraftVersion.BEE_UPDATE);
+        int currentVersion = MinecraftProtocolVersion.getCurrentVersion();
+
         WrapperPlayServerSpawnEntity packet = new WrapperPlayServerSpawnEntity();
 
         packet.getHandle().getIntegers().write(0, entityId);
         packet.getHandle().getIntegers().write(6, spawnTypeId);
-        packet.getHandle().getIntegers().write(7, entityData);
+
+        if (currentVersion < beeVersion) {
+            packet.getHandle().getIntegers().write(7, (int) entityType.getTypeId());
+
+        } else {
+
+            packet.getHandle().getEntityTypeModifier().write(0, entityType);
+        }
 
         packet.getHandle().getDoubles().write(0, location.getX());
         packet.getHandle().getDoubles().write(1, location.getY());
@@ -115,10 +133,15 @@ public class ProtocolPacketFactory {
     }
 
     public WrapperPlayServerSpawnEntityLiving createSpawnEntityLivingPacket(int entityId, EntityType entityType, WrappedDataWatcher dataWatcher, Location location) {
-        WrapperPlayServerSpawnEntityLiving packet = new WrapperPlayServerSpawnEntityLiving();
+        int beeVersion = MinecraftProtocolVersion.getVersion(MinecraftVersion.BEE_UPDATE);
+        int currentVersion = MinecraftProtocolVersion.getCurrentVersion();
 
+        WrapperPlayServerSpawnEntityLiving packet = new WrapperPlayServerSpawnEntityLiving();
         packet.setEntityID(entityId);
-        packet.setMetadata(dataWatcher);
+
+        if (currentVersion < beeVersion) {
+            packet.setMetadata(dataWatcher);
+        }
 
         packet.setType(entityType);
 

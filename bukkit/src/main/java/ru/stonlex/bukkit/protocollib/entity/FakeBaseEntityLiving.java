@@ -10,6 +10,9 @@ import ru.stonlex.bukkit.protocollib.entity.animation.FakeEntityAnimation;
 import ru.stonlex.bukkit.protocollib.packet.AbstractPacket;
 import ru.stonlex.bukkit.protocollib.packet.ProtocolPacketFactory;
 
+import java.util.Collection;
+import java.util.Collections;
+
 @Getter
 public abstract class FakeBaseEntityLiving
         extends FakeBaseEntity implements FakeEntityLiving {
@@ -27,6 +30,12 @@ public abstract class FakeBaseEntityLiving
         super(entityType, location);
     }
 
+
+    @Override
+    public synchronized Collection<AbstractPacket> getSpawnPackets() {
+        return Collections.singletonList(
+                ProtocolPacketFactory.createSpawnEntityLivingPacket(entityId, entityType, dataWatcher, location));
+    }
 
     @Override
     public synchronized void playAnimationAll(@NonNull FakeEntityAnimation fakeEntityAnimation) {

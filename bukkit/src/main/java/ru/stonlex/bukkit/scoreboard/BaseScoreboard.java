@@ -1,5 +1,9 @@
 package ru.stonlex.bukkit.scoreboard;
 
+import com.comphenix.protocol.ProtocolLibrary;
+import com.comphenix.protocol.utility.MinecraftProtocolVersion;
+import com.comphenix.protocol.utility.MinecraftVersion;
+import com.comphenix.protocol.wrappers.WrappedChatComponent;
 import gnu.trove.map.TIntObjectMap;
 import lombok.Getter;
 import lombok.NonNull;
@@ -323,10 +327,19 @@ public class BaseScoreboard {
             currentDisplay = currentDisplay.substring(0, 32);
         }
 
-        WrapperPlayServerScoreboardObjective objectivePacket = new WrapperPlayServerScoreboardObjective();
+        int aquaticVersion = MinecraftProtocolVersion.getVersion(MinecraftVersion.AQUATIC_UPDATE);
+        int currentVersion = MinecraftProtocolVersion.getVersion(ProtocolLibrary.getProtocolManager().getMinecraftVersion());
 
+        WrapperPlayServerScoreboardObjective objectivePacket = new WrapperPlayServerScoreboardObjective();
         objectivePacket.setName(scoreboardName);
-        objectivePacket.setDisplayName(currentDisplay);
+
+        if (currentVersion < aquaticVersion) {
+            objectivePacket.setDisplayName(currentDisplay);
+
+        } else {
+
+            objectivePacket.getHandle().getChatComponents().write(0, WrappedChatComponent.fromText(currentDisplay));
+        }
 
         objectivePacket.setHealthDisplay(WrapperPlayServerScoreboardObjective.HealthDisplay.INTEGER);
         objectivePacket.setMode(objectiveMode);

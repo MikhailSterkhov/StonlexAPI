@@ -1,5 +1,10 @@
 package ru.stonlex.bukkit.protocollib.team;
 
+import com.comphenix.protocol.ProtocolLibrary;
+import com.comphenix.protocol.utility.MinecraftProtocolVersion;
+import com.comphenix.protocol.utility.MinecraftReflection;
+import com.comphenix.protocol.utility.MinecraftVersion;
+import com.comphenix.protocol.wrappers.WrappedChatComponent;
 import lombok.*;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -118,26 +123,48 @@ public class ProtocolTeam {
     @Getter
     private Consumer<WrapperPlayServerScoreboardTeam> packetHandler;
 
-    private synchronized WrapperPlayServerScoreboardTeam getTeamPacket(int mode) {
+    private synchronized WrapperPlayServerScoreboardTeam getTeamPacket(@NonNull Player player, int mode) {
+        int aquaticVersion = MinecraftProtocolVersion.getVersion(MinecraftVersion.AQUATIC_UPDATE);
+        int version = ProtocolLibrary.getProtocolManager().getProtocolVersion(player);
+
         WrapperPlayServerScoreboardTeam scoreboardTeam = new WrapperPlayServerScoreboardTeam();
-
         scoreboardTeam.setName(name);
-        scoreboardTeam.setMode(mode);
 
-        scoreboardTeam.setCollisionRule("never");
-        scoreboardTeam.setNameTagVisibility("always");
+        if (version >= aquaticVersion) {
+            scoreboardTeam.getHandle().getIntegers().write(0, mode);
 
-        if (mode == WrapperPlayServerScoreboardTeam.Mode.TEAM_CREATED || mode == WrapperPlayServerScoreboardTeam.Mode.TEAM_UPDATED) {
+            scoreboardTeam.getHandle().getStrings().write(2, "never");
+            scoreboardTeam.getHandle().getStrings().write(1, "always");
 
-            scoreboardTeam.setPrefix(prefix != null ? fixLength(16, prefix) : "");
-            scoreboardTeam.setSuffix(suffix != null ? fixLength(16, suffix) : "");
+            if (mode == WrapperPlayServerScoreboardTeam.Mode.TEAM_CREATED || mode == WrapperPlayServerScoreboardTeam.Mode.TEAM_UPDATED) {
+                scoreboardTeam.getHandle().getChatComponents().write(1, WrappedChatComponent.fromText(prefix != null ? fixLength(16, prefix) : ""));
+                scoreboardTeam.getHandle().getChatComponents().write(2, WrappedChatComponent.fromText(prefix != null ? fixLength(16, prefix) : ""));
 
-            scoreboardTeam.setPackOptionData(0);
-            scoreboardTeam.setColor(ChatColor.getByChar(prefix.replace(" ", "").charAt(1)).ordinal());
+                scoreboardTeam.getHandle().getEnumModifier(ChatColor.class, MinecraftReflection.getMinecraftClass("EnumChatFormat")).write(0, ChatColor.getByChar(prefix.replace(" ", "").charAt(1)));
+
+                scoreboardTeam.getHandle().getIntegers().write(1, 0);
+
+            } else {
+                scoreboardTeam.setPlayers(Collections.singletonList(name));
+            }
 
         } else {
 
-            scoreboardTeam.setPlayers(entryList);
+            scoreboardTeam.setMode(mode);
+
+            scoreboardTeam.setCollisionRule("never");
+            scoreboardTeam.setNameTagVisibility("always");
+
+            if (mode == WrapperPlayServerScoreboardTeam.Mode.TEAM_CREATED || mode == WrapperPlayServerScoreboardTeam.Mode.TEAM_UPDATED) {
+                scoreboardTeam.setPrefix(prefix != null ? fixLength(16, prefix) : "");
+                scoreboardTeam.setSuffix(suffix != null ? fixLength(16, suffix) : "");
+
+                scoreboardTeam.setPackOptionData(0);
+                scoreboardTeam.setColor(ChatColor.getByChar(prefix.replace(" ", "").charAt(1)).ordinal());
+
+            } else {
+                scoreboardTeam.setPlayers(entryList);
+            }
         }
 
         if (packetHandler != null)
@@ -152,7 +179,7 @@ public class ProtocolTeam {
     }
 
     public synchronized void sendPacket(int mode, @NonNull Player receiver) {
-        getTeamPacket(mode).sendPacket(receiver);
+        getTeamPacket(receiver, mode).sendPacket(receiver);
     }
 
     public synchronized void broadcastPacket(int mode) {
