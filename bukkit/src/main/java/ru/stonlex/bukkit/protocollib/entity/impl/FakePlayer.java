@@ -215,8 +215,8 @@ public class FakePlayer extends FakeBaseEntityLiving {
                 scoreboardTeam.setDisplayName(teamName);
 
                 scoreboardTeam.setPrefix(glowingColor == null ? "§8" : glowingColor.toString());
+                scoreboardTeam.setColor(glowingColor == null ? 0 : glowingColor.ordinal());
 
-                scoreboardTeam.setColor(glowingColor.ordinal());
                 scoreboardTeam.setPackOptionData(0);
 
             } else {

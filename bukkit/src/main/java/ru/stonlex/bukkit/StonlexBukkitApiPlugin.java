@@ -21,8 +21,8 @@ public final class StonlexBukkitApiPlugin extends JavaPlugin {
 
         // events
         getServer().getPluginManager().registerEvents(new BaseInventoryListener(), this);
-        getServer().getPluginManager().registerEvents(new PlayerListener(), this);
         getServer().getPluginManager().registerEvents(new BaseScoreboardListener(), this);
+        getServer().getPluginManager().registerEvents(new PlayerListener(), this);
 
         getServer().getPluginManager().registerEvents(ProtocolTeam.TEAM_LISTENER, this);
         getServer().getPluginManager().registerEvents(StonlexBukkitApi.HOLOGRAPHIC_MANAGER, this);

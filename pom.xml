@@ -10,6 +10,14 @@
 
     <packaging>pom</packaging>
 
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
     <build>
         <finalName>StonlexAPI</finalName>
         <plugins>
@@ -33,7 +41,7 @@
                             <classpathPrefix>lib/</classpathPrefix>
                         </manifest>
                     </archive>
-                    <outputDirectory>C:/Users/user/OneDrive/Рабочий стол/Разработки/говно для переписи</outputDirectory>
+                    <outputDirectory>${user.home}/OneDrive/Рабочий стол/Разработки/говно для переписи</outputDirectory>
                 </configuration>
             </plugin>
         </plugins>
@@ -65,7 +73,14 @@
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <version>5.1.47</version>
-            <scope>provided</scope>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.zaxxer</groupId>
+            <artifactId>HikariCP</artifactId>
+            <version>4.0.3</version>
+            <scope>compile</scope>
         </dependency>
 
         <dependency>

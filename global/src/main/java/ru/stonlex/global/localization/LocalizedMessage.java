@@ -57,7 +57,6 @@ public class LocalizedMessage {
             handle = toList().stream().map(line -> line.replace(placeholder, value.toString())).collect(Collectors.toList());
         }
 
-        localizationResource.addMessage(messageKey, handle);
         return this;
     }
 

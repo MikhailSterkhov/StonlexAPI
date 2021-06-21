@@ -2,26 +2,19 @@ package ru.stonlex.example;
 
 import jline.internal.TestAccessible;
 import lombok.NonNull;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.java.JavaPlugin;
-import ru.stonlex.bukkit.StonlexBukkitApi;
-import ru.stonlex.bukkit.holographic.ProtocolHolographic;
-import ru.stonlex.bukkit.protocollib.entity.impl.FakePlayer;
-import ru.stonlex.bukkit.scoreboard.BaseScoreboardBuilder;
-import ru.stonlex.bukkit.scoreboard.BaseScoreboardScope;
-import ru.stonlex.bukkit.scoreboard.animation.ScoreboardDisplayFlickAnimation;
 import ru.stonlex.bukkit.utility.localization.LocalizedPlayer;
-import ru.stonlex.bukkit.utility.location.LocationUtil;
-import ru.stonlex.example.command.ExampleConsoleCommand;
-import ru.stonlex.example.command.ExamplePlayerCommand;
-import ru.stonlex.example.configuration.TestConfiguration;
+import ru.stonlex.example.database.TestDatabaseEventHandler;
 import ru.stonlex.example.localization.ExampleLang;
+import ru.stonlex.global.database.*;
+import ru.stonlex.global.database.query.RemoteDatabaseRowType;
+import ru.stonlex.global.database.query.row.TypedQueryRow;
+import ru.stonlex.global.database.query.row.ValueQueryRow;
 import ru.stonlex.global.mail.MailSender;
+import ru.stonlex.global.utility.DateUtil;
 import ru.stonlex.global.utility.MailUtil;
 
-import java.util.function.Consumer;
+import java.sql.Timestamp;
 
 public final class ApiExample {
 
@@ -46,97 +39,6 @@ public final class ApiExample {
     }
 
     @TestAccessible
-    protected void exampleConfiguration(@NonNull JavaPlugin javaPlugin) {
-        new TestConfiguration(javaPlugin).createIfNotExists();
-    }
-
-    @TestAccessible
-    protected void exampleScoreboard(@NonNull Player player) {
-        // Анимация Title
-        ScoreboardDisplayFlickAnimation displayFlickAnimation = new ScoreboardDisplayFlickAnimation();
-
-        displayFlickAnimation.addColor(ChatColor.RED);
-        displayFlickAnimation.addColor(ChatColor.GOLD);
-        displayFlickAnimation.addColor(ChatColor.YELLOW);
-        displayFlickAnimation.addColor(ChatColor.WHITE);
-        displayFlickAnimation.addTextToAnimation("§lANIMATION");
-
-        // Создание своего скорборда
-        BaseScoreboardBuilder scoreboardBuilder = StonlexBukkitApi.newScoreboardBuilder();
-
-        scoreboardBuilder.scoreboardDisplay(ChatColor.YELLOW + "TEST TITLE"); //Статический Title скорборда
-        scoreboardBuilder.scoreboardDisplay(displayFlickAnimation); // Простейшая анимация Title скорборда
-
-        scoreboardBuilder.scoreboardScope(BaseScoreboardScope.PROTOTYPE); // [Обязательно] Видимость скорборда, подробнее можно посмотреть в самом классе BaseScoreboardScope
-
-        scoreboardBuilder.scoreboardLine(3, "Ваш игровой ник: §cЗагрузка...");
-        scoreboardBuilder.scoreboardLine(2, "");
-        scoreboardBuilder.scoreboardLine(1, "§ewww.google.com");
-
-        scoreboardBuilder.scoreboardUpdater((baseScoreboard, player1) -> {
-            baseScoreboard.updateScoreboardLine(3, player1, "Ваш игровой ник: §c" + player1.getName());
-
-        }, 20);
-
-        // Отправляем его игроку
-        scoreboardBuilder.build().setScoreboardToPlayer(player);
-    }
-
-    @TestAccessible
-    protected void exampleCommand() {
-
-        // Если в классе команды наследуется конструктор из
-        //  StonlexCommand, то команды регистрируются автоматически, вызовом
-        //  самого конструктора.
-        new ExamplePlayerCommand(true);
-
-        // Если же подобных технологий не знаем и не делаем,
-        //  то регистрируем сами при помощи CommandFactory
-        StonlexBukkitApi.registerCommand(new ExampleConsoleCommand(false), "console", "console-alias");
-    }
-
-    @TestAccessible
-    protected void exampleHolographic(Player receiver, Location location) {
-        ProtocolHolographic protocolHolographic = StonlexBukkitApi.createSimpleHolographic(location);
-
-        // Создание кликабельных голограмм
-        Consumer<Player> playerConsumer = player -> { //player = игрок, который кликнул
-
-            player.sendMessage(ChatColor.GOLD + "Клик по голограмме прошел успешно");
-            player.sendMessage(ChatColor.GOLD + "Локация: " + LocationUtil.locationToString(protocolHolographic.getLocation()));
-        };
-
-        // Добавление строк в голограмму
-        protocolHolographic.addClickLine(ChatColor.YELLOW + "Разработчик данной API", playerConsumer);
-        protocolHolographic.addClickLine(ChatColor.GREEN + "https://vk.com/itzstonlex", playerConsumer);
-
-        protocolHolographic.addReceivers(receiver); //заспавнить только для одного игрока
-    }
-
-    @TestAccessible
-    protected void exampleNPC(Player receiver, String playerSkin, Location location) {
-        FakePlayer fakePlayer = new FakePlayer(playerSkin, location);
-
-        //создаем желтую подсветку для NPC
-        fakePlayer.setGlowingColor(ChatColor.YELLOW);
-
-        //добавить действие при клике на NPC
-        fakePlayer.setClickAction( player -> { //player = игрок, который кликнул
-            player.sendMessage(ChatColor.GOLD + "Клик по NPC прошел успешно");
-            player.sendMessage(ChatColor.GOLD + "Локация: " + LocationUtil.locationToString(fakePlayer.getLocation()));
-        });
-
-        fakePlayer.look(receiver); //посмотреть на игрока
-
-        fakePlayer.setBurning(true); //поджечь
-        fakePlayer.setSneaking(true); //присесть
-        fakePlayer.setInvisible(false); //сделать видимым
-
-        fakePlayer.spawn(); //заспавнить для всех игроков онлайн
-        fakePlayer.addViewers(receiver); //заспавнить только для одного игрока
-    }
-
-    @TestAccessible
     protected void exampleSendMailMessage(String toMail, String subject, String contentMessage) {
         //создаем и получаем отправителя
         MailSender mailSender = MailUtil.getMailSender(
@@ -144,6 +46,102 @@ public final class ApiExample {
 
         //кидаем сообщение получателю
         MailUtil.sendMessage(mailSender, subject, contentMessage, toMail);
+    }
+
+    @TestAccessible
+    protected void exampleRemoteDatabase() {
+
+        // Создание подключения к базе данных.
+        RemoteDatabasesApi remoteDatabasesApi = RemoteDatabasesApi.getInstance();
+        RemoteDatabaseConnectionFields connectionFields = remoteDatabasesApi.createConnectionFields("localhost", "root", "", "test");
+
+        RemoteDatabaseConnectionHandler connectionHandler = remoteDatabasesApi.createHikariConnection(connectionFields);
+
+        // Установка обработчика событий (необязательно)
+        connectionHandler.setEventHandler(new TestDatabaseEventHandler());
+
+        // Выполнение строковых запросов.
+        {
+            RemoteDatabaseExecuteHandler executeHandler = connectionHandler.getExecuteHandler();
+
+            // 1: Запрос на создание таблицы
+            executeHandler.executeUpdate(true, "CREATE TABLE `PlayerIdentifiers` (`Id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT, `Name` TEXT NOT NULL, `JoinDate` TIMESTAMP)");
+
+            // 2: Запрос на изменение данных
+            executeHandler.executeUpdate(false, "INSERT INTO `Humans` VALUES (?, ?)", "Миша Лейн", new Timestamp(System.currentTimeMillis()));
+
+            // 3: Запрос на получение данных
+            executeHandler.executeQuery(true, "SELECT * FROM `Humans` WHERE `Name`=?", "Миша Лейн")
+                    .thenAccept(result -> {
+
+                        if (!result.next()) {
+                            return;
+                        }
+
+                        int userId = result.getInt("Id");
+                        Timestamp registerTime = result.getTimestamp("RegisterTime");
+
+                        System.out.println("(ID: " + userId + ") Дата регистрации - "
+                                + DateUtil.formatTime(registerTime.getTime(), DateUtil.DEFAULT_DATE_PATTERN));
+                    });
+        }
+
+        // Выполнение запросов через билдер-паттерн.
+        {
+            // Сначала получим таблицу Humans
+            RemoteDatabaseTable humansTable = connectionHandler.getTable("Humans");
+
+            // Если ее не существует, то создадим ее в базе
+            if (humansTable == null) {
+                connectionHandler.newDatabaseQuery("Humans")
+                        .createTableQuery()
+
+                        .queryRow(new TypedQueryRow(RemoteDatabaseRowType.INT, "Id")
+                                .index(TypedQueryRow.IndexType.NOT_NULL)
+                                .index(TypedQueryRow.IndexType.PRIMARY)
+                                .index(TypedQueryRow.IndexType.AUTO_INCREMENT))
+
+                        .queryRow(new TypedQueryRow(RemoteDatabaseRowType.VAR_CHAR, "Name")
+                                .index(TypedQueryRow.IndexType.NOT_NULL))
+
+                        .queryRow(new TypedQueryRow(RemoteDatabaseRowType.TIMESTAMP, "RegisterTime"))
+                        .executeSync(connectionHandler);
+
+                humansTable = connectionHandler.getTable("Humans");
+            }
+
+            // 1: Отправим запрос на создание строчки
+            humansTable.newDatabaseQuery()
+                    .insertQuery()
+
+                    .queryRow(new ValueQueryRow("Name", "Миша Лейн"))
+                    .queryRow(new ValueQueryRow("RegisterTime", new Timestamp(System.currentTimeMillis())))
+
+                    .executeSync(connectionHandler);
+
+            // 2: Запрос на получение данных из только что созданной строчки, где имя = Миша Лейн
+            humansTable.newDatabaseQuery()
+                    .selectQuery()
+
+                    .queryRow(new ValueQueryRow("Name", "Миша Лейн"))
+
+                    .executeQueryAsync(connectionHandler)
+                    .thenAccept(result -> {
+
+                        if (!result.next()) {
+                            return;
+                        }
+
+                        int userId = result.getInt("Id");
+                        Timestamp registerTime = result.getTimestamp("RegisterTime");
+
+                        System.out.println("(ID: " + userId + ") Дата регистрации - "
+                                + DateUtil.formatTime(registerTime.getTime(), DateUtil.DEFAULT_DATE_PATTERN));
+                    });
+        }
+
+        // Закрываем соединение с базой данных (если это конец работы с ней, конечно).
+        connectionHandler.handleDisconnect();
     }
 
 }

@@ -30,18 +30,18 @@ import java.util.function.Consumer;
 @Getter
 public abstract class FakeBaseEntity implements Cloneable, FakeEntityClickable {
 
-    public static @NonNull WrappedDataWatcher.Serializer BYTE_SERIALIZER        = WrappedDataWatcher.Registry.get(Byte.class);
-    public static @NonNull WrappedDataWatcher.Serializer FLOAT_SERIALIZER       = WrappedDataWatcher.Registry.get(Float.class);
-    public static @NonNull WrappedDataWatcher.Serializer INT_SERIALIZER         = WrappedDataWatcher.Registry.get(Integer.class);
-    public static @NonNull WrappedDataWatcher.Serializer STRING_SERIALIZER      = WrappedDataWatcher.Registry.get(String.class);
-    public static @NonNull WrappedDataWatcher.Serializer BOOLEAN_SERIALIZER     = WrappedDataWatcher.Registry.get(Boolean.class);
+    public static @NonNull WrappedDataWatcher.Serializer BYTE_SERIALIZER                = WrappedDataWatcher.Registry.get(Byte.class);
+    public static @NonNull WrappedDataWatcher.Serializer FLOAT_SERIALIZER               = WrappedDataWatcher.Registry.get(Float.class);
+    public static @NonNull WrappedDataWatcher.Serializer INT_SERIALIZER                 = WrappedDataWatcher.Registry.get(Integer.class);
+    public static @NonNull WrappedDataWatcher.Serializer STRING_SERIALIZER              = WrappedDataWatcher.Registry.get(String.class);
+    public static @NonNull WrappedDataWatcher.Serializer BOOLEAN_SERIALIZER             = WrappedDataWatcher.Registry.get(Boolean.class);
 
-    public static @NonNull WrappedDataWatcher.Serializer CHAT_COMPONENT_SERIALIZER     = WrappedDataWatcher.Registry.getChatComponentSerializer();
+    public static @NonNull WrappedDataWatcher.Serializer CHAT_COMPONENT_SERIALIZER      = WrappedDataWatcher.Registry.getChatComponentSerializer();
 
-    public static @NonNull WrappedDataWatcher.Serializer ITEMSTACK_SERIALIZER   = WrappedDataWatcher.Registry.get(MinecraftReflection.getItemStackClass());
-    public static @NonNull WrappedDataWatcher.Serializer ROTATION_SERIALIZER    = WrappedDataWatcher.Registry.get(Vector3F.getMinecraftClass());
+    public static @NonNull WrappedDataWatcher.Serializer ITEMSTACK_SERIALIZER           = WrappedDataWatcher.Registry.get(MinecraftReflection.getItemStackClass());
+    public static @NonNull WrappedDataWatcher.Serializer ROTATION_SERIALIZER            = WrappedDataWatcher.Registry.get(Vector3F.getMinecraftClass());
 
-    public static @NonNull FieldAccessor ENTITY_ID_ACCESSOR = Accessors.getFieldAccessor(MinecraftReflection.getEntityClass(), "entityCount", true);
+    public static @NonNull FieldAccessor ENTITY_ID_ACCESSOR                             = Accessors.getFieldAccessor(MinecraftReflection.getEntityClass(), "entityCount", true);
 
 
     protected @NonNull int entityId;

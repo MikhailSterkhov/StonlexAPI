@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module org.jetbrains.idea.maven.project.MavenProjectsManager.isMavenModule="true" type="JAVA_MODULE" version="4">
+  <component name="CheckStyle-IDEA-Module">
+    <option name="configuration">
+      <map />
+    </option>
+  </component>
   <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_8">
     <output url="file://$MODULE_DIR$/target/classes" />
     <output-test url="file://$MODULE_DIR$/target/test-classes" />
@@ -13,6 +18,8 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: net.milkbowl:Vault:1.7.1-b91" level="project" />
     <orderEntry type="module" module-name="bukkit" scope="PROVIDED" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.stonlexx.protocollib:packetwrapper:1.0-SNAPSHOT" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: com.mojang:brigadier:1.0.17" level="project" />
     <orderEntry type="module" module-name="bungee" scope="PROVIDED" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.apache.commons:commons-lang3:3.10" level="project" />
     <orderEntry type="module" module-name="global" scope="PROVIDED" />
@@ -28,7 +35,9 @@
     <orderEntry type="library" name="Maven: org.spigotmc:spigot:1.12.2-R0.1-SNAPSHOT" level="project" />
     <orderEntry type="library" name="Maven: net.md-5:bungeecord:1.12" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.projectlombok:lombok:1.18.10" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: mysql:mysql-connector-java:5.1.47" level="project" />
+    <orderEntry type="library" name="Maven: mysql:mysql-connector-java:5.1.47" level="project" />
+    <orderEntry type="library" name="Maven: com.zaxxer:HikariCP:4.0.3" level="project" />
+    <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:2.0.0-alpha1" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: com.google.code.gson:gson:2.8.0" level="project" />
     <orderEntry type="library" name="Maven: javax.mail:mail:1.5.0-b01" level="project" />
     <orderEntry type="library" name="Maven: javax.activation:activation:1.1" level="project" />

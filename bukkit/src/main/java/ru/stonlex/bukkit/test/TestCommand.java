@@ -7,7 +7,6 @@ import org.bukkit.entity.Player;
 import ru.stonlex.bukkit.command.BaseCommand;
 import ru.stonlex.bukkit.command.annotation.CommandCooldown;
 import ru.stonlex.bukkit.command.annotation.CommandPermission;
-import ru.stonlex.bukkit.utility.localization.LocalizedPlayer;
 import ru.stonlex.global.localization.LocalizationResource;
 
 @CommandPermission(permission = "stonlexapi.test", message = "§6нет прав.")
@@ -27,10 +26,10 @@ public class TestCommand extends BaseCommand<Player> {
 
     @Override
     protected void onExecute(Player player, String[] args) {
-        LocalizedPlayer localizedPlayer = LocalizedPlayer.create(player, Lang.EN_LANGUAGE.getResource());
-
-        localizedPlayer.sendMessage("TEST_LOCALIZED_MESSAGE");
-        localizedPlayer.sendTitle("TEST_LOCALIZED_TITLE", "TEST_LOCALIZED_SUBTITLE");
+        //LocalizedPlayer localizedPlayer = LocalizedPlayer.create(player, Lang.EN_LANGUAGE.getResource());
+        //
+        //localizedPlayer.sendMessage("TEST_LOCALIZED_MESSAGE");
+        //localizedPlayer.sendTitle("TEST_LOCALIZED_TITLE", "TEST_LOCALIZED_SUBTITLE");
     }
 
     @Getter
