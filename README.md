@@ -282,7 +282,7 @@ public class ExampleSimpleGUI
     
 ```
 
-![BaseSimpleInventory](https://psv4.userapi.com/c520036/u181576872/docs/d35/a0e0a1d54643/ezgif_com-gif-maker_2.gif?extra=gNpK16lJ7vdnEKlHDtZ4uawwrXrVI9UK04NSpdQ1GvhRbv5L7eDpcsHdAwfzDNKkCvr_SxY6UD5fWzvCHLnU71FNVHhpkyLHrwrP7uE3p_Qkb-QhodEWtNul9FtVvyvY5MGmCLBEA1NoRFLeGt6wS5i0)
+![BaseSimpleInventory](https://psv4.userapi.com/c520036/u181576872/docs/d35/0576b90c0da6/ezgif_com-gif-maker_2.gif?extra=s-oV8KK5X0t1bDgxtrbIw_dIyuDLvNIYz5HbP9ljRS9hGbGwDuuAZWDp2bFf3um2WTZDFaEVCd3Hx1he0PGNSBFEfNjrMKVU0bk9xf284Do7-8la1e6HaDQctHRWEbsxlhdfdciCz4CNRbBDOzZbAeAPiQ)
 
 
 На данном моменте можно было бы и закончить список функционала инвентарей, однако, этим они не ограничиваются.
@@ -403,7 +403,7 @@ public class ExamplePaginatedGUI
     }
 ```
 
-![BasePaginatedInventory](https://psv4.userapi.com/c536132/u181576872/docs/d11/93e8f4f8dcb1/ezgif_com-gif-maker_3.gif?extra=VSbyjVTH0yhHpCpPw7OQoBLYnwJv1pzqH3J03beUxa4vuAMKF8WDATc3FzcaDBgnc0O5iBjIe3uZDYlulTEW3OYboEMAjwk4xREX2CHvEVmHfMw5pRaEXbi1c04_am1doIKcVt4hvKjrsS_BpcFg2Xiw)
+![BasePaginatedInventory](https://psv4.userapi.com/c536132/u181576872/docs/d11/b5e6a2cde1e0/ezgif_com-gif-maker_3.gif?extra=KNWrPzV26D8CFhbEdKuOleihgowYb5Ew-uaYbpsRGsHJfE5bBXF63q0gDSx0YgysJHiIaywTUVGGwIl1YP7tTuaqpPlcMYgZvAj2yNHuThziXS4FHFyZiZpiixdXRNHSL5egDAKLeQR3xbby3TnksDe5nQ)
 
 
 ***
@@ -465,7 +465,7 @@ fakePlayer.spawn(); // заспавнить для всех игроков, и �
 fakePlayer.remove(); // удалить Entity как для всех, так и прекратить спавн для новых игроков
 ```
 
-![FakeEntity](https://psv4.userapi.com/c505536/u181576872/docs/d51/459c8317c186/ezgif_com-gif-maker_1.gif?extra=bjK486KYhlZLwAG3Oha0wGqfJsyW9JtLKB5Q7re38wrUeFJOWSqUwB6LJ80aPHPkl3sOkxn8HoIUUh7TL3YspTDWuSiMfbPOfrL5QzE_eKoY96B8yEkduhYlaxys5fKJz4l6Cg6aqalv24N00Agj25TS)
+![FakeEntity](https://psv4.userapi.com/c505536/u181576872/docs/d51/c71e4469842c/ezgif_com-gif-maker_1.gif?extra=EMpjY7CP2pqz63P50texNr4rL8CcWncDf5erHdZHCSb6LEux3GXtneR90vigx63_9xiBcgVfo2GusnaKf4M2h1gLHaUFHb4XavDM6U4FrxfZIjT5luah66ffb6O8CkqRXkV-lxfVsaMqeaItod1-YgYmjw)
 
 ***
 - `FakeTeams-API`:
@@ -547,7 +547,7 @@ animationPacket.broadcastPacket();
 
 Сейчас на простом примере попробуем создать подобный Scoreboard:
 
-![Scoreboards](https://psv4.userapi.com/c520036/u181576872/docs/d8/bc84b00b9819/ezgif_com-gif-maker.gif?extra=jdkMXQ7H0CIUkkjBuxH4ZM-ek-KqqRZekTKDEEmYR-sABA5NsUmcO-vQ5tsaadA0-funCgHe8fLBPbi1SjzTSm0jAna8TGK4z15x1o09Mynp09m9g_Ul_kB-IAkVnsLwIhdVeaw0cit9zS1r_liJrn6i)
+![Scoreboards](https://psv4.userapi.com/c520036/u181576872/docs/d8/f6d5b49b36cc/ezgif_com-gif-maker.gif?extra=XqRXfe3OhNM2MdmP_2YQkJ_xdEIXi4yUerk7YaI5FyIu0xqihysRTOK-kOph-Z5J67wrkR-mMLTP1UJ62WAihAh_Cq1c9bBdbhrZLCoCTByyhddxQwRwP-ms9DyriRnd5_quqBAjdPoQfPF0c18lN-Ek_w)
 
 Для начала необходимо создать Builder, по которому будут выстраиваться необходимые данные для Scoreboard:
 
