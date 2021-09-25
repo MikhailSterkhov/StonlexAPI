@@ -5,6 +5,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import ru.stonlex.global.database.query.RemoteDatabaseQuery;
 import ru.stonlex.global.database.query.row.ValueQueryRow;
 
@@ -14,15 +15,15 @@ import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Getter(AccessLevel.PROTECTED)
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public final class SelectQuery
         extends RemoteDatabaseQuery<ValueQueryRow> {
 
-    private final String queryFunction = "SELECT";
+    @NonNull String queryFunction = "SELECT";
+    @NonNull String databaseTable;
 
-    private final String databaseTable;
 
-
-    private String[] selectedRows = {"*"};
+    String[] selectedRows = {"*"};
 
     public SelectQuery setSelectedRows(String... selectedRows) {
         this.selectedRows = selectedRows;
@@ -31,7 +32,7 @@ public final class SelectQuery
     }
 
     @Override
-    protected void buildQuery(@NonNull StringBuilder queryBuilder, @NonNull LinkedList<ValueQueryRow> queryRows) {
+    protected void handle(@NonNull StringBuilder queryBuilder, @NonNull LinkedList<ValueQueryRow> queryRows) {
 
         if (Arrays.asList(selectedRows).contains("*")) {
             queryBuilder.append("*");

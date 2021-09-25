@@ -1,7 +1,10 @@
 package ru.stonlex.global.database.query;
 
+import lombok.AccessLevel;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import lombok.experimental.FieldDefaults;
 
 import java.io.InputStream;
 import java.io.Reader;
@@ -12,9 +15,10 @@ import java.util.Calendar;
 import java.util.Map;
 
 @RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class RemoteDatabaseQueryResult implements ResultSet {
     
-    private final ResultSet resultSet;
+    @NonNull ResultSet resultSet;
     
     @SneakyThrows
     @Override

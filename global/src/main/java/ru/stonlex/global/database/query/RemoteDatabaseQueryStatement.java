@@ -1,8 +1,11 @@
 package ru.stonlex.global.database.query;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.SneakyThrows;
+import lombok.experimental.FieldDefaults;
+import ru.stonlex.global.database.RemoteDatabasesApi;
 
 import java.io.Closeable;
 import java.sql.Connection;
@@ -10,15 +13,18 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
 
 @Getter
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class RemoteDatabaseQueryStatement
         implements Closeable {
 
-    private final boolean sync;
-    private final PreparedStatement preparedStatement;
+    @NonNull boolean sync;
 
-    private RemoteDatabaseQueryResult queryResult;
+    @NonNull PreparedStatement preparedStatement;
+
+    private RemoteDatabaseQueryResult result;
 
 
     /**
@@ -42,51 +48,43 @@ public class RemoteDatabaseQueryStatement
     }
 
     public void executeUpdate() throws SQLException {
-        preparedStatement.execute();
+        preparedStatement.executeUpdate();
     }
 
     @SneakyThrows
     public RemoteDatabaseQueryResult executeQuery() {
-        return (this.queryResult = new RemoteDatabaseQueryResult(preparedStatement.executeQuery()));
+        return (this.result = new RemoteDatabaseQueryResult(preparedStatement.executeQuery()));
     }
 
     @Override
     public void close() {
-        Runnable command = () -> {
+        Runnable command = () -> RemoteDatabasesApi.getInstance().submitSqlExceptions(() -> {
 
-            try {
-                if (queryResult != null && !queryResult.isClosed()) {
-                    queryResult.close();
-                }
-
-                if (preparedStatement != null && !preparedStatement.isClosed()) {
-                    preparedStatement.close();
-                }
+            if (result != null && !result.isClosed()) {
+                result.close();
             }
 
-            catch (Exception exception) {
-                exception.printStackTrace();
+            if (preparedStatement != null && !preparedStatement.isClosed()) {
+                preparedStatement.close();
             }
-        };
+        });
 
-        if (sync) {
-            command.run();
+        if (!sync) {
+            CompletableFuture.runAsync(() -> {
+                try {
+                    Thread.sleep(1500);
+
+                } catch (InterruptedException exception) {
+                    exception.printStackTrace();
+                }
+
+                command.run();
+            });
+
             return;
         }
 
-        new Thread(() -> {
-
-            try {
-                Thread.sleep(1500);
-
-            } catch (InterruptedException exception) {
-                exception.printStackTrace();
-            }
-
-            command.run();
-            Thread.currentThread().stop();
-
-        }).start();
+        command.run();
     }
 
 }

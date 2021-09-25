@@ -1,22 +1,21 @@
 package ru.stonlex.global.database;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 @RequiredArgsConstructor
 @AllArgsConstructor
 @Getter
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class RemoteDatabaseConnectionFields {
 
-    @SuppressWarnings("all")
-    private int port = 3306;
+    int port = 3306;
 
-    private final String host;
+    @NonNull String host;
 
-    private final String username;
+    @NonNull String username;
 
-    private final String password;
+    @NonNull String password;
 
-    private final String scheme;
+    @NonNull String scheme;
 }

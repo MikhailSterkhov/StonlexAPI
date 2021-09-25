@@ -5,6 +5,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import ru.stonlex.global.database.RemoteDatabaseConnectionHandler;
 import ru.stonlex.global.database.query.RemoteDatabaseQuery;
 import ru.stonlex.global.database.query.RemoteDatabaseQueryResult;
@@ -17,13 +18,14 @@ import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Getter(AccessLevel.PROTECTED)
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public final class CreateTableQuery
         extends RemoteDatabaseQuery<TypedQueryRow> {
 
-    private final String queryFunction = "CREATE TABLE";
-    private final String databaseTable;
+    @NonNull String queryFunction = "CREATE TABLE";
+    @NonNull String databaseTable;
 
-    private boolean canCheckExists;
+    boolean canCheckExists;
 
     public CreateTableQuery setCanCheckExists(boolean canCheckExists) {
         this.canCheckExists = canCheckExists;
@@ -32,7 +34,7 @@ public final class CreateTableQuery
     }
 
     @Override
-    protected void buildQuery(@NonNull StringBuilder queryBuilder, @NonNull LinkedList<TypedQueryRow> queryRows) {
+    protected void handle(@NonNull StringBuilder queryBuilder, @NonNull LinkedList<TypedQueryRow> queryRows) {
         if (canCheckExists) {
             queryBuilder.append("IF NOT EXISTS ");
         }

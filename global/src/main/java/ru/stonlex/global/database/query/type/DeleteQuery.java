@@ -5,6 +5,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import ru.stonlex.global.database.query.RemoteDatabaseQuery;
 import ru.stonlex.global.database.query.row.ValueQueryRow;
 
@@ -13,15 +14,15 @@ import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Getter(AccessLevel.PROTECTED)
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public final class DeleteQuery
         extends RemoteDatabaseQuery<ValueQueryRow> {
 
-    private final String queryFunction = "DELETE FROM";
-
-    private final String databaseTable;
+    @NonNull String queryFunction = "DELETE FROM";
+    @NonNull String databaseTable;
 
     @Override
-    protected void buildQuery(@NonNull StringBuilder queryBuilder, @NonNull LinkedList<ValueQueryRow> queryRows) {
+    protected void handle(@NonNull StringBuilder queryBuilder, @NonNull LinkedList<ValueQueryRow> queryRows) {
 
         queryBuilder.append("`");
         queryBuilder.append(databaseTable);
@@ -33,4 +34,5 @@ public final class DeleteQuery
             queryBuilder.append(Joiner.on(" AND ").join(queryRows.stream().map(row -> "`" + row.getName() + "`=?").collect(Collectors.toSet())));
         }
     }
+
 }

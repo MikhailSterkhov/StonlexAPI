@@ -8,13 +8,12 @@ import java.util.concurrent.CompletableFuture;
 
 public interface RemoteDatabaseExecuteHandler {
 
-    Connection getConnection();
+    @NonNull Connection getConnection();
 
-    void refreshConnection();
-
+    @NonNull CompletableFuture<RemoteDatabaseQueryResult> executeQuery(boolean sync, @NonNull String query, Object... values);
 
     void executeUpdate(boolean sync, @NonNull String query, Object... values);
 
-    CompletableFuture<RemoteDatabaseQueryResult> executeQuery(boolean sync, @NonNull String query, Object... values);
+    void refreshConnection();
 
 }

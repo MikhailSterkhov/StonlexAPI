@@ -5,11 +5,10 @@ import lombok.Getter;
 import lombok.NonNull;
 import org.bukkit.Location;
 import org.bukkit.entity.EntityType;
-import ru.stonlex.bukkit.protocollib.entity.FakeBaseEntity;
-import ru.stonlex.bukkit.protocollib.packet.entity.WrapperPlayServerSpawnEntity;
+import ru.stonlex.bukkit.protocollib.entity.FakeBaseEntityLiving;
 
 @Getter
-public class FakeArmorStand extends FakeBaseEntity {
+public class FakeArmorStand extends FakeBaseEntityLiving {
 
     private boolean marker;
     private boolean small;
@@ -20,10 +19,6 @@ public class FakeArmorStand extends FakeBaseEntity {
         super(EntityType.ARMOR_STAND, location);
     }
 
-    @Override
-    public synchronized int getSpawnTypeId() {
-        return WrapperPlayServerSpawnEntity.ObjectTypes.ARMORSTAND;
-    }
 
     public synchronized void setSmall(boolean small) {
         this.small = small;

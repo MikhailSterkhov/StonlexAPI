@@ -1,9 +1,7 @@
 package ru.stonlex.global.database.execute;
 
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
 import ru.stonlex.global.database.RemoteDatabaseConnectionHandler;
 import ru.stonlex.global.database.RemoteDatabaseExecuteHandler;
 import ru.stonlex.global.database.query.RemoteDatabaseQueryResult;
@@ -17,9 +15,10 @@ import java.util.concurrent.CompletableFuture;
 
 @RequiredArgsConstructor
 @Getter
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public final class DataSourceExecuteHandler implements RemoteDatabaseExecuteHandler {
 
-    private final RemoteDatabaseConnectionHandler databaseConnection;
+    @NonNull RemoteDatabaseConnectionHandler databaseConnection;
 
     @Override
     @SneakyThrows
@@ -42,7 +41,7 @@ public final class DataSourceExecuteHandler implements RemoteDatabaseExecuteHand
                 queryStatement.executeUpdate();
 
                 if (databaseConnection.getEventHandler() != null) {
-                    databaseConnection.getEventHandler().onQueryExecuted(query);
+                    databaseConnection.getEventHandler().onQueryExecuted(databaseConnection, query);
                 }
             }
 
@@ -65,7 +64,7 @@ public final class DataSourceExecuteHandler implements RemoteDatabaseExecuteHand
 
         try (RemoteDatabaseQueryStatement queryStatement = new RemoteDatabaseQueryStatement(false, getConnection(), query, values)) {
             if (databaseConnection.getEventHandler() != null) {
-                databaseConnection.getEventHandler().onQueryExecuted(query);
+                databaseConnection.getEventHandler().onQueryExecuted(databaseConnection, query);
             }
 
             return sync

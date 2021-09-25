@@ -2,13 +2,15 @@ package ru.stonlex.global.database.connection;
 
 import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
 import lombok.*;
+import lombok.experimental.FieldDefaults;
 import ru.stonlex.global.database.RemoteDatabaseConnectionFields;
 import ru.stonlex.global.database.RemoteDatabaseConnectionHandler;
 import ru.stonlex.global.database.RemoteDatabaseExecuteHandler;
 import ru.stonlex.global.database.RemoteDatabaseTable;
-import ru.stonlex.global.database.event.RemoteDatabaseEventHandler;
+import ru.stonlex.global.database.event.RemoteDatabaseEventListener;
 import ru.stonlex.global.database.execute.DataSourceExecuteHandler;
 import ru.stonlex.global.database.table.RemoteDatabaseTableData;
+import ru.stonlex.global.utility.query.AsyncUtil;
 
 import java.sql.Connection;
 import java.util.HashMap;
@@ -17,17 +19,18 @@ import java.util.Objects;
 
 @RequiredArgsConstructor
 @Getter
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public final class MysqlDatabaseConnection implements RemoteDatabaseConnectionHandler {
 
-    private final RemoteDatabaseConnectionFields connectionFields;
-    private final Map<String, RemoteDatabaseTable> databaseTables = new HashMap<>();
+    @NonNull final RemoteDatabaseConnectionFields connectionFields;
+    @NonNull final Map<String, RemoteDatabaseTable> databaseTables = new HashMap<>();
 
-    private Connection connection;
+    Connection connection;
 
-    private RemoteDatabaseExecuteHandler executeHandler;
+    RemoteDatabaseExecuteHandler executeHandler;
 
     @Setter
-    private RemoteDatabaseEventHandler eventHandler;
+    RemoteDatabaseEventListener eventHandler;
 
     @Override
     public RemoteDatabaseTable getTable(@NonNull String tableName) {
@@ -71,11 +74,11 @@ public final class MysqlDatabaseConnection implements RemoteDatabaseConnectionHa
     @Override
     @SneakyThrows
     public void handleDisconnect() {
-        connection.close();
-
         if (eventHandler != null) {
             eventHandler.onDatabaseDisconnected(this);
         }
+
+        AsyncUtil.submitThrowsAsync(connection::close);
     }
 
     @Override
@@ -85,12 +88,12 @@ public final class MysqlDatabaseConnection implements RemoteDatabaseConnectionHa
             return;
         }
 
+        connection = null;
+        handleConnection();
+
         if (eventHandler != null) {
             eventHandler.onDatabaseReconnected(this);
         }
-
-        connection = null;
-        handleConnection();
     }
 
 }

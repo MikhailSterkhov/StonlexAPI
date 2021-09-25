@@ -5,6 +5,15 @@
       <map />
     </option>
   </component>
+  <component name="FacetManager">
+    <facet type="minecraft" name="Minecraft">
+      <configuration>
+        <autoDetectTypes>
+          <platformType>SPIGOT</platformType>
+        </autoDetectTypes>
+      </configuration>
+    </facet>
+  </component>
   <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_8">
     <output url="file://$MODULE_DIR$/target/classes" />
     <output-test url="file://$MODULE_DIR$/target/test-classes" />
@@ -19,7 +28,15 @@
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.spigotmc:spigot:1.12.2-R0.1-SNAPSHOT" level="project" />
     <orderEntry type="library" name="Maven: org.stonlexx.protocollib:packetwrapper:1.0-SNAPSHOT" level="project" />
     <orderEntry type="library" name="Maven: com.mojang:brigadier:1.0.17" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: com.comphenix.protocol:ProtocolLib:4.5.0" level="project" />
+    <orderEntry type="module-library">
+      <library name="Maven: com.comphenix.protocol:ProtocolLib:4.6.0">
+        <CLASSES>
+          <root url="jar://$USER_HOME$/OneDrive/Рабочий стол/Библиотеки/ProtocolLib.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
     <orderEntry type="library" scope="PROVIDED" name="Maven: net.milkbowl:Vault:1.7.1-b91" level="project" />
     <orderEntry type="module" module-name="global" />
     <orderEntry type="library" name="Maven: com.google.guava:guava:28.2-jre" level="project" />

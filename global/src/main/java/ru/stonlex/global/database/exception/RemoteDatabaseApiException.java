@@ -1,11 +1,10 @@
 package ru.stonlex.global.database.exception;
 
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor
 public class RemoteDatabaseApiException
         extends RuntimeException {
-
-    public RemoteDatabaseApiException() {
-        super();
-    }
 
     public RemoteDatabaseApiException(String message) {
         super(message);

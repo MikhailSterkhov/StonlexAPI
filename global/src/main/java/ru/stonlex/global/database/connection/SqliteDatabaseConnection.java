@@ -1,10 +1,7 @@
 package ru.stonlex.global.database.connection;
 
-import com.zaxxer.hikari.HikariConfig;
-import com.zaxxer.hikari.HikariDataSource;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import ru.stonlex.global.database.RemoteDatabaseConnectionFields;
 import ru.stonlex.global.database.RemoteDatabaseConnectionHandler;
 import ru.stonlex.global.database.RemoteDatabaseExecuteHandler;
 import ru.stonlex.global.database.RemoteDatabaseTable;
@@ -13,7 +10,9 @@ import ru.stonlex.global.database.execute.DataSourceExecuteHandler;
 import ru.stonlex.global.database.table.RemoteDatabaseTableData;
 import ru.stonlex.global.utility.query.AsyncUtil;
 
+import java.io.File;
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -21,10 +20,10 @@ import java.util.Objects;
 @RequiredArgsConstructor
 @Getter
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public final class HikariDatabaseConnection implements RemoteDatabaseConnectionHandler {
+public final class SqliteDatabaseConnection implements RemoteDatabaseConnectionHandler {
 
-    @NonNull final RemoteDatabaseConnectionFields connectionFields;
-    @NonNull final Map<String, RemoteDatabaseTable> databaseTables = new HashMap<>();
+    @NonNull File file;
+    @NonNull Map<String, RemoteDatabaseTable> databaseTables = new HashMap<>();
 
     Connection connection;
 
@@ -42,20 +41,7 @@ public final class HikariDatabaseConnection implements RemoteDatabaseConnectionH
     @Override
     @SneakyThrows
     public void handleConnection() {
-        HikariConfig hikariConfig = new HikariConfig();
-
-        hikariConfig.setDriverClassName("com.mysql.jdbc.Driver");
-        hikariConfig.setJdbcUrl(String.format("jdbc:mysql://%s:%s/%s",
-                connectionFields.getHost(), connectionFields.getPort(), connectionFields.getScheme()));
-
-        hikariConfig.setUsername(connectionFields.getUsername());
-        hikariConfig.setPassword(connectionFields.getPassword());
-
-        hikariConfig.addDataSourceProperty("cachePrepStmts" , "true");
-        hikariConfig.addDataSourceProperty("prepStmtCacheSize" , "250");
-        hikariConfig.addDataSourceProperty("prepStmtCacheSqlLimit" , "2048");
-
-        connection = new HikariDataSource(hikariConfig).getConnection();
+        connection = DriverManager.getConnection("jdbc:sqlite:" + file.getAbsolutePath());
         executeHandler = new DataSourceExecuteHandler(this);
 
         // Load database tables.

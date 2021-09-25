@@ -1,7 +1,6 @@
 package ru.stonlex.bukkit.utility.mojang;
 
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
@@ -92,7 +91,10 @@ public class MojangUtil {
     public String getOriginalName(@NonNull String playerName) {
         try {
             return JsonUtil.parse(MojangUtil.readURL(UUID_URL_STRING + playerName))
-                    .getAsJsonObject().get("name").getAsString();
+
+                    .getAsJsonObject()
+                    .get("name")
+                    .getAsString();
         }
 
         catch (IOException exception) {

@@ -5,6 +5,16 @@
       <map />
     </option>
   </component>
+  <component name="FacetManager">
+    <facet type="minecraft" name="Minecraft">
+      <configuration>
+        <autoDetectTypes>
+          <platformType>SPIGOT</platformType>
+          <platformType>BUNGEECORD</platformType>
+        </autoDetectTypes>
+      </configuration>
+    </facet>
+  </component>
   <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_8">
     <output url="file://$MODULE_DIR$/target/classes" />
     <output-test url="file://$MODULE_DIR$/target/test-classes" />
@@ -20,6 +30,15 @@
     <orderEntry type="module" module-name="bukkit" scope="PROVIDED" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.stonlexx.protocollib:packetwrapper:1.0-SNAPSHOT" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: com.mojang:brigadier:1.0.17" level="project" />
+    <orderEntry type="module-library">
+      <library name="Maven: com.comphenix.protocol:ProtocolLib:4.6.0">
+        <CLASSES>
+          <root url="jar://$USER_HOME$/OneDrive/Рабочий стол/Библиотеки/ProtocolLib.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
     <orderEntry type="module" module-name="bungee" scope="PROVIDED" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.apache.commons:commons-lang3:3.10" level="project" />
     <orderEntry type="module" module-name="global" scope="PROVIDED" />

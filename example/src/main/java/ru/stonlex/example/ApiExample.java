@@ -4,7 +4,7 @@ import jline.internal.TestAccessible;
 import lombok.NonNull;
 import org.bukkit.entity.Player;
 import ru.stonlex.bukkit.utility.localization.LocalizedPlayer;
-import ru.stonlex.example.database.TestDatabaseEventHandler;
+import ru.stonlex.example.database.TestDatabaseEventListener;
 import ru.stonlex.example.localization.ExampleLang;
 import ru.stonlex.global.database.*;
 import ru.stonlex.global.database.query.RemoteDatabaseRowType;
@@ -58,7 +58,7 @@ public final class ApiExample {
         RemoteDatabaseConnectionHandler connectionHandler = remoteDatabasesApi.createHikariConnection(connectionFields);
 
         // Установка обработчика событий (необязательно)
-        connectionHandler.setEventHandler(new TestDatabaseEventHandler());
+        connectionHandler.setEventHandler(new TestDatabaseEventListener());
 
         // Выполнение строковых запросов.
         {
@@ -79,43 +79,34 @@ public final class ApiExample {
                         }
 
                         int userId = result.getInt("Id");
+
                         Timestamp registerTime = result.getTimestamp("RegisterTime");
 
-                        System.out.println("(ID: " + userId + ") Дата регистрации - "
-                                + DateUtil.formatTime(registerTime.getTime(), DateUtil.DEFAULT_DATE_PATTERN));
+                        System.out.println("(ID: " + userId + ") Дата регистрации - " + DateUtil.formatTime(registerTime.getTime(), DateUtil.DEFAULT_DATE_PATTERN));
                     });
         }
 
         // Выполнение запросов через билдер-паттерн.
         {
             // Сначала получим таблицу Humans
-            RemoteDatabaseTable humansTable = connectionHandler.getTable("Humans");
+            RemoteDatabaseTable humansTable = connectionHandler.createOrGetTable("Humans", createTableQuery -> {
 
-            // Если ее не существует, то создадим ее в базе
-            if (humansTable == null) {
-                connectionHandler.newDatabaseQuery("Humans")
-                        .createTableQuery()
+                createTableQuery.push(TypedQueryRow.createPrimaryNotNull(RemoteDatabaseRowType.INT, "Id")
+                        .putIndex(TypedQueryRow.IndexType.AUTO_INCREMENT));
 
-                        .queryRow(new TypedQueryRow(RemoteDatabaseRowType.INT, "Id")
-                                .index(TypedQueryRow.IndexType.NOT_NULL)
-                                .index(TypedQueryRow.IndexType.PRIMARY)
-                                .index(TypedQueryRow.IndexType.AUTO_INCREMENT))
+                createTableQuery.push(TypedQueryRow.create(RemoteDatabaseRowType.VAR_CHAR, "Name")
+                        .putIndex(TypedQueryRow.IndexType.NOT_NULL));
 
-                        .queryRow(new TypedQueryRow(RemoteDatabaseRowType.VAR_CHAR, "Name")
-                                .index(TypedQueryRow.IndexType.NOT_NULL))
-
-                        .queryRow(new TypedQueryRow(RemoteDatabaseRowType.TIMESTAMP, "RegisterTime"))
-                        .executeSync(connectionHandler);
-
-                humansTable = connectionHandler.getTable("Humans");
-            }
+                createTableQuery.push(TypedQueryRow.create(RemoteDatabaseRowType.TIMESTAMP, "RegisterTime"));
+                createTableQuery.executeSync(connectionHandler);
+            });
 
             // 1: Отправим запрос на создание строчки
             humansTable.newDatabaseQuery()
                     .insertQuery()
 
-                    .queryRow(new ValueQueryRow("Name", "Миша Лейн"))
-                    .queryRow(new ValueQueryRow("RegisterTime", new Timestamp(System.currentTimeMillis())))
+                    .push(ValueQueryRow.create("Name", "Миша Лейн"))
+                    .push(ValueQueryRow.create("RegisterTime", new Timestamp(System.currentTimeMillis())))
 
                     .executeSync(connectionHandler);
 
@@ -123,7 +114,7 @@ public final class ApiExample {
             humansTable.newDatabaseQuery()
                     .selectQuery()
 
-                    .queryRow(new ValueQueryRow("Name", "Миша Лейн"))
+                    .push(ValueQueryRow.create("Name", "Миша Лейн"))
 
                     .executeQueryAsync(connectionHandler)
                     .thenAccept(result -> {
@@ -133,10 +124,10 @@ public final class ApiExample {
                         }
 
                         int userId = result.getInt("Id");
+
                         Timestamp registerTime = result.getTimestamp("RegisterTime");
 
-                        System.out.println("(ID: " + userId + ") Дата регистрации - "
-                                + DateUtil.formatTime(registerTime.getTime(), DateUtil.DEFAULT_DATE_PATTERN));
+                        System.out.println("(ID: " + userId + ") Дата регистрации - " + DateUtil.formatTime(registerTime.getTime(), DateUtil.DEFAULT_DATE_PATTERN));
                     });
         }
 
