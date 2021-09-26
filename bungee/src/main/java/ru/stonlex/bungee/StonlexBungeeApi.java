@@ -3,14 +3,17 @@ package ru.stonlex.bungee;
 import lombok.Getter;
 import net.md_5.bungee.api.plugin.Plugin;
 import ru.stonlex.bungee.listener.PlayerListener;
+import ru.stonlex.bungee.messaging.BungeeMessagingManager;
 
-public final class BungeeAPI extends Plugin {
+@Getter
+public final class StonlexBungeeApi extends Plugin {
 
     @Getter
-    private static BungeeAPI instance; {
+    private static StonlexBungeeApi instance; {
         instance = this;
     }
 
+    private final BungeeMessagingManager messagingManager = new BungeeMessagingManager();
 
     @Override
     public void onEnable() {
