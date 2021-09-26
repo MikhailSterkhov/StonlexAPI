@@ -16,6 +16,7 @@ import ru.stonlex.bukkit.inventory.BaseInventory;
 import ru.stonlex.bukkit.inventory.BaseInventoryManager;
 import ru.stonlex.bukkit.inventory.impl.BasePaginatedInventory;
 import ru.stonlex.bukkit.inventory.impl.BaseSimpleInventory;
+import ru.stonlex.bukkit.messaging.BukkitMessagingManager;
 import ru.stonlex.bukkit.scoreboard.BaseScoreboardBuilder;
 import ru.stonlex.bukkit.utility.ItemUtil;
 import ru.stonlex.bukkit.utility.location.CuboidRegion;
@@ -29,13 +30,11 @@ import java.util.function.BiConsumer;
 public interface StonlexBukkitApi {
 
     CommandManager COMMAND_MANAGER                  = (CommandManager.INSTANCE);
-
     VaultManager VAULT_MANAGER                      = (VaultManager.INSTANCE);
-
     ProtocolHolographicManager HOLOGRAPHIC_MANAGER  = (ProtocolHolographicManager.INSTANCE);
 
     BaseInventoryManager INVENTORY_MANAGER          = new BaseInventoryManager();
-
+    BukkitMessagingManager MESSAGING_MANAGER        = new BukkitMessagingManager();
 
     Map<String, Integer> SERVERS_ONLINE_MAP         = new HashMap<>();
 
