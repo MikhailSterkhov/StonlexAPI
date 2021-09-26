@@ -6,6 +6,7 @@ import lombok.AccessLevel;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Plugin;
@@ -26,6 +27,10 @@ public final class BungeeMessagingManager {
          * @param serverInfo - сервер
          */
         public void sendData(@NonNull ServerInfo serverInfo) {
+            if (!ProxyServer.getInstance().getChannels().contains(tag)) {
+                ProxyServer.getInstance().registerChannel(tag);
+            }
+
             serverInfo.sendData(tag, bytes);
         }
 
@@ -34,6 +39,10 @@ public final class BungeeMessagingManager {
          * @param proxiedPlayer - игрок
          */
         public void sendData(@NonNull ProxiedPlayer proxiedPlayer) {
+            if (!ProxyServer.getInstance().getChannels().contains(tag)) {
+                ProxyServer.getInstance().registerChannel(tag);
+            }
+
             proxiedPlayer.sendData(tag, bytes);
         }
     }
