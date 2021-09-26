@@ -27,6 +27,11 @@ public class EmptyHolographicLine implements ProtocolHolographicLine {
 
 
     @Override
+    public double getLineDistance() {
+        return ProtocolHolographicLine.DEFAULT_LINE_DISTANCE;
+    }
+
+    @Override
     public String getLineText() {
         return "";
     }
@@ -36,7 +41,7 @@ public class EmptyHolographicLine implements ProtocolHolographicLine {
 
     @Override
     public void initialize() {
-        this.location = location.clone().add(0, -(0.25 * lineIndex), 0);
+        this.location = location.clone().add(0, -(ProtocolHolographicLine.DEFAULT_LINE_DISTANCE * lineIndex), 0);
     }
 
     @Override

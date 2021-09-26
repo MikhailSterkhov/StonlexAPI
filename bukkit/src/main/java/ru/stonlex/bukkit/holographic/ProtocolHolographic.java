@@ -1,5 +1,6 @@
 package ru.stonlex.bukkit.holographic;
 
+import lombok.NonNull;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -10,50 +11,45 @@ import java.util.function.Consumer;
 
 public interface ProtocolHolographic extends ProtocolHolographicSpawnable {
 
-    Location getLocation();
+    @NonNull Location getLocation();
 
+    @NonNull Set<Player> getViewers();
 
-    Set<Player> getViewers();
+    @NonNull Set<Player> getReceivers();
 
-    Set<Player> getReceivers();
-
-
-    List<ProtocolHolographicLine> getHolographicLines();
+    @NonNull List<ProtocolHolographicLine> getHolographicLines();
 
     ProtocolHolographicUpdater getHolographicUpdater();
 
     ProtocolHolographicLine getHolographicLine(int lineIndex);
 
+    void setHolographicLine(int lineIndex, @NonNull ProtocolHolographicLine holographicLine);
 
-    void setHolographicLine(int lineIndex, ProtocolHolographicLine holographicLine);
+    void setTextLine(int lineIndex, @NonNull String holographicLine);
 
+    void setClickLine(int lineIndex, @NonNull String holographicLine, @NonNull Consumer<Player> clickAction);
 
-    void setTextLine(int lineIndex, String holographicLine);
+    void setSkullLine(int lineIndex, @NonNull String headTexture, boolean small);
 
-    void setClickLine(int lineIndex, String holographicLine, Consumer<Player> clickAction);
-
-    void setSkullLine(int lineIndex, String headTexture, boolean small);
-
-    void setDropLine(int lineIndex, ItemStack itemStack);
+    void setDropLine(int lineIndex, @NonNull ItemStack itemStack);
 
     void setEmptyLine(int lineIndex);
 
-
     void addHolographicLine(ProtocolHolographicLine holographicLine);
 
-    void addTextLine(String holographicLine);
+    void addTextLine(@NonNull String holographicLine);
 
-    void addClickLine(String holographicLine, Consumer<Player> clickAction);
+    void addClickLine(@NonNull String holographicLine, @NonNull Consumer<Player> clickAction);
 
-    void addSkullLine(String headTexture, boolean small);
+    void addSkullLine(@NonNull String headTexture, boolean small);
 
-    void addDropLine(ItemStack itemStack);
+    void addDropLine(@NonNull ItemStack itemStack);
 
     void addEmptyLine();
 
+    void teleport(@NonNull Location location);
 
-    void teleport(Location location);
-
+    void setFullClickAction(@NonNull Consumer<Player> clickAction);
 
     void setUpdater(long updateTicks, ProtocolHolographicUpdater holographicUpdater);
 }

@@ -139,10 +139,6 @@ public class SimpleHolographic implements ProtocolHolographic {
         for (ProtocolHolographicLine holographicLine : holographicLines) {
             holographicLine.addReceivers(players);
         }
-
-        for (Player player : players) {
-            StonlexBukkitApi.HOLOGRAPHIC_MANAGER.addProtocolHolographic(player, this);
-        }
     }
 
     @Override
@@ -152,10 +148,6 @@ public class SimpleHolographic implements ProtocolHolographic {
 
         for (ProtocolHolographicLine holographicLine : holographicLines) {
             holographicLine.removeReceivers(players);
-        }
-
-        for (Player player : players) {
-            StonlexBukkitApi.HOLOGRAPHIC_MANAGER.getPlayerHolographics().remove(player);
         }
     }
 
@@ -171,6 +163,10 @@ public class SimpleHolographic implements ProtocolHolographic {
         for (ProtocolHolographicLine holographicLine : holographicLines) {
             holographicLine.addViewers(players);
         }
+
+        for (Player player : players) {
+            StonlexBukkitApi.HOLOGRAPHIC_MANAGER.addProtocolHolographic(player, this);
+        }
     }
 
     @Override
@@ -179,6 +175,10 @@ public class SimpleHolographic implements ProtocolHolographic {
 
         for (ProtocolHolographicLine holographicLine : holographicLines) {
             holographicLine.removeViewers(players);
+        }
+
+        for (Player player : players) {
+            StonlexBukkitApi.HOLOGRAPHIC_MANAGER.removeProtocolHolographic(player, this);
         }
     }
 
@@ -213,6 +213,16 @@ public class SimpleHolographic implements ProtocolHolographic {
 
         for (ProtocolHolographicLine holographicLine : holographicLines) {
             holographicLine.teleport(location);
+        }
+    }
+
+    @Override
+    public void setFullClickAction(@NonNull Consumer<Player> clickAction) {
+        for (ProtocolHolographicLine holographicLine : holographicLines) {
+            if (holographicLine.getFakeArmorStand() == null)
+                continue;
+
+            holographicLine.getFakeArmorStand().setClickAction(clickAction);
         }
     }
 

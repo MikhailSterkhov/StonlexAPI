@@ -3,10 +3,14 @@ package ru.stonlex.bukkit.test;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import ru.stonlex.bukkit.command.BaseCommand;
 import ru.stonlex.bukkit.command.annotation.CommandCooldown;
 import ru.stonlex.bukkit.command.annotation.CommandPermission;
+import ru.stonlex.bukkit.holographic.impl.SimpleHolographic;
 import ru.stonlex.global.localization.LocalizationResource;
 
 @CommandPermission(permission = "stonlexapi.test", message = "§6нет прав.")
@@ -14,10 +18,10 @@ import ru.stonlex.global.localization.LocalizationResource;
 public class TestCommand extends BaseCommand<Player> {
 
     /**
-     * дженерик <Player> означает, что команда будет выполняться только для игроков
+     * Дженерик <Player> означает, что команда будет выполняться только для игроков
      * <p>
-     * судя по вышеприведенным аннотациям, у команды есть право stonlexapi.test, а выполнять
-     * ее можно только спустя одну секунду, так как выставлена задержка в 1000 миллисекунд
+     * Судя по вышеприведенным аннотациям, у команды есть право stonlexapi.test, а выполнять
+     * ее можно только спустя одну секунду, так как выставлена задержка в 1.000 миллисекунд
      */
 
     public TestCommand() {
@@ -26,10 +30,23 @@ public class TestCommand extends BaseCommand<Player> {
 
     @Override
     protected void onExecute(Player player, String[] args) {
-        //LocalizedPlayer localizedPlayer = LocalizedPlayer.create(player, Lang.EN_LANGUAGE.getResource());
-        //
-        //localizedPlayer.sendMessage("TEST_LOCALIZED_MESSAGE");
-        //localizedPlayer.sendTitle("TEST_LOCALIZED_TITLE", "TEST_LOCALIZED_SUBTITLE");
+        SimpleHolographic holographic = new SimpleHolographic(player.getLocation());
+
+
+        holographic.addTextLine(ChatColor.AQUA + "Text line");
+        holographic.addClickLine(ChatColor.YELLOW + "[Click line]", player1 -> player1.sendMessage("ладно"));
+
+        holographic.addDropLine(new ItemStack(Material.GOLDEN_APPLE));
+        holographic.addTextLine(ChatColor.AQUA + "Test line 1");
+
+        holographic.addSkullLine("ItzStonlex", false);
+        holographic.addSkullLine("md_5", true);
+
+        holographic.addTextLine(ChatColor.AQUA + "Test line 2");
+
+
+        holographic.setFullClickAction(interactedPlayer -> interactedPlayer.sendMessage("зач кликнул? иди поспи"));
+        holographic.addReceivers(player);
     }
 
     @Getter

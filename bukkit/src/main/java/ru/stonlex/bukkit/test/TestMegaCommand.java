@@ -30,4 +30,5 @@ public class TestMegaCommand extends BaseMegaCommand<Player> {
 
         player.sendMessage(ChatColor.RED + "Тест выключен! Аргументы: " + Joiner.on(", ").join(args));
     }
+
 }

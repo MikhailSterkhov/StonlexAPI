@@ -31,6 +31,7 @@ public @interface CommandCooldown {
     enum ReceiverModifier {
 
         ONLY_SENDER,
-        PUBLIC;
+        PUBLIC,
+        ;
     }
 }

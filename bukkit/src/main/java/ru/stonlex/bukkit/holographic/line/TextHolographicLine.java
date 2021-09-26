@@ -35,10 +35,14 @@ public class TextHolographicLine implements ProtocolHolographicLine {
         this.location = holographic.getLocation();
     }
 
+    @Override
+    public double getLineDistance() {
+        return ProtocolHolographicLine.DEFAULT_LINE_DISTANCE;
+    }
 
     @Override
     public void initialize() {
-        setFakeArmorStand(new FakeArmorStand(getLocation().clone().add(0, -(0.25 * lineIndex), 0)));
+        setFakeArmorStand(new FakeArmorStand(normalizeLocation(getLocation())));
 
         getFakeArmorStand().setInvisible(true);
         getFakeArmorStand().setBasePlate(false);
@@ -93,7 +97,7 @@ public class TextHolographicLine implements ProtocolHolographicLine {
 
     @Override
     public void teleport(Location location) {
-        this.location = location.clone().add(0, -(0.25 * lineIndex), 0);
+        this.location = normalizeLocation(location);
 
         fakeArmorStand.teleport(this.location);
     }

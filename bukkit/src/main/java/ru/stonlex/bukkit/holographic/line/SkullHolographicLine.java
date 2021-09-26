@@ -40,10 +40,19 @@ public class SkullHolographicLine implements ProtocolHolographicLine {
         this.location = holographic.getLocation();
     }
 
+    @Override
+    public double getLineDistance() {
+        return 0.6 + (!small ? 0.25 : 0);
+    }
+
+    @Override
+    public Location modifyNormalizeLocation(@NonNull Location normalizedLocation) {
+        return normalizedLocation.add(0, getLineDistance() + (!small ? 0.0D : 1.0D), 0);
+    }
 
     @Override
     public void initialize() {
-        setFakeArmorStand(new FakeArmorStand(getLocation().clone().add(0, -(0.2 * lineIndex), 0)));
+        setFakeArmorStand(new FakeArmorStand(normalizeLocation(getLocation())));
 
         if (lineText.length() > 20) {
             fakeArmorStand.getEntityEquipment()
@@ -56,14 +65,6 @@ public class SkullHolographicLine implements ProtocolHolographicLine {
         fakeArmorStand.setSmall(small);
         fakeArmorStand.setInvisible(true);
         fakeArmorStand.setBasePlate(false);
-
-        //для расстояния между головой и новыми строками
-        holographic.addEmptyLine();
-        holographic.addEmptyLine();
-
-        if (!fakeArmorStand.isSmall()) {
-            holographic.addEmptyLine();
-        }
     }
 
     @Override
@@ -114,7 +115,7 @@ public class SkullHolographicLine implements ProtocolHolographicLine {
 
     @Override
     public void teleport(Location location) {
-        this.location = location.clone().add(0, -(0.25 * lineIndex), 0);
+        this.location = normalizeLocation(location);
 
         fakeArmorStand.teleport(this.location);
     }

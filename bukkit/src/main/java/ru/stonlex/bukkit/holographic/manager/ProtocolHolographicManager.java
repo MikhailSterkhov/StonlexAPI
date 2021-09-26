@@ -1,5 +1,7 @@
 package ru.stonlex.bukkit.holographic.manager;
 
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -7,10 +9,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import ru.stonlex.bukkit.holographic.ProtocolHolographic;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -18,7 +17,7 @@ public final class ProtocolHolographicManager implements Listener {
 
     public static final ProtocolHolographicManager INSTANCE = new ProtocolHolographicManager();
 
-    protected final Map<Player, List<ProtocolHolographic>> playerHolographics = new HashMap<>();
+    protected final Multimap<Player, ProtocolHolographic> playerHolographics = HashMultimap.create();
 
 
     /**
@@ -27,7 +26,7 @@ public final class ProtocolHolographicManager implements Listener {
      *
      * @param player - игрок
      */
-    public List<ProtocolHolographic> getProtocolHolographics(Player player) {
+    public Collection<ProtocolHolographic> getProtocolHolographics(Player player) {
         return playerHolographics.get(player);
     }
 
@@ -38,7 +37,17 @@ public final class ProtocolHolographicManager implements Listener {
      * @param protocolHolographic - голограмма
      */
     public void addProtocolHolographic(Player player, ProtocolHolographic protocolHolographic) {
-        playerHolographics.getOrDefault(player, new ArrayList<>()).add(protocolHolographic);
+        playerHolographics.put(player, protocolHolographic);
+    }
+
+    /**
+     * Удалить кеш голограммы для указанного игрока
+     *
+     * @param player - игрок
+     * @param protocolHolographic - голограмма
+     */
+    public void removeProtocolHolographic(Player player, ProtocolHolographic protocolHolographic) {
+        playerHolographics.remove(player, protocolHolographic);
     }
 
 }

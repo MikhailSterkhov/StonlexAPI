@@ -46,10 +46,7 @@ public class ItemHolographicLine implements ProtocolHolographicLine {
 
     @Override
     public void initialize() {
-        holographic.addEmptyLine();
-        holographic.addEmptyLine();
-
-        fakeDroppedItem = new FakeDroppedItem(itemStack, getLocation().clone().add(0, -(0.2 * lineIndex) + 1.9, 0));
+        fakeDroppedItem = new FakeDroppedItem(itemStack, normalizeLocation(getLocation()));
         fakeDroppedItem.setNoGravity(true);
     }
 
@@ -100,9 +97,19 @@ public class ItemHolographicLine implements ProtocolHolographicLine {
 
     @Override
     public void teleport(Location location) {
-        this.location = location.clone().add(0, -(0.25 * lineIndex) + 1.9, 0);
+        this.location = normalizeLocation(location);
 
         fakeDroppedItem.teleport(this.location);
+    }
+
+    @Override
+    public double getLineDistance() {
+        return 0.72D;
+    }
+
+    @Override
+    public Location modifyNormalizeLocation(@NonNull Location normalizedLocation) {
+        return normalizedLocation.add(0, getLineDistance() + 1.5D, 0);
     }
 
     @Override

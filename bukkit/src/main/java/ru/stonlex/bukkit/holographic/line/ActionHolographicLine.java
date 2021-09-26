@@ -45,11 +45,15 @@ public class ActionHolographicLine implements ProtocolHolographicLine {
         this.location = holographic.getLocation();
     }
 
+    @Override
+    public double getLineDistance() {
+        return ProtocolHolographicLine.DEFAULT_LINE_DISTANCE;
+    }
 
     @Override
     public void initialize() {
         //armor stand holographic
-        setFakeArmorStand(new FakeArmorStand(getLocation().clone().add(0, -(0.25 * lineIndex), 0)));
+        setFakeArmorStand(new FakeArmorStand(normalizeLocation(getLocation())));
 
         fakeArmorStand.setInvisible(true);
         fakeArmorStand.setBasePlate(false);
@@ -117,7 +121,7 @@ public class ActionHolographicLine implements ProtocolHolographicLine {
 
     @Override
     public void teleport(Location location) {
-        this.location = location.clone().add(0, -(0.25 * lineIndex), 0);
+        this.location = normalizeLocation(location);
 
         fakeArmorStand.teleport(this.location);
         clickableSilverfish.teleport(fakeArmorStand.getLocation().clone().add(0, 2.2, 0));

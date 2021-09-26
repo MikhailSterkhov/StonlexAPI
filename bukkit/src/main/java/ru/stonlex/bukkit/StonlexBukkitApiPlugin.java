@@ -8,6 +8,7 @@ import ru.stonlex.bukkit.listener.PlayerListener;
 import ru.stonlex.bukkit.protocollib.entity.listener.FakeEntityListener;
 import ru.stonlex.bukkit.protocollib.team.ProtocolTeam;
 import ru.stonlex.bukkit.scoreboard.listener.BaseScoreboardListener;
+import ru.stonlex.bukkit.test.TestCommand;
 import ru.stonlex.bukkit.vault.VaultManager;
 
 @Getter
@@ -36,7 +37,7 @@ public final class StonlexBukkitApiPlugin extends JavaPlugin {
         StonlexBukkitApi.INVENTORY_MANAGER.startInventoryUpdateTask(this);
 
         // test
-        //StonlexBukkitApi.registerCommand(new TestCommand());
+        StonlexBukkitApi.registerCommand(new TestCommand());
         //StonlexBukkitApi.registerCommand(new TestMegaCommand());
     }
 
