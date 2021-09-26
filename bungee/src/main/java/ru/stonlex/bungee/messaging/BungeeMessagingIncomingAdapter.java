@@ -20,9 +20,6 @@ public abstract class BungeeMessagingIncomingAdapter
     @NonNull String tag;
     @NonNull String channel;
 
-    protected abstract void onReceive(@NonNull String tag, @NonNull String channel, @NonNull ByteArrayDataInput input);
-
-
     @EventHandler
     public void onReceive(PluginMessageEvent event) {
 
@@ -32,9 +29,15 @@ public abstract class BungeeMessagingIncomingAdapter
             String channel = input.readUTF();
 
             if (channel.equals(this.channel)) {
-                onReceive(tag, channel, input);
+                onReceive(input);
             }
         }
     }
+
+    /**
+     * Основной процесс обработки сообщения
+     * @param input  - обработчик байтов сообщения
+     */
+    protected abstract void onReceive(@NonNull ByteArrayDataInput input);
 
 }

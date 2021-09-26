@@ -19,8 +19,6 @@ public abstract class BukkitMessagingIncomingAdapter
     @NonNull String tag;
     @NonNull String channel;
 
-    protected abstract void onReceive(Player player, @NonNull String tag, @NonNull String channel, @NonNull ByteArrayDataInput input);
-
     @Override
     public void onPluginMessageReceived(String tag, Player player, byte[] bytes) {
 
@@ -30,9 +28,17 @@ public abstract class BukkitMessagingIncomingAdapter
             String channel = input.readUTF();
 
             if (channel.equals(this.channel)) {
-                onReceive(player, tag, channel, input);
+                onReceive(player, input);
             }
         }
     }
+
+    /**
+     * Основной процесс обработки сообщения
+     *
+     * @param player - игрок, от которого пришло сообщение (если от его имени оно было отправлено)
+     * @param input  - обработчик байтов сообщения
+     */
+    protected abstract void onReceive(Player player, @NonNull ByteArrayDataInput input);
 
 }
