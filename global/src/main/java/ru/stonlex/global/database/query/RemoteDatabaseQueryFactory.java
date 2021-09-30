@@ -32,4 +32,8 @@ public final class RemoteDatabaseQueryFactory {
         return new DeleteQuery(databaseTable);
     }
 
+    public @NonNull UpdateQuery updateQuery() {
+        return new UpdateQuery(databaseTable);
+    }
+
 }
