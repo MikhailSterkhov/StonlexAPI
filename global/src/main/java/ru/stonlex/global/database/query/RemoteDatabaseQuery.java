@@ -29,7 +29,7 @@ public abstract class RemoteDatabaseQuery<Q extends RemoteDatabaseQueryRow> {
     protected abstract void handle(@NonNull StringBuilder queryBuilder, @NonNull LinkedList<Q> queryRows);
 
 
-    protected @NonNull String buildToString() {
+    public @NonNull String buildToString() {
         StringBuilder stringBuilder = new StringBuilder(getQueryFunction());
         stringBuilder.append(" ");
 

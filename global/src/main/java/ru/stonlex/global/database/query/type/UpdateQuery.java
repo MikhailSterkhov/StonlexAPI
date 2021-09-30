@@ -44,7 +44,9 @@ public final class UpdateQuery
         if (!whereRowsList.isEmpty()) {
 
             queryBuilder.append(" WHERE ");
-            queryBuilder.append(Joiner.on(" AND ").join(queryRows.stream().map(row -> "`" + row.getName() + "`=?").collect(Collectors.toSet())));
+            queryBuilder.append(Joiner.on(" AND ").join(whereRowsList.stream().map(row -> "`" + row.getName() + "`=?").collect(Collectors.toSet())));
         }
+
+        queryRows.addAll(whereRowsList);
     }
 }
