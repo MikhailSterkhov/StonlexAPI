@@ -8,6 +8,8 @@ import ru.stonlex.bukkit.listener.PlayerListener;
 import ru.stonlex.bukkit.protocollib.entity.listener.FakeEntityListener;
 import ru.stonlex.bukkit.protocollib.team.ProtocolTeam;
 import ru.stonlex.bukkit.scoreboard.listener.BaseScoreboardListener;
+import ru.stonlex.bukkit.test.TestCommand;
+import ru.stonlex.bukkit.utility.actionitem.ActionItemListener;
 import ru.stonlex.bukkit.vault.VaultManager;
 
 @Getter
@@ -22,21 +24,28 @@ public final class StonlexBukkitApiPlugin extends JavaPlugin {
         // events
         getServer().getPluginManager().registerEvents(new BaseInventoryListener(), this);
         getServer().getPluginManager().registerEvents(new BaseScoreboardListener(), this);
+        getServer().getPluginManager().registerEvents(new ActionItemListener(), this);
         getServer().getPluginManager().registerEvents(new PlayerListener(), this);
 
         getServer().getPluginManager().registerEvents(ProtocolTeam.TEAM_LISTENER, this);
         getServer().getPluginManager().registerEvents(StonlexBukkitApi.HOLOGRAPHIC_MANAGER, this);
 
         // vault
-        VaultManager.INSTANCE.getChatProvider().registerProvider(this);
-        VaultManager.INSTANCE.getEconomyProvider().registerProvider(this);
-        VaultManager.INSTANCE.getPermissionProvider().registerProvider(this);
+        if (getServer().getPluginManager().getPlugin("Vault") != null) {
+
+            VaultManager.INSTANCE.getChatProvider().registerProvider(this);
+            VaultManager.INSTANCE.getEconomyProvider().registerProvider(this);
+            VaultManager.INSTANCE.getPermissionProvider().registerProvider(this);
+        }
 
         // inventories
         StonlexBukkitApi.INVENTORY_MANAGER.startInventoryUpdateTask(this);
 
+        // messaging
+        //StonlexBukkitApi.MESSAGING_MANAGER.registerIncomingListener(this, new BungeeInventoryIncomingListener(this));
+
         // test
-        //StonlexBukkitApi.registerCommand(new TestCommand());
+        StonlexBukkitApi.registerCommand(new TestCommand());
         //StonlexBukkitApi.registerCommand(new TestMegaCommand());
     }
 
