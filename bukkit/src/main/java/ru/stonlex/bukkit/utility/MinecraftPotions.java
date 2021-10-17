@@ -6,7 +6,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 @UtilityClass
-public class BukkitPotionUtil {
+public class MinecraftPotions {
 
     public PotionEffect getInfinityPotion(@NonNull PotionEffectType potionEffectType) {
         return getPotion(potionEffectType, 9999 * 20);

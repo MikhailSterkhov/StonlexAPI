@@ -1,6 +1,6 @@
 name: StonlexAPI
 main: ru.stonlex.bukkit.StonlexBukkitApiPlugin
-version: 1.3
+version: 1.0
 author: ItzStonlex
 
 softdepend:
