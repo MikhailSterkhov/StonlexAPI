@@ -20,8 +20,7 @@ import ru.stonlex.bukkit.messaging.BukkitMessagingManager;
 import ru.stonlex.bukkit.scoreboard.BaseScoreboardBuilder;
 import ru.stonlex.bukkit.utility.ItemUtil;
 import ru.stonlex.bukkit.utility.location.CuboidRegion;
-import ru.stonlex.bukkit.vault.VaultManager;
-import ru.stonlex.bukkit.vault.VaultPlayer;
+import ru.stonlex.bukkit.vault.VaultServiceManager;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -30,7 +29,8 @@ import java.util.function.BiConsumer;
 public interface StonlexBukkitApi {
 
     CommandManager COMMAND_MANAGER                  = (CommandManager.INSTANCE);
-    VaultManager VAULT_MANAGER                      = (VaultManager.INSTANCE);
+    VaultServiceManager VAULT_API                   = (VaultServiceManager.INSTANCE);
+    VaultServiceManager.Registry VAULT_REGISTRY     = (VaultServiceManager.REGISTRY);
     ProtocolHolographicManager HOLOGRAPHIC_MANAGER  = (ProtocolHolographicManager.INSTANCE);
 
     BaseInventoryManager INVENTORY_MANAGER          = new BaseInventoryManager();
@@ -68,26 +68,6 @@ public interface StonlexBukkitApi {
     static ProtocolHolographic createSimpleHolographic(@NonNull Location location) {
         return new SimpleHolographic(location);
     }
-
-
-    /**
-     * Получить игрока с данными библиотеки Vault
-     *
-     * @param playerName - ник игрока
-     */
-    static VaultPlayer getVaultPlayer(@NonNull String playerName) {
-        return VAULT_MANAGER.getVaultPlayer(playerName);
-    }
-
-    /**
-     * Получить игрока с данными библиотеки Vault
-     *
-     * @param player - онлайн игрок
-     */
-    static VaultPlayer getVaultPlayer(@NonNull Player player) {
-        return VAULT_MANAGER.getVaultPlayer(player);
-    }
-
 
     /**
      * Создать кубоид блоков из двух по
@@ -142,7 +122,7 @@ public interface StonlexBukkitApi {
         return new BaseSimpleInventory(inventoryRows, inventoryTitle) {
 
             @Override
-            public void drawInventory(Player player) {
+            public void drawInventory(@NonNull Player player) {
                 inventoryConsumer.accept(player, this);
             }
         };
@@ -161,7 +141,7 @@ public interface StonlexBukkitApi {
         return new BasePaginatedInventory(inventoryRows, inventoryTitle) {
 
             @Override
-            public void drawInventory(Player player) {
+            public void drawInventory(@NonNull Player player) {
                 inventoryConsumer.accept(player, this);
             }
         };

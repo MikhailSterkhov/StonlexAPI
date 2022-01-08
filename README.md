@@ -615,13 +615,40 @@ scoreboardBuilder.build().setScoreboardToPlayer(player);
 Scoreboard создан, полностью настроен и установлен игроку, что еще может быть лучше?
 ***
 ### `Vault-API:`
-...
+
+Данной утилитой управляет класс `VaultServiceManager`
+
+С его помощью можно как напрямую обращаться к Vault провайдерам, 
+так и использовать заготовленные API-методы.
+
+```java
+double balance = StonlexBukkitApi.VAULT_API.getBalance("ItzStonlex");
+String prefix = StonlexBukkitApi.VAULT_API.getPrefix("ItzStonlex");
+```
+
+```java
+VaultService<Economy> service = StonlexBukkitApi.VAULT_REGISTRY.getRegisteredService(Economy.class);
+Economy economy = service.getCurrentService(Bukkit.getServer());
+
+if (economy != null) {
+    // ...
+}
+```
+
+Для регистрации своих Vault провайдеров есть возможность 
+использовать следующие API-методы:
+
+```java
+VaultService<Economy> economyService = StonlexBukkitApi.VAULT_REGISTRY.getRegisteredService(Economy.class);
+```
+
+```java
+economyService.register(this, new MyEconomyImpl());
+```
+
+или...
+```java
+economyService.register(this, ServicePriority.Highest, new MyEconomyImpl());
+```
 
 ***
-### `Utilities:`
-...
-
-***
-## Обратная связь
-* **[Discord chat](https://discord.gg/GmT9pUy8af)**
-* **[ВКонтакте](https://vk.com/itzstonlex)**
